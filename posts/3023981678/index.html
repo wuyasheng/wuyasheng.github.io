@@ -1,0 +1,1930 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Verilog Demo_9 IIC, Wonderful">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>Verilog Demo_9 IIC | Wonderful</title>
+    <link rel="icon" type="image/png" href="/medias/logo.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<style type="text/css" lang="css">
+    #loading-container{
+        position: fixed;
+        top: 0;
+        left: 0;
+        min-height: 100vh;
+        width: 100vw;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: #FFF;
+        text-align: center;
+        /* loader页面消失采用渐隐的方式*/
+        -webkit-transition: opacity 1s ease;
+        -moz-transition: opacity 1s ease;
+        -o-transition: opacity 1s ease;
+        transition: opacity 1s ease;
+    }
+    .loading-image{
+        width: 120px;
+        height: 50px;
+        transform: translate(-50%);
+    }
+
+    .loading-image div:nth-child(2) {
+        -webkit-animation: pacman-balls 1s linear 0s infinite;
+        animation: pacman-balls 1s linear 0s infinite
+    }
+
+    .loading-image div:nth-child(3) {
+        -webkit-animation: pacman-balls 1s linear .33s infinite;
+        animation: pacman-balls 1s linear .33s infinite
+    }
+
+    .loading-image div:nth-child(4) {
+        -webkit-animation: pacman-balls 1s linear .66s infinite;
+        animation: pacman-balls 1s linear .66s infinite
+    }
+
+    .loading-image div:nth-child(5) {
+        -webkit-animation: pacman-balls 1s linear .99s infinite;
+        animation: pacman-balls 1s linear .99s infinite
+    }
+
+   .loading-image div:first-of-type {
+        width: 0;
+        height: 0;
+        border: 25px solid #49b1f5;
+        border-right-color: transparent;
+        border-radius: 25px;
+        -webkit-animation: rotate_pacman_half_up .5s 0s infinite;
+        animation: rotate_pacman_half_up .5s 0s infinite;
+    }
+    .loading-image div:nth-child(2) {
+        width: 0;
+        height: 0;
+        border: 25px solid #49b1f5;
+        border-right-color: transparent;
+        border-radius: 25px;
+        -webkit-animation: rotate_pacman_half_down .5s 0s infinite;
+        animation: rotate_pacman_half_down .5s 0s infinite;
+        margin-top: -50px;
+    }
+    @-webkit-keyframes rotate_pacman_half_up {0% {transform: rotate(270deg)}50% {transform: rotate(1turn)}to {transform: rotate(270deg)}}
+
+    @keyframes rotate_pacman_half_up {0% {transform: rotate(270deg)}50% {transform: rotate(1turn)}to {transform: rotate(270deg)}}
+
+    @-webkit-keyframes rotate_pacman_half_down {0% {transform: rotate(90deg)}50% {transform: rotate(0deg)}to {transform: rotate(90deg)}}
+
+    @keyframes rotate_pacman_half_down {0% {transform: rotate(90deg)}50% {transform: rotate(0deg)}to {transform: rotate(90deg)}}
+
+    @-webkit-keyframes pacman-balls {75% {opacity: .7}to {transform: translate(-100px, -6.25px)}}
+
+    @keyframes pacman-balls {75% {opacity: .7}to {transform: translate(-100px, -6.25px)}}
+
+
+    .loading-image div:nth-child(3),
+    .loading-image div:nth-child(4),
+    .loading-image div:nth-child(5),
+    .loading-image div:nth-child(6){
+        background-color: #49b1f5;
+        width: 15px;
+        height: 15px;
+        border-radius: 100%;
+        margin: 2px;
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        transform: translateY(-6.25px);
+        top: 25px;
+        left: 100px;
+    }
+    .loading-text{
+        margin-bottom: 20vh;
+        text-align: center;
+        color: #2c3e50;
+        font-size: 2rem;
+        box-sizing: border-box;
+        padding: 0 10px;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    @media only screen and (max-width: 500px) {
+         .loading-text{
+            font-size: 1.5rem;
+         }
+    }
+    .fadeout {
+        opacity: 0;
+        filter: alpha(opacity=0);
+    }
+    /* logo出现动画 */
+    @-webkit-keyframes fadeInDown{0%{opacity:0;-webkit-transform:translate3d(0,-100%,0);transform:translate3d(0,-100%,0)}100%{opacity:1;-webkit-transform:none;transform:none}}
+    @keyframes fadeInDown{0%{opacity:0;-webkit-transform:translate3d(0,-100%,0);}}
+ </style>
+ <script>
+(function () {
+    const loaded = function(){
+       setTimeout(function(){
+            const loader = document.getElementById("loading-container");
+            loader.className="fadeout" ;//使用渐隐的方法淡出loading page
+            // document.getElementById("body-wrap").style.display="flex";
+            setTimeout(function(){
+                loader.style.display="none";
+            },1000); 
+        },1000);//强制显示loading page 1s  
+    };
+    loaded();
+})()
+ </script><meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="Wonderful" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"><style type="text/css" lang="css">
+    #loading-container{
+        position: fixed;
+        top: 0;
+        left: 0;
+        min-height: 100vh;
+        width: 100vw;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: #FFF;
+        text-align: center;
+        /* loader页面消失采用渐隐的方式*/
+        -webkit-transition: opacity 1s ease;
+        -moz-transition: opacity 1s ease;
+        -o-transition: opacity 1s ease;
+        transition: opacity 1s ease;
+    }
+    .loading-image{
+        width: 120px;
+        height: 50px;
+        transform: translate(-50%);
+    }
+
+    .loading-image div:nth-child(2) {
+        -webkit-animation: pacman-balls 1s linear 0s infinite;
+        animation: pacman-balls 1s linear 0s infinite
+    }
+
+    .loading-image div:nth-child(3) {
+        -webkit-animation: pacman-balls 1s linear .33s infinite;
+        animation: pacman-balls 1s linear .33s infinite
+    }
+
+    .loading-image div:nth-child(4) {
+        -webkit-animation: pacman-balls 1s linear .66s infinite;
+        animation: pacman-balls 1s linear .66s infinite
+    }
+
+    .loading-image div:nth-child(5) {
+        -webkit-animation: pacman-balls 1s linear .99s infinite;
+        animation: pacman-balls 1s linear .99s infinite
+    }
+
+   .loading-image div:first-of-type {
+        width: 0;
+        height: 0;
+        border: 25px solid #49b1f5;
+        border-right-color: transparent;
+        border-radius: 25px;
+        -webkit-animation: rotate_pacman_half_up .5s 0s infinite;
+        animation: rotate_pacman_half_up .5s 0s infinite;
+    }
+    .loading-image div:nth-child(2) {
+        width: 0;
+        height: 0;
+        border: 25px solid #49b1f5;
+        border-right-color: transparent;
+        border-radius: 25px;
+        -webkit-animation: rotate_pacman_half_down .5s 0s infinite;
+        animation: rotate_pacman_half_down .5s 0s infinite;
+        margin-top: -50px;
+    }
+    @-webkit-keyframes rotate_pacman_half_up {0% {transform: rotate(270deg)}50% {transform: rotate(1turn)}to {transform: rotate(270deg)}}
+
+    @keyframes rotate_pacman_half_up {0% {transform: rotate(270deg)}50% {transform: rotate(1turn)}to {transform: rotate(270deg)}}
+
+    @-webkit-keyframes rotate_pacman_half_down {0% {transform: rotate(90deg)}50% {transform: rotate(0deg)}to {transform: rotate(90deg)}}
+
+    @keyframes rotate_pacman_half_down {0% {transform: rotate(90deg)}50% {transform: rotate(0deg)}to {transform: rotate(90deg)}}
+
+    @-webkit-keyframes pacman-balls {75% {opacity: .7}to {transform: translate(-100px, -6.25px)}}
+
+    @keyframes pacman-balls {75% {opacity: .7}to {transform: translate(-100px, -6.25px)}}
+
+
+    .loading-image div:nth-child(3),
+    .loading-image div:nth-child(4),
+    .loading-image div:nth-child(5),
+    .loading-image div:nth-child(6){
+        background-color: #49b1f5;
+        width: 15px;
+        height: 15px;
+        border-radius: 100%;
+        margin: 2px;
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        transform: translateY(-6.25px);
+        top: 25px;
+        left: 100px;
+    }
+    .loading-text{
+        margin-bottom: 20vh;
+        text-align: center;
+        color: #2c3e50;
+        font-size: 2rem;
+        box-sizing: border-box;
+        padding: 0 10px;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    @media only screen and (max-width: 500px) {
+         .loading-text{
+            font-size: 1.5rem;
+         }
+    }
+    .fadeout {
+        opacity: 0;
+        filter: alpha(opacity=0);
+    }
+    /* logo出现动画 */
+    @-webkit-keyframes fadeInDown{0%{opacity:0;-webkit-transform:translate3d(0,-100%,0);transform:translate3d(0,-100%,0)}100%{opacity:1;-webkit-transform:none;transform:none}}
+    @keyframes fadeInDown{0%{opacity:0;-webkit-transform:translate3d(0,-100%,0);}}
+ </style>
+ <script>
+(function () {
+    const loaded = function(){
+       setTimeout(function(){
+            const loader = document.getElementById("loading-container");
+            loader.className="fadeout" ;//使用渐隐的方法淡出loading page
+            // document.getElementById("body-wrap").style.display="flex";
+            setTimeout(function(){
+                loader.style.display="none";
+            },1000); 
+        },1000);//强制显示loading page 1s  
+    };
+    loaded();
+})()
+ </script></head>
+
+
+
+
+ <div id="loading-container">
+     <p class="loading-text">玩命加载中 . . . </p> 
+     <div class="loading-image">
+         <div></div>
+         <div></div>
+         <div></div>
+         <div></div> 
+         <div></div>
+     </div>
+ </div><body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Wonderful</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="" class="waves-effect waves-light">
+
+      
+      <i class="fas fa-list" style="zoom: 0.6;"></i>
+      
+      <span>资源</span>
+      <i class="fas fa-chevron-down" aria-hidden="true" style="zoom: 0.6;"></i>
+    </a>
+    <ul class="sub-nav menus_item_child ">
+      
+      <li>
+        <a href="/source_list/software">
+          
+          <i class="fas fa-database" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>软件推荐</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/source_list/websites">
+          
+          <i class="fas fa-book" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>网站推荐</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/source_list/experience">
+          
+          <i class="fas fa-file-alt" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>经验记录</span>
+        </a>
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Wonderful</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="javascript:;">
+			
+				<i class="fa-fw fas fa-list"></i>
+			
+			资源
+			<span class="m-icon"><i class="fas fa-chevron-right"></i></span>
+		</a>
+            <ul  style="background:  ;" >
+              
+                <li>   
+				
+                  <a href="/source_list/software " style="margin-left:75px";>
+				  
+				   <i class="fa fas fa-database" style="position: absolute;left:50px" ></i>
+			      
+		          <span>软件推荐</span>
+                  </a>
+                </li>
+              
+                <li>   
+				
+                  <a href="/source_list/websites " style="margin-left:75px";>
+				  
+				   <i class="fa fas fa-book" style="position: absolute;left:50px" ></i>
+			      
+		          <span>网站推荐</span>
+                  </a>
+                </li>
+              
+                <li>   
+				
+                  <a href="/source_list/experience " style="margin-left:75px";>
+				  
+				   <i class="fa fas fa-file-alt" style="position: absolute;left:50px" ></i>
+			      
+		          <span>经验记录</span>
+                  </a>
+                </li>
+               
+            </ul>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+
+
+
+    </nav>
+
+
+
+</header>
+
+
+
+    
+<script src="/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
+                alert('密码错误，将返回主页！');
+                location.href = '/';
+            }
+        }
+    })();
+</script>
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/verilog.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">Verilog Demo_9 IIC</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Verilog/">
+                                <span class="chip bg-color">Verilog</span>
+                            </a>
+                        
+                            <a href="/tags/IIC/">
+                                <span class="chip bg-color">IIC</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/FPGA-%E4%BE%8B%E7%A8%8B/" class="post-category">
+                                FPGA-例程
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-03-28
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    4.1k
+                </div>
+                
+
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="Verilog-IIC驱动"><a href="#Verilog-IIC驱动" class="headerlink" title="Verilog  IIC驱动"></a>Verilog  IIC驱动</h2><hr>
+<p>注 : 本文内容来自整理摘抄至原文 <a href="https://www.cnblogs.com/xiaomeige/p/6509414.html" target="_blank" rel="noopener">参考文1</a>、<a href="https://www.cnblogs.com/bixiaopengblog/p/7469536.html" target="_blank" rel="noopener">参考文2</a>、<a href="https://www.cnblogs.com/sepeng/p/3258705.html" target="_blank" rel="noopener">参考文3</a>、<a href="https://www.cnblogs.com/gianttank/archive/2010/11/20/1882575.html" target="_blank" rel="noopener">参考文4</a>、<a href="https://www.cnblogs.com/liujinggang/p/9656358.html" target="_blank" rel="noopener">参考文5</a>、<a href="https://www.cnblogs.com/gianttank/archive/2010/11/20/1882581.html" target="_blank" rel="noopener">参考文6</a></p>
+<h3 id="IIC-驱动原理"><a href="#IIC-驱动原理" class="headerlink" title="IIC 驱动原理"></a>IIC 驱动原理</h3><p>IIC(Inter-Integrated Circuit)总线是一种由PHILIPS公司开发的两线式串行总线，用于连接微控制器及其外围设备。I2C总线产生于在80年代，最初为音频和视频设备开发，如今主要在服务器管理中使用，其中包括单个组件状态的通信。例如管理员可对各个组件进行查询，以管理系统的配置或掌握组件的功能状态，如电源和系统风扇。可随时监控内存、硬盘、网络、系统温度等多个参数，增加了系统的安全性，方便了管理。IIC数据传输速率有标准模式（100 kbps）、快速模式（400 kbps）和高速模式（3.4 Mbps），另外一些变种实现了低速模式（10 kbps）和快速+模式（1 Mbps）。</p>
+<p>下图是一个嵌入式系统中处理器仅通过2根线的IIC总线控制多个IIC外设的典型应用图</p>
+<img src="/medias/loading/loading.gif" data-original="/images/post_images/verilog_demo_09_iic/IIC_1.png">
+
+<p>图中处理器是IIC主机，它仅仅通过两根信号就可以控制IO扩展器，各种不同的传感器，EEPROM，AD/DAs等设备，这也是IIC总线协议相较于其他协议最有优势的地方。</p>
+<p>IIC总线的特点：</p>
+<p>1、 简单性和有效性。由于接口直接在组件之上，因此I2C总线占用的空间非常小，减少了电路板的空间和芯片管脚的数量，降低了互联成本。总线的长度可高达25英尺，并且能够以10Kbps的最大传输速率支持40个组件。</p>
+<p>2、 支持多主控(multimastering)， 其中任何能够进行发送和接收的设备都可以成为主总线。一个主控能够控制信号的传输和时钟频率。当然，在任何时间点上只能有一个主控占用IIC总线。</p>
+<p>IIC总线协议详解：</p>
+<p>IIC总线接口是一个标准的双向传输接口，一次数据传输需要主机和从机按照IIC协议的标准进行。I2C总线是由数据线SDA和时钟SCL构成的串行总线，可发送和接收数据，并且在硬件上都需要接一个上拉电阻到VCC。各种被控制电路均并联在这条总线上，但就像电话机一样只有拨通各自的号码才能工作，所以每个电路和模块都有唯一的地址，这样，各控制电路虽然挂在同一条总线上，却彼此独立，互不相关。</p>
+<p>IIC主机往从机里面写入数据的步骤如下：</p>
+<p>1、 主机发送一个起始信号和从机的设备地址给从机</p>
+<p>2、 主机发送数据给从机</p>
+<p>3、 主机发送一个停止信号结束发送过程</p>
+<p>IIC主机从从机里面读出数据的步骤如下：</p>
+<p>1、 主机发送一个起始信号和从机的设备地址给从机</p>
+<p>2、 主机发送一个要读取的地址给从机</p>
+<p>3、 主机从从机接收数据</p>
+<p>4、 主机发送一个停止信号给从机结束整个接收过程</p>
+<p>1、主机通过IIC总线往从机里面写数据</p>
+<p>主机通过IIC总线往从机中写数据的时候，主机首先会发送一个起始信号，接着把IIC从机的7位设备地址后面添一个0(设备地址后面的0表示主机向从机写数据，1表示主机从从机中读数据)组成一个8位的数据，把这个8位的数据发给从机，发完这8位的数据以后主机马上释放SDA信号线等待从机的应答，如果从机正确收到这个数据，从机就会发送一个有效应答位0给主机告诉主机自己已经收到了数据，主机收到从机的有效应答位以后 ，接下来主机会发送想要写入的寄存器地址，寄存器发送完毕以后主机同样会释放SDA信号线等待从机的应答，从机如果正确收到了主机发过来的寄存器地址，从机会再次发送一个有效应答位给主机，主机收到从机的有效应答位0以后，接下来主机就会给从机发送想要写入从机的数据，从机正确收到这个数据以后仍然像之前两次一样会给主机发送一个有效应答位，主机收到这个有效应答位以后给从机发送一个停止信号，整个传输过程就结束了。下图是整个传输过程的示意图：</p>
+<img src="/medias/loading/loading.gif" data-original="/images/post_images/verilog_demo_09_iic/IIC_2.png">
+
+<p>2、主机通过IIC总线从从机里面读数据</p>
+<p>主机通过IIC总线从从机中读数据的过程与写数据的过程有相似之处，但是读数据的过程还多了一些额外的步骤。主机从从机读数据时主机首先会发送一个起始信号，接着把IIC从机的7位设备地址后面添一个0(设备地址后面的0表示主机向从机写数据，1表示主机从从机中读数据)，把这个8位的数据发给从机，发完这8位的数据以后主机马上释放SDA信号线等待从机的应答，如果从机正确收到这个数据，从机就会发送一个有效应答位0给主机告诉主机自己已经收到了数据，主机收到从机的有效应答位以后 ，接下来主机会发送想要读的寄存器地址，寄存器发送完毕以后主机同样会释放SDA信号线等待从机的应答，从机如果正确收到了主机发过来的寄存器地址，从机会再次发送一个有效应答位给主机，主机收到从机的有效应答位0以后，主机会给从机再次发送一次起始信号，接着把IIC从机的7位设备地址后面添一个1(设备地址后面的0表示主机向从机写数据，1表示主机从从机中读数据)，注意，第一次是在设备地址后面添0，这一次是在设备地址后面添1，把这个8位的数据发给从机，发完这8位的数据以后主机马上释放SDA信号线等待从机的应答，如果从机正确收到这个数据，从机就会发送一个有效应答位0给主机告诉主机自己已经收到了数据，接着从机继续占用SDA信号线给主机发送寄存器中的数据，发送完毕以后，主机再次占用SDA信号线发送一个非应答信号1给从机，主机发送一个停止信号给从机结束整个读数据的过程。下图是整个读数据过程的示意图</p>
+<img src="/medias/loading/loading.gif" data-original="/images/post_images/verilog_demo_09_iic/IIC_3.png">
+
+<p>总线各个时候的状态，其中在SCL为高电平时，SDA不能发生改变，只能在SCL为低电平时，SDA才能发生改变。</p>
+<img src="/medias/loading/loading.gif" data-original="/images/post_images/verilog_demo_09_iic/IIC_4.png">
+
+<p>（注意三态门的处理方法）</p>
+<h3 id="代码1"><a href="#代码1" class="headerlink" title="代码1"></a>代码1</h3><pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">module</span> <span class="token function">IIC2</span><span class="token punctuation">(</span>    <span class="token comment" spellcheck="true">//（使用计数器的思想进行设计-注意三态门的处理方法）</span>
+    <span class="token keyword">input</span>                clk<span class="token punctuation">,</span>
+    <span class="token keyword">input</span>                rst_n<span class="token punctuation">,</span>
+    <span class="token keyword">input</span>        <span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    dev_addr<span class="token punctuation">,</span>
+    <span class="token keyword">input</span>        <span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    addr<span class="token punctuation">,</span>
+    <span class="token keyword">input</span>                wr_en<span class="token punctuation">,</span>
+    <span class="token keyword">input</span>        <span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    wr_data<span class="token punctuation">,</span>
+    <span class="token keyword">input</span>                rd_en<span class="token punctuation">,</span>
+    <span class="token keyword">output</span>    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    rd_data<span class="token punctuation">,</span>
+    <span class="token keyword">output</span>    <span class="token keyword">reg</span>            rd_data_valid<span class="token punctuation">,</span>
+    <span class="token keyword">output</span>    <span class="token keyword">reg</span>            scl<span class="token punctuation">,</span>
+    <span class="token keyword">inout</span>                sda<span class="token punctuation">,</span>
+    <span class="token keyword">output</span>    <span class="token keyword">reg</span>            rdy
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">localparam</span> <span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> CLK_MAX <span class="token operator">=</span> <span class="token number">8'd100</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">reg</span> <span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    cnt0<span class="token punctuation">;</span>
+    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    cnt1<span class="token punctuation">;</span>
+    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    cnt2<span class="token punctuation">;</span>
+
+    <span class="token keyword">reg</span>            flag<span class="token punctuation">;</span>
+    <span class="token keyword">reg</span>            wr_flag<span class="token punctuation">;</span>
+    <span class="token keyword">reg</span>            rd_flag<span class="token punctuation">;</span>
+    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    dev_addr_reg<span class="token punctuation">;</span>
+    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    addr_reg<span class="token punctuation">;</span>
+    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    wr_data_reg<span class="token punctuation">;</span>
+    <span class="token keyword">reg</span> <span class="token punctuation">[</span><span class="token number">26</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>  all_date_reg<span class="token punctuation">;</span>
+    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    cnt_step<span class="token punctuation">;</span>
+
+    <span class="token keyword">reg</span>        sda_en<span class="token punctuation">;</span>
+    <span class="token keyword">reg</span>        sda_out<span class="token punctuation">;</span>
+    <span class="token keyword">wire</span>    sda_in<span class="token punctuation">;</span>
+
+    <span class="token keyword">wire</span>    start_flag<span class="token punctuation">;</span>
+    <span class="token keyword">wire</span>    wr_start_flag<span class="token punctuation">;</span>
+    <span class="token keyword">wire</span>    rd_start_flag<span class="token punctuation">;</span>    
+
+    <span class="token keyword">wire</span>    add_cnt0<span class="token punctuation">,</span>end_cnt0<span class="token punctuation">;</span>
+    <span class="token keyword">wire</span>    add_cnt1<span class="token punctuation">,</span>end_cnt1<span class="token punctuation">;</span>
+    <span class="token keyword">wire</span>    add_cnt2<span class="token punctuation">,</span>end_cnt2<span class="token punctuation">;</span>
+
+
+    <span class="token comment" spellcheck="true">//确定开始的标志位，以及生成工作的flag信号</span>
+    <span class="token keyword">assign</span> start_flag <span class="token operator">=</span> <span class="token operator">!</span>flag <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>wr_en <span class="token operator">|</span> rd_en<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> rdy<span class="token punctuation">;</span>
+    <span class="token keyword">assign</span> wr_start_flag <span class="token operator">=</span> <span class="token operator">!</span>flag <span class="token operator">&amp;&amp;</span> wr_en <span class="token operator">&amp;&amp;</span> rdy<span class="token punctuation">;</span>
+    <span class="token keyword">assign</span> rd_start_flag <span class="token operator">=</span> <span class="token operator">!</span>flag <span class="token operator">&amp;&amp;</span> rd_en <span class="token operator">&amp;&amp;</span> rdy<span class="token punctuation">;</span>
+    <span class="token important">always@</span><span class="token punctuation">(</span><span class="token keyword">posedge</span> clk <span class="token keyword">or</span> <span class="token keyword">negedge</span> rst_n<span class="token punctuation">)</span><span class="token keyword">begin</span>
+        <span class="token function">if</span><span class="token punctuation">(</span><span class="token operator">!</span>rst_n<span class="token punctuation">)</span>
+            flag    <span class="token operator">&lt;=</span> <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>start_flag<span class="token punctuation">)</span>
+            flag    <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>end_cnt2<span class="token punctuation">)</span>
+            flag    <span class="token operator">&lt;=</span> <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span>
+            flag    <span class="token operator">&lt;=</span> flag<span class="token punctuation">;</span>
+    <span class="token keyword">end</span>
+    <span class="token important">always@</span><span class="token punctuation">(</span><span class="token keyword">posedge</span> clk <span class="token keyword">or</span> <span class="token keyword">negedge</span> rst_n<span class="token punctuation">)</span><span class="token keyword">begin</span>
+        <span class="token function">if</span><span class="token punctuation">(</span><span class="token operator">!</span>rst_n<span class="token punctuation">)</span>
+            rd_flag    <span class="token operator">&lt;=</span> <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>rd_start_flag<span class="token punctuation">)</span>
+            rd_flag    <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>end_cnt2<span class="token punctuation">)</span>
+            rd_flag    <span class="token operator">&lt;=</span> <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span>
+            rd_flag    <span class="token operator">&lt;=</span> rd_flag<span class="token punctuation">;</span>
+    <span class="token keyword">end</span>
+    <span class="token important">always@</span><span class="token punctuation">(</span><span class="token keyword">posedge</span> clk <span class="token keyword">or</span> <span class="token keyword">negedge</span> rst_n<span class="token punctuation">)</span><span class="token keyword">begin</span>
+        <span class="token function">if</span><span class="token punctuation">(</span><span class="token operator">!</span>rst_n<span class="token punctuation">)</span>
+            wr_flag    <span class="token operator">&lt;=</span> <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>wr_start_flag<span class="token punctuation">)</span>
+            wr_flag    <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>end_cnt2<span class="token punctuation">)</span>
+            wr_flag    <span class="token operator">&lt;=</span> <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span>
+            wr_flag    <span class="token operator">&lt;=</span> wr_flag<span class="token punctuation">;</span>
+    <span class="token keyword">end</span>
+    <span class="token comment" spellcheck="true">//对读写进行初始化，写操作将地址及数据暂存，读操作对地址进行暂存</span>
+    <span class="token important">always@</span><span class="token punctuation">(</span><span class="token keyword">posedge</span> clk <span class="token keyword">or</span> <span class="token keyword">negedge</span> rst_n<span class="token punctuation">)</span><span class="token keyword">begin</span>
+        <span class="token function">if</span><span class="token punctuation">(</span><span class="token operator">!</span>rst_n<span class="token punctuation">)</span><span class="token keyword">begin</span>
+            dev_addr_reg    <span class="token operator">&lt;=</span> <span class="token number">8'd0</span><span class="token punctuation">;</span>
+            addr_reg        <span class="token operator">&lt;=</span> <span class="token number">8'd0</span><span class="token punctuation">;</span>
+            wr_data_reg        <span class="token operator">&lt;=</span> <span class="token number">8'd0</span><span class="token punctuation">;</span>
+            cnt_step        <span class="token operator">&lt;=</span> <span class="token number">8'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">end</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>wr_start_flag<span class="token punctuation">)</span><span class="token keyword">begin</span>
+            dev_addr_reg    <span class="token operator">&lt;=</span> dev_addr<span class="token punctuation">;</span>
+            addr_reg        <span class="token operator">&lt;=</span> addr<span class="token punctuation">;</span>
+            wr_data_reg        <span class="token operator">&lt;=</span> wr_data<span class="token punctuation">;</span>
+            cnt_step        <span class="token operator">&lt;=</span> <span class="token number">8'd29</span><span class="token punctuation">;</span>
+            all_date_reg    <span class="token operator">&lt;=</span> <span class="token operator">{</span>dev_addr<span class="token punctuation">,</span><span class="token number">1'b1</span><span class="token punctuation">,</span>addr<span class="token punctuation">,</span><span class="token number">1'b1</span><span class="token punctuation">,</span>wr_data<span class="token punctuation">,</span><span class="token number">1'b1</span><span class="token operator">}</span><span class="token punctuation">;</span>
+        <span class="token keyword">end</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>rd_start_flag<span class="token punctuation">)</span><span class="token keyword">begin</span>
+            dev_addr_reg    <span class="token operator">&lt;=</span> dev_addr<span class="token punctuation">;</span>
+            addr_reg        <span class="token operator">&lt;=</span> addr<span class="token punctuation">;</span>
+            wr_data_reg        <span class="token operator">&lt;=</span> <span class="token number">8'd0</span><span class="token punctuation">;</span>
+            cnt_step        <span class="token operator">&lt;=</span> <span class="token number">8'd39</span><span class="token punctuation">;</span>
+            all_date_reg    <span class="token operator">&lt;=</span> <span class="token operator">{</span>dev_addr<span class="token punctuation">,</span><span class="token number">1'b1</span><span class="token punctuation">,</span>addr<span class="token punctuation">,</span><span class="token number">1'b1</span><span class="token punctuation">,</span><span class="token number">1'b1</span><span class="token punctuation">,</span>dev_addr<span class="token operator">}</span><span class="token punctuation">;</span>
+        <span class="token keyword">end</span>
+        <span class="token keyword">else</span> <span class="token keyword">begin</span>
+            dev_addr_reg    <span class="token operator">&lt;=</span> dev_addr_reg<span class="token punctuation">;</span>
+            addr_reg        <span class="token operator">&lt;=</span> addr_reg<span class="token punctuation">;</span>
+            wr_data_reg        <span class="token operator">&lt;=</span> wr_data_reg<span class="token punctuation">;</span>
+            cnt_step        <span class="token operator">&lt;=</span> cnt_step<span class="token punctuation">;</span>
+        <span class="token keyword">end</span>
+    <span class="token keyword">end</span>
+    <span class="token comment" spellcheck="true">//计数，确定几个阶段</span>
+    <span class="token important">always @</span><span class="token punctuation">(</span><span class="token keyword">posedge</span> clk <span class="token keyword">or</span> <span class="token keyword">negedge</span> rst_n<span class="token punctuation">)</span><span class="token keyword">begin</span>
+        <span class="token function">if</span><span class="token punctuation">(</span><span class="token operator">!</span>rst_n<span class="token punctuation">)</span><span class="token keyword">begin</span>
+            cnt0 <span class="token operator">&lt;=</span> <span class="token number">8'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">end</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>add_cnt0<span class="token punctuation">)</span><span class="token keyword">begin</span>
+            <span class="token function">if</span><span class="token punctuation">(</span>end_cnt0<span class="token punctuation">)</span>
+                cnt0 <span class="token operator">&lt;=</span> <span class="token number">8'd0</span><span class="token punctuation">;</span>
+            <span class="token keyword">else</span>
+                cnt0 <span class="token operator">&lt;=</span> cnt0 <span class="token operator">+</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+        <span class="token keyword">end</span>
+    <span class="token keyword">end</span>
+
+    <span class="token keyword">assign</span> add_cnt0 <span class="token operator">=</span> flag <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+    <span class="token keyword">assign</span> end_cnt0 <span class="token operator">=</span> add_cnt0 <span class="token operator">&amp;&amp;</span> cnt0 <span class="token operator">==</span> CLK_MAX <span class="token operator">-</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+
+    <span class="token important">always @</span><span class="token punctuation">(</span><span class="token keyword">posedge</span> clk <span class="token keyword">or</span> <span class="token keyword">negedge</span> rst_n<span class="token punctuation">)</span><span class="token keyword">begin</span>
+        <span class="token function">if</span><span class="token punctuation">(</span><span class="token operator">!</span>rst_n<span class="token punctuation">)</span><span class="token keyword">begin</span>
+            cnt1 <span class="token operator">&lt;=</span> <span class="token number">8'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">end</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>add_cnt1<span class="token punctuation">)</span><span class="token keyword">begin</span>
+            <span class="token function">if</span><span class="token punctuation">(</span>end_cnt1<span class="token punctuation">)</span>
+                cnt1 <span class="token operator">&lt;=</span> <span class="token number">8'd0</span><span class="token punctuation">;</span>
+            <span class="token keyword">else</span>
+                cnt1 <span class="token operator">&lt;=</span> cnt1 <span class="token operator">+</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+        <span class="token keyword">end</span>
+    <span class="token keyword">end</span>
+
+    <span class="token keyword">assign</span> add_cnt1 <span class="token operator">=</span> end_cnt0<span class="token punctuation">;</span>
+    <span class="token keyword">assign</span> end_cnt1 <span class="token operator">=</span> add_cnt1 <span class="token operator">&amp;&amp;</span> cnt1 <span class="token operator">==</span> <span class="token number">3</span><span class="token punctuation">;</span>
+
+    <span class="token important">always @</span><span class="token punctuation">(</span><span class="token keyword">posedge</span> clk <span class="token keyword">or</span> <span class="token keyword">negedge</span> rst_n<span class="token punctuation">)</span><span class="token keyword">begin</span> 
+        <span class="token function">if</span><span class="token punctuation">(</span><span class="token operator">!</span>rst_n<span class="token punctuation">)</span><span class="token keyword">begin</span>
+            cnt2 <span class="token operator">&lt;=</span> <span class="token number">8'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">end</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>add_cnt2<span class="token punctuation">)</span><span class="token keyword">begin</span>
+            <span class="token function">if</span><span class="token punctuation">(</span>end_cnt2<span class="token punctuation">)</span>
+                cnt2 <span class="token operator">&lt;=</span> <span class="token number">8'd0</span><span class="token punctuation">;</span>
+            <span class="token keyword">else</span>
+                cnt2 <span class="token operator">&lt;=</span> cnt2 <span class="token operator">+</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+        <span class="token keyword">end</span>
+    <span class="token keyword">end</span>
+
+    <span class="token keyword">assign</span> add_cnt2 <span class="token operator">=</span> end_cnt1<span class="token punctuation">;</span>
+    <span class="token keyword">assign</span> end_cnt2 <span class="token operator">=</span> add_cnt2 <span class="token operator">&amp;&amp;</span> cnt2 <span class="token operator">==</span> cnt_step <span class="token operator">-</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">//功能模块部分.......</span>
+    <span class="token important">always@</span><span class="token punctuation">(</span><span class="token keyword">posedge</span> clk <span class="token keyword">or</span> <span class="token keyword">negedge</span> rst_n<span class="token punctuation">)</span><span class="token keyword">begin</span>
+        <span class="token function">if</span><span class="token punctuation">(</span><span class="token operator">!</span>rst_n<span class="token punctuation">)</span><span class="token keyword">begin</span>
+            scl        <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+        <span class="token keyword">end</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>flag<span class="token punctuation">)</span><span class="token keyword">begin</span>
+            <span class="token function">case</span><span class="token punctuation">(</span>cnt2<span class="token punctuation">)</span>
+                <span class="token number">8'd0</span><span class="token punctuation">:</span>    
+                    <span class="token function">case</span><span class="token punctuation">(</span>cnt1<span class="token punctuation">)</span>
+                        <span class="token number">8'd0</span>    <span class="token punctuation">:</span>scl    <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+                        <span class="token number">8'd1</span>    <span class="token punctuation">:</span>scl    <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+                        <span class="token number">8'd2</span>    <span class="token punctuation">:</span>scl    <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+                        <span class="token number">8'd3</span>    <span class="token punctuation">:</span>scl    <span class="token operator">&lt;=</span> <span class="token number">1'b0</span><span class="token punctuation">;</span>
+                        <span class="token keyword">default</span>    <span class="token punctuation">:</span>scl    <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+                    <span class="token keyword">endcase</span>
+                cnt_step <span class="token operator">-</span> <span class="token number">1'b1</span><span class="token punctuation">:</span>
+                    <span class="token function">case</span><span class="token punctuation">(</span>cnt1<span class="token punctuation">)</span>
+                        <span class="token number">8'd0</span>    <span class="token punctuation">:</span>scl    <span class="token operator">&lt;=</span> <span class="token number">1'b0</span><span class="token punctuation">;</span>
+                        <span class="token number">8'd1</span>    <span class="token punctuation">:</span>scl    <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+                        <span class="token number">8'd2</span>    <span class="token punctuation">:</span>scl    <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+                        <span class="token number">8'd3</span>    <span class="token punctuation">:</span>scl    <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+                        <span class="token keyword">default</span>    <span class="token punctuation">:</span>scl    <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+                    <span class="token keyword">endcase</span>
+                <span class="token keyword">default</span><span class="token punctuation">:</span>
+                    <span class="token function">case</span><span class="token punctuation">(</span>cnt1<span class="token punctuation">)</span>
+                        <span class="token number">8'd0</span>    <span class="token punctuation">:</span>scl    <span class="token operator">&lt;=</span> <span class="token number">1'b0</span><span class="token punctuation">;</span>
+                        <span class="token number">8'd1</span>    <span class="token punctuation">:</span>scl    <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+                        <span class="token number">8'd2</span>    <span class="token punctuation">:</span>scl    <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+                        <span class="token number">8'd3</span>    <span class="token punctuation">:</span>scl    <span class="token operator">&lt;=</span> <span class="token number">1'b0</span><span class="token punctuation">;</span>
+                        <span class="token keyword">default</span>    <span class="token punctuation">:</span>scl    <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+                    <span class="token keyword">endcase</span>
+            <span class="token keyword">endcase</span>
+        <span class="token keyword">end</span>
+        <span class="token keyword">else</span>
+            scl        <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+    <span class="token keyword">end</span>
+
+    <span class="token important">always@</span><span class="token punctuation">(</span><span class="token keyword">posedge</span> clk <span class="token keyword">or</span> <span class="token keyword">negedge</span> rst_n<span class="token punctuation">)</span><span class="token keyword">begin</span>
+        <span class="token function">if</span><span class="token punctuation">(</span><span class="token operator">!</span>rst_n<span class="token punctuation">)</span><span class="token keyword">begin</span>
+            sda_en    <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+            sda_out    <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+        <span class="token keyword">end</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>wr_flag<span class="token punctuation">)</span><span class="token keyword">begin</span>
+            <span class="token function">case</span><span class="token punctuation">(</span>cnt2<span class="token punctuation">)</span>
+                <span class="token number">8'd0</span>    <span class="token punctuation">:</span> 
+                    <span class="token function">case</span><span class="token punctuation">(</span>cnt1<span class="token punctuation">)</span>
+                        <span class="token number">8'd0</span>    <span class="token punctuation">:</span><span class="token keyword">begin</span> sda_en <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>sda_out <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span><span class="token keyword">end</span>
+                        <span class="token number">8'd1</span>    <span class="token punctuation">:</span><span class="token keyword">begin</span> sda_en <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>sda_out <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span><span class="token keyword">end</span>
+                        <span class="token keyword">default</span>    <span class="token punctuation">:</span><span class="token keyword">begin</span> sda_en <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>sda_out <span class="token operator">&lt;=</span> <span class="token number">1'b0</span><span class="token punctuation">;</span><span class="token keyword">end</span>
+                    <span class="token keyword">endcase</span>
+                <span class="token number">8'd1</span><span class="token punctuation">,</span><span class="token number">8'd2</span><span class="token punctuation">,</span><span class="token number">8'd3</span><span class="token punctuation">,</span><span class="token number">8'd4</span><span class="token punctuation">,</span><span class="token number">8'd5</span><span class="token punctuation">,</span><span class="token number">8'd6</span><span class="token punctuation">,</span><span class="token number">8'd7</span><span class="token punctuation">,</span><span class="token number">8'd8</span><span class="token punctuation">,</span>
+                <span class="token number">8'd10</span><span class="token punctuation">,</span><span class="token number">8'd11</span><span class="token punctuation">,</span><span class="token number">8'd12</span><span class="token punctuation">,</span><span class="token number">8'd13</span><span class="token punctuation">,</span><span class="token number">8'd14</span><span class="token punctuation">,</span><span class="token number">8'd15</span><span class="token punctuation">,</span><span class="token number">8'd16</span><span class="token punctuation">,</span><span class="token number">8'd17</span><span class="token punctuation">,</span>
+                <span class="token number">8'd19</span><span class="token punctuation">,</span><span class="token number">8'd20</span><span class="token punctuation">,</span><span class="token number">8'd21</span><span class="token punctuation">,</span><span class="token number">8'd22</span><span class="token punctuation">,</span><span class="token number">8'd23</span><span class="token punctuation">,</span><span class="token number">8'd24</span><span class="token punctuation">,</span><span class="token number">8'd25</span><span class="token punctuation">,</span><span class="token number">8'd26</span><span class="token punctuation">:</span>
+                    <span class="token keyword">begin</span>
+                        sda_en <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+                        sda_out <span class="token operator">&lt;=</span> all_date_reg<span class="token punctuation">[</span><span class="token number">8'd26</span> <span class="token operator">-</span> cnt2<span class="token punctuation">]</span><span class="token punctuation">;</span>
+                    <span class="token keyword">end</span>    
+                <span class="token number">8'd9</span><span class="token punctuation">,</span><span class="token number">8'd18</span><span class="token punctuation">,</span><span class="token number">8'd27</span><span class="token punctuation">:</span>
+                    <span class="token keyword">begin</span>
+                        sda_en <span class="token operator">&lt;=</span> <span class="token number">1'b0</span><span class="token punctuation">;</span>
+                        sda_out <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+                    <span class="token keyword">end</span>
+                <span class="token number">8'd28</span><span class="token punctuation">:</span> 
+                    <span class="token function">case</span><span class="token punctuation">(</span>cnt1<span class="token punctuation">)</span>
+                        <span class="token number">8'd0</span>    <span class="token punctuation">:</span><span class="token keyword">begin</span> sda_en <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>sda_out <span class="token operator">&lt;=</span> <span class="token number">1'b0</span><span class="token punctuation">;</span><span class="token keyword">end</span>
+                        <span class="token number">8'd1</span>    <span class="token punctuation">:</span><span class="token keyword">begin</span> sda_en <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>sda_out <span class="token operator">&lt;=</span> <span class="token number">1'b0</span><span class="token punctuation">;</span><span class="token keyword">end</span>
+                        <span class="token keyword">default</span>    <span class="token punctuation">:</span><span class="token keyword">begin</span> sda_en <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>sda_out <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span><span class="token keyword">end</span>
+                    <span class="token keyword">endcase</span>
+            <span class="token keyword">endcase</span>
+        <span class="token keyword">end</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>rd_flag<span class="token punctuation">)</span><span class="token keyword">begin</span>    <span class="token comment" spellcheck="true">//读操作时序</span>
+            <span class="token function">case</span><span class="token punctuation">(</span>cnt2<span class="token punctuation">)</span>
+                <span class="token number">8'd0</span><span class="token punctuation">,</span><span class="token number">8'd19</span><span class="token punctuation">:</span> 
+                    <span class="token function">case</span><span class="token punctuation">(</span>cnt1<span class="token punctuation">)</span>
+                        <span class="token number">8'd0</span>    <span class="token punctuation">:</span><span class="token keyword">begin</span> sda_en <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>sda_out <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span><span class="token keyword">end</span>
+                        <span class="token number">8'd1</span>    <span class="token punctuation">:</span><span class="token keyword">begin</span> sda_en <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>sda_out <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span><span class="token keyword">end</span>
+                        <span class="token keyword">default</span>    <span class="token punctuation">:</span><span class="token keyword">begin</span> sda_en <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>sda_out <span class="token operator">&lt;=</span> <span class="token number">1'b0</span><span class="token punctuation">;</span><span class="token keyword">end</span>
+                    <span class="token keyword">endcase</span>
+                <span class="token number">8'd1</span><span class="token punctuation">,</span><span class="token number">8'd2</span><span class="token punctuation">,</span><span class="token number">8'd3</span><span class="token punctuation">,</span><span class="token number">8'd4</span><span class="token punctuation">,</span><span class="token number">8'd5</span><span class="token punctuation">,</span><span class="token number">8'd6</span><span class="token punctuation">,</span><span class="token number">8'd7</span><span class="token punctuation">,</span><span class="token number">8'd8</span><span class="token punctuation">,</span>
+                <span class="token number">8'd10</span><span class="token punctuation">,</span><span class="token number">8'd11</span><span class="token punctuation">,</span><span class="token number">8'd12</span><span class="token punctuation">,</span><span class="token number">8'd13</span><span class="token punctuation">,</span><span class="token number">8'd14</span><span class="token punctuation">,</span><span class="token number">8'd15</span><span class="token punctuation">,</span><span class="token number">8'd16</span><span class="token punctuation">,</span><span class="token number">8'd17</span><span class="token punctuation">,</span>
+                <span class="token number">8'd20</span><span class="token punctuation">,</span><span class="token number">8'd21</span><span class="token punctuation">,</span><span class="token number">8'd22</span><span class="token punctuation">,</span><span class="token number">8'd23</span><span class="token punctuation">,</span><span class="token number">8'd24</span><span class="token punctuation">,</span><span class="token number">8'd25</span><span class="token punctuation">,</span><span class="token number">8'd26</span><span class="token punctuation">,</span><span class="token number">8'd27</span><span class="token punctuation">:</span>
+                    <span class="token keyword">begin</span>
+                        sda_en <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+                        sda_out <span class="token operator">&lt;=</span> all_date_reg<span class="token punctuation">[</span><span class="token number">8'd27</span> <span class="token operator">-</span> cnt2<span class="token punctuation">]</span><span class="token punctuation">;</span>
+                    <span class="token keyword">end</span>    
+                <span class="token number">8'd29</span><span class="token punctuation">,</span><span class="token number">8'd30</span><span class="token punctuation">,</span><span class="token number">8'd31</span><span class="token punctuation">,</span><span class="token number">8'd32</span><span class="token punctuation">,</span><span class="token number">8'd33</span><span class="token punctuation">,</span><span class="token number">8'd34</span><span class="token punctuation">,</span><span class="token number">8'd35</span><span class="token punctuation">,</span><span class="token number">8'd36</span><span class="token punctuation">:</span>
+                    <span class="token keyword">begin</span>
+                        sda_en <span class="token operator">&lt;=</span> <span class="token number">1'b0</span><span class="token punctuation">;</span>
+                        rd_data<span class="token punctuation">[</span><span class="token number">8'd36</span> <span class="token operator">-</span> cnt2<span class="token punctuation">]</span> <span class="token operator">&lt;=</span> sda_in<span class="token punctuation">;</span>
+                    <span class="token keyword">end</span>    
+                <span class="token number">8'd9</span><span class="token punctuation">,</span><span class="token number">8'd18</span><span class="token punctuation">,</span><span class="token number">8'd28</span><span class="token punctuation">,</span><span class="token number">8'd37</span><span class="token punctuation">:</span>
+                    <span class="token keyword">begin</span>
+                        sda_en <span class="token operator">&lt;=</span> <span class="token number">1'b0</span><span class="token punctuation">;</span>
+                        sda_out <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+                    <span class="token keyword">end</span>
+                <span class="token number">8'd38</span><span class="token punctuation">:</span> 
+                    <span class="token function">case</span><span class="token punctuation">(</span>cnt1<span class="token punctuation">)</span>
+                        <span class="token number">8'd0</span>    <span class="token punctuation">:</span><span class="token keyword">begin</span> sda_en <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>sda_out <span class="token operator">&lt;=</span> <span class="token number">1'b0</span><span class="token punctuation">;</span><span class="token keyword">end</span>
+                        <span class="token number">8'd1</span>    <span class="token punctuation">:</span><span class="token keyword">begin</span> sda_en <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>sda_out <span class="token operator">&lt;=</span> <span class="token number">1'b0</span><span class="token punctuation">;</span><span class="token keyword">end</span>
+                        <span class="token keyword">default</span>    <span class="token punctuation">:</span><span class="token keyword">begin</span> sda_en <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>sda_out <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span><span class="token keyword">end</span>
+                    <span class="token keyword">endcase</span>
+            <span class="token keyword">endcase</span>
+
+        <span class="token keyword">end</span> 
+        <span class="token keyword">else</span> <span class="token keyword">begin</span>
+
+        <span class="token keyword">end</span>    
+    <span class="token keyword">end</span>
+
+    <span class="token comment" spellcheck="true">//读数据完成信号，可以取读到的数据</span>
+    <span class="token important">always@</span><span class="token punctuation">(</span><span class="token keyword">posedge</span> clk <span class="token keyword">or</span> <span class="token keyword">negedge</span> rst_n<span class="token punctuation">)</span><span class="token keyword">begin</span>
+        <span class="token function">if</span><span class="token punctuation">(</span><span class="token operator">!</span>rst_n<span class="token punctuation">)</span>
+            rd_data_valid        <span class="token operator">&lt;=</span> <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>rd_flag <span class="token operator">&amp;&amp;</span> cnt2 <span class="token operator">==</span> cnt_step <span class="token operator">-</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>
+            rd_data_valid        <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span>
+            rd_data_valid        <span class="token operator">&lt;=</span> <span class="token number">1'b0</span><span class="token punctuation">;</span>
+    <span class="token keyword">end</span>
+
+    <span class="token comment" spellcheck="true">//准备信号，为1时表示可以接受控制信号，即空闲</span>
+    <span class="token important">always@</span><span class="token punctuation">(</span><span class="token keyword">posedge</span> clk <span class="token keyword">or</span> <span class="token keyword">negedge</span> rst_n<span class="token punctuation">)</span><span class="token keyword">begin</span>
+        <span class="token function">if</span><span class="token punctuation">(</span><span class="token operator">!</span>rst_n<span class="token punctuation">)</span>
+            rdy        <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span>
+            rdy        <span class="token operator">&lt;=</span> <span class="token operator">~</span>flag<span class="token punctuation">;</span>
+    <span class="token keyword">end</span>
+
+    <span class="token comment" spellcheck="true">//三态门结构</span>
+    <span class="token keyword">assign</span>    sda <span class="token operator">=</span> sda_en <span class="token operator">?</span> sda_out <span class="token punctuation">:</span> <span class="token number">1'bz</span><span class="token punctuation">;</span>
+    <span class="token keyword">assign</span>    sda_in <span class="token operator">=</span> sda<span class="token punctuation">;</span>
+
+<span class="token keyword">endmodule</span></code></pre>
+<h3 id="代码2"><a href="#代码2" class="headerlink" title="代码2"></a>代码2</h3><pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">module</span> <span class="token function">I2C_Controller</span><span class="token punctuation">(</span>        <span class="token comment" spellcheck="true">//本代码为IIC驱动程序，可用于SCCB写操作</span>
+        <span class="token keyword">input</span>                iCLK<span class="token punctuation">,</span>        
+        <span class="token keyword">input</span>                iRST_N<span class="token punctuation">,</span>        
+        <span class="token keyword">input</span>                I2C_CLK<span class="token punctuation">,</span>    
+        <span class="token keyword">input</span>                I2C_EN<span class="token punctuation">,</span>        
+        <span class="token keyword">input</span>        <span class="token punctuation">[</span><span class="token number">23</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    I2C_WDATA<span class="token punctuation">,</span>    
+        <span class="token keyword">output</span>                I2C_SCLK<span class="token punctuation">,</span>    
+        <span class="token keyword">inout</span>                I2C_SDAT<span class="token punctuation">,</span>    
+        <span class="token keyword">input</span>                WR<span class="token punctuation">,</span>         
+        <span class="token keyword">input</span>                GO<span class="token punctuation">,</span>          
+        <span class="token keyword">output</span>                ACK<span class="token punctuation">,</span>          
+        <span class="token keyword">output</span>    <span class="token keyword">reg</span>            END<span class="token punctuation">,</span>          
+        <span class="token keyword">output</span>    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    I2C_RDATA    
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">reg</span>        I2C_BIT<span class="token punctuation">;</span>
+    <span class="token keyword">reg</span>     SCLK<span class="token punctuation">;</span>    
+    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    SD_COUNTER<span class="token punctuation">;</span>
+    <span class="token keyword">wire</span>     I2C_SCLK1 <span class="token operator">=</span>     <span class="token punctuation">(</span>GO <span class="token operator">==</span> <span class="token number">1</span> <span class="token operator">&amp;&amp;</span>
+                             <span class="token punctuation">(</span><span class="token punctuation">(</span>SD_COUNTER <span class="token operator">>=</span> <span class="token number">5</span> <span class="token operator">&amp;&amp;</span> SD_COUNTER <span class="token operator">&lt;=</span><span class="token number">12</span> <span class="token operator">||</span> SD_COUNTER <span class="token operator">==</span> <span class="token number">14</span><span class="token punctuation">)</span> <span class="token operator">||</span>    
+                              <span class="token punctuation">(</span>SD_COUNTER <span class="token operator">>=</span> <span class="token number">16</span> <span class="token operator">&amp;&amp;</span> SD_COUNTER <span class="token operator">&lt;=</span><span class="token number">23</span> <span class="token operator">||</span> SD_COUNTER <span class="token operator">==</span> <span class="token number">25</span><span class="token punctuation">)</span> <span class="token operator">||</span>
+                              <span class="token punctuation">(</span>SD_COUNTER <span class="token operator">>=</span> <span class="token number">27</span> <span class="token operator">&amp;&amp;</span> SD_COUNTER <span class="token operator">&lt;=</span><span class="token number">34</span> <span class="token operator">||</span> SD_COUNTER <span class="token operator">==</span> <span class="token number">36</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">?</span> I2C_CLK <span class="token punctuation">:</span> SCLK<span class="token punctuation">;</span>                    
+    <span class="token keyword">wire</span>     I2C_SCLK2 <span class="token operator">=</span>     <span class="token punctuation">(</span>GO <span class="token operator">==</span> <span class="token number">1</span> <span class="token operator">&amp;&amp;</span>
+                             <span class="token punctuation">(</span><span class="token punctuation">(</span>SD_COUNTER <span class="token operator">>=</span> <span class="token number">5</span> <span class="token operator">&amp;&amp;</span> SD_COUNTER <span class="token operator">&lt;=</span><span class="token number">12</span> <span class="token operator">||</span> SD_COUNTER <span class="token operator">==</span> <span class="token number">14</span><span class="token punctuation">)</span> <span class="token operator">||</span>
+                              <span class="token punctuation">(</span>SD_COUNTER <span class="token operator">>=</span> <span class="token number">16</span> <span class="token operator">&amp;&amp;</span> SD_COUNTER <span class="token operator">&lt;=</span><span class="token number">23</span> <span class="token operator">||</span> SD_COUNTER <span class="token operator">==</span> <span class="token number">25</span><span class="token punctuation">)</span> <span class="token operator">||</span>
+                              <span class="token punctuation">(</span>SD_COUNTER <span class="token operator">>=</span> <span class="token number">33</span> <span class="token operator">&amp;&amp;</span> SD_COUNTER <span class="token operator">&lt;=</span><span class="token number">40</span> <span class="token operator">||</span> SD_COUNTER <span class="token operator">==</span> <span class="token number">42</span><span class="token punctuation">)</span> <span class="token operator">||</span>
+                              <span class="token punctuation">(</span>SD_COUNTER <span class="token operator">>=</span> <span class="token number">45</span> <span class="token operator">&amp;&amp;</span> SD_COUNTER <span class="token operator">&lt;=</span><span class="token number">52</span> <span class="token operator">||</span> SD_COUNTER <span class="token operator">==</span> <span class="token number">54</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">?</span> I2C_CLK <span class="token punctuation">:</span> SCLK<span class="token punctuation">;</span>                        
+    <span class="token keyword">assign</span>    I2C_SCLK <span class="token operator">=</span> WR <span class="token operator">?</span> I2C_SCLK1 <span class="token punctuation">:</span> I2C_SCLK2<span class="token punctuation">;</span>    
+    <span class="token keyword">wire</span>    SDO1    <span class="token operator">=</span>        <span class="token punctuation">(</span><span class="token punctuation">(</span>SD_COUNTER <span class="token operator">==</span> <span class="token number">13</span> <span class="token operator">||</span> SD_COUNTER <span class="token operator">==</span> <span class="token number">14</span><span class="token punctuation">)</span><span class="token operator">||</span> 
+                             <span class="token punctuation">(</span>SD_COUNTER <span class="token operator">==</span> <span class="token number">24</span> <span class="token operator">||</span> SD_COUNTER <span class="token operator">==</span> <span class="token number">25</span><span class="token punctuation">)</span> <span class="token operator">||</span> 
+                             <span class="token punctuation">(</span>SD_COUNTER <span class="token operator">==</span> <span class="token number">35</span> <span class="token operator">||</span> SD_COUNTER <span class="token operator">==</span> <span class="token number">36</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">1'b0</span> <span class="token punctuation">:</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>                                
+    <span class="token keyword">wire</span>    SDO2    <span class="token operator">=</span>        <span class="token punctuation">(</span><span class="token punctuation">(</span>SD_COUNTER <span class="token operator">==</span> <span class="token number">13</span> <span class="token operator">||</span> SD_COUNTER <span class="token operator">==</span> <span class="token number">14</span><span class="token punctuation">)</span><span class="token operator">||</span> 
+                             <span class="token punctuation">(</span>SD_COUNTER <span class="token operator">==</span> <span class="token number">24</span> <span class="token operator">||</span> SD_COUNTER <span class="token operator">==</span> <span class="token number">25</span><span class="token punctuation">)</span> <span class="token operator">||</span> 
+                             <span class="token punctuation">(</span>SD_COUNTER <span class="token operator">==</span> <span class="token number">41</span> <span class="token operator">||</span> SD_COUNTER <span class="token operator">==</span> <span class="token number">42</span><span class="token punctuation">)</span> <span class="token operator">||</span>
+                             <span class="token punctuation">(</span>SD_COUNTER <span class="token operator">>=</span> <span class="token number">44</span> <span class="token operator">&amp;&amp;</span> SD_COUNTER <span class="token operator">&lt;=</span> <span class="token number">52</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">1'b0</span> <span class="token punctuation">:</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>        
+    <span class="token keyword">wire</span>    SDO <span class="token operator">=</span> WR <span class="token operator">?</span> SDO1 <span class="token punctuation">:</span> SDO2<span class="token punctuation">;</span>
+    <span class="token keyword">assign</span>    I2C_SDAT <span class="token operator">=</span> SDO <span class="token operator">?</span> I2C_BIT <span class="token punctuation">:</span> <span class="token number">1'bz</span><span class="token punctuation">;</span>
+    <span class="token keyword">reg</span>        ACKW1<span class="token punctuation">,</span> ACKW2<span class="token punctuation">,</span> ACKW3<span class="token punctuation">;</span>        
+    <span class="token keyword">reg</span>     ACKR1<span class="token punctuation">,</span> ACKR2<span class="token punctuation">,</span> ACKR3<span class="token punctuation">;</span>        
+    <span class="token keyword">assign</span>    ACK <span class="token operator">=</span> WR <span class="token operator">?</span> <span class="token punctuation">(</span>ACKW1 <span class="token operator">|</span> ACKW2 <span class="token operator">|</span> ACKW3<span class="token punctuation">)</span> <span class="token punctuation">:</span> <span class="token punctuation">(</span>ACKR1 <span class="token operator">|</span> ACKR2 <span class="token operator">|</span> ACKR3<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token important">always @</span><span class="token punctuation">(</span><span class="token keyword">posedge</span> iCLK <span class="token keyword">or</span> <span class="token keyword">negedge</span> iRST_N<span class="token punctuation">)</span> 
+        <span class="token keyword">begin</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>iRST_N<span class="token punctuation">)</span> 
+                SD_COUNTER <span class="token operator">&lt;=</span> <span class="token number">6'b0</span><span class="token punctuation">;</span>
+            <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>I2C_EN<span class="token punctuation">)</span>
+                <span class="token keyword">begin</span>
+                    <span class="token keyword">if</span> <span class="token punctuation">(</span>GO <span class="token operator">==</span> <span class="token number">0</span> <span class="token operator">||</span> END <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span> 
+                        SD_COUNTER <span class="token operator">&lt;=</span> <span class="token number">6'b0</span><span class="token punctuation">;</span>
+                    <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>SD_COUNTER <span class="token operator">&lt;</span> <span class="token number">6'd63</span><span class="token punctuation">)</span> 
+                        SD_COUNTER <span class="token operator">&lt;=</span> SD_COUNTER <span class="token operator">+</span> <span class="token number">6'd1</span><span class="token punctuation">;</span>    
+                <span class="token keyword">end</span>
+            <span class="token keyword">else</span>
+                SD_COUNTER <span class="token operator">&lt;=</span> SD_COUNTER<span class="token punctuation">;</span>
+        <span class="token keyword">end</span>
+
+    <span class="token important">always @</span><span class="token punctuation">(</span><span class="token keyword">posedge</span> iCLK <span class="token keyword">or</span> <span class="token keyword">negedge</span> iRST_N<span class="token punctuation">)</span> 
+        <span class="token keyword">begin</span>
+            <span class="token function">if</span><span class="token punctuation">(</span><span class="token operator">!</span>iRST_N<span class="token punctuation">)</span> 
+                <span class="token keyword">begin</span> 
+                    SCLK <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+                    I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> 
+                    ACKW1 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> ACKW2 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> ACKW3 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> 
+                    ACKR1 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> ACKR2 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> ACKR3 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+                    END <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+                    I2C_RDATA <span class="token operator">&lt;=</span> <span class="token number">8'h0</span><span class="token punctuation">;</span>    
+                <span class="token keyword">end</span>
+            <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>I2C_EN<span class="token punctuation">)</span>        
+                <span class="token keyword">begin</span>
+                    <span class="token function">if</span><span class="token punctuation">(</span>GO<span class="token punctuation">)</span>
+                        <span class="token keyword">begin</span>
+                            <span class="token function">if</span><span class="token punctuation">(</span>WR<span class="token punctuation">)</span>        
+                                <span class="token keyword">begin</span>
+                                    <span class="token function">case</span><span class="token punctuation">(</span>SD_COUNTER<span class="token punctuation">)</span>
+                                        <span class="token number">6'd0</span> <span class="token punctuation">:</span>    <span class="token keyword">begin</span>
+                                            SCLK <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+                                            I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+                                            ACKW1 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> ACKW2 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> ACKW3 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+                                            ACKR1 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> ACKR2 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> ACKR3 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+                                            END <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+                                        <span class="token keyword">end</span>
+                                        <span class="token number">6'd1</span> <span class="token punctuation">:</span>    <span class="token keyword">begin</span> 
+                                            SCLK <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+                                            I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+                                            ACKW1 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> ACKW2 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> ACKW3 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> 
+                                            END <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+                                        <span class="token keyword">end</span>
+                                        <span class="token number">6'd2</span>  <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>        
+                                        <span class="token number">6'd3</span>  <span class="token punctuation">:</span> SCLK <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>            
+                                        <span class="token number">6'd4</span>  <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">23</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd5</span>  <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">22</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd6</span>  <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">21</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd7</span>  <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">20</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd8</span>  <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">19</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd9</span>  <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">18</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd10</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">17</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd11</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">16</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd12</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>                
+                                        <span class="token number">6'd13</span> <span class="token punctuation">:</span> ACKW1     <span class="token operator">&lt;=</span> I2C_SDAT<span class="token punctuation">;</span>        
+                                        <span class="token number">6'd14</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>                
+                                        <span class="token number">6'd15</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd16</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">14</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd17</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">13</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd18</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">12</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd19</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">11</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd20</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">10</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd21</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">9</span><span class="token punctuation">]</span><span class="token punctuation">;</span>   
+                                        <span class="token number">6'd22</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd23</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>                
+                                        <span class="token number">6'd24</span> <span class="token punctuation">:</span> ACKW2     <span class="token operator">&lt;=</span> I2C_SDAT<span class="token punctuation">;</span>        
+                                        <span class="token number">6'd25</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>                
+                                        <span class="token number">6'd26</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">]</span><span class="token punctuation">;</span>     
+                                        <span class="token number">6'd27</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">6</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd28</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd29</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd30</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd31</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd32</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd33</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd34</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>                
+                                        <span class="token number">6'd35</span> <span class="token punctuation">:</span> ACKW3     <span class="token operator">&lt;=</span> I2C_SDAT<span class="token punctuation">;</span>        
+                                        <span class="token number">6'd36</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>                
+                                        <span class="token number">6'd37</span> <span class="token punctuation">:</span> <span class="token keyword">begin</span>    SCLK <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span> I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token keyword">end</span>
+                                        <span class="token number">6'd38</span> <span class="token punctuation">:</span> SCLK <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd39</span> <span class="token punctuation">:</span> <span class="token keyword">begin</span> I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> END <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> <span class="token keyword">end</span> 
+                                        <span class="token keyword">default</span> <span class="token punctuation">:</span> <span class="token keyword">begin</span> I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> SCLK <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> <span class="token keyword">end</span>
+                                    <span class="token keyword">endcase</span>
+                                <span class="token keyword">end</span>
+                            <span class="token keyword">else</span>        
+                                <span class="token keyword">begin</span>
+                                    <span class="token function">case</span><span class="token punctuation">(</span>SD_COUNTER<span class="token punctuation">)</span>
+                                        <span class="token number">6'd0</span> <span class="token punctuation">:</span>    <span class="token keyword">begin</span>
+                                            SCLK <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+                                            I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+                                            ACKW1 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> ACKW2 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> ACKW3 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+                                            ACKR1 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> ACKR2 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> ACKR3 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> 
+                                            END <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+                                        <span class="token keyword">end</span>
+                                        <span class="token number">6'd1</span> <span class="token punctuation">:</span>    <span class="token keyword">begin</span> 
+                                            SCLK <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+                                            I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+                                            ACKR1 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> ACKR2 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> ACKR3 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> 
+                                            END <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+                                        <span class="token keyword">end</span>
+                                        <span class="token number">6'd2</span>  <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>        
+                                        <span class="token number">6'd3</span>  <span class="token punctuation">:</span> SCLK <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>            
+                                        <span class="token number">6'd4</span>  <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">23</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd5</span>  <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">22</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd6</span>  <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">21</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd7</span>  <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">20</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd8</span>  <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">19</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+                                        <span class="token number">6'd9</span>  <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">18</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd10</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">17</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd11</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">16</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd12</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>                
+                                        <span class="token number">6'd13</span> <span class="token punctuation">:</span> ACKR1     <span class="token operator">&lt;=</span> I2C_SDAT<span class="token punctuation">;</span>        
+                                        <span class="token number">6'd14</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>                
+                                        <span class="token number">6'd15</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd16</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">14</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd17</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">13</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd18</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">12</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd19</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">11</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd20</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">10</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd21</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">9</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd22</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd23</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>                
+                                        <span class="token number">6'd24</span> <span class="token punctuation">:</span> ACKR2     <span class="token operator">&lt;=</span> I2C_SDAT<span class="token punctuation">;</span>        
+                                        <span class="token number">6'd25</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>                
+                                        <span class="token number">6'd26</span> <span class="token punctuation">:</span> <span class="token keyword">begin</span>    SCLK <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span> I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token keyword">end</span>
+                                        <span class="token number">6'd27</span> <span class="token punctuation">:</span> SCLK <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd28</span> <span class="token punctuation">:</span> <span class="token keyword">begin</span> I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> <span class="token keyword">end</span> 
+                                        <span class="token number">6'd29</span> <span class="token punctuation">:</span>    <span class="token keyword">begin</span> 
+                                            SCLK <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+                                            I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+                                        <span class="token keyword">end</span>
+                                        <span class="token number">6'd30</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>        
+                                        <span class="token number">6'd31</span> <span class="token punctuation">:</span> SCLK <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>            
+                                        <span class="token number">6'd32</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">23</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd33</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">22</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd34</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">21</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd35</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">20</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd36</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">19</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd37</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">18</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd38</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> I2C_WDATA<span class="token punctuation">[</span><span class="token number">17</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd39</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>            
+                                        <span class="token number">6'd40</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>                
+                                        <span class="token number">6'd41</span> <span class="token punctuation">:</span> ACKR3     <span class="token operator">&lt;=</span> I2C_SDAT<span class="token punctuation">;</span>        
+                                        <span class="token number">6'd42</span> <span class="token punctuation">:</span> I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>                
+                                        <span class="token number">6'd43</span> <span class="token punctuation">:</span> I2C_BIT     <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>            
+                                        <span class="token number">6'd44</span> <span class="token punctuation">:</span> I2C_BIT     <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>            
+                                        <span class="token number">6'd45</span> <span class="token punctuation">:</span> I2C_RDATA<span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">]</span> <span class="token operator">&lt;=</span> I2C_SDAT<span class="token punctuation">;</span>    
+                                        <span class="token number">6'd46</span> <span class="token punctuation">:</span> I2C_RDATA<span class="token punctuation">[</span><span class="token number">6</span><span class="token punctuation">]</span> <span class="token operator">&lt;=</span> I2C_SDAT<span class="token punctuation">;</span>    
+                                        <span class="token number">6'd47</span> <span class="token punctuation">:</span> I2C_RDATA<span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">]</span> <span class="token operator">&lt;=</span> I2C_SDAT<span class="token punctuation">;</span>    
+                                        <span class="token number">6'd48</span> <span class="token punctuation">:</span> I2C_RDATA<span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">]</span> <span class="token operator">&lt;=</span> I2C_SDAT<span class="token punctuation">;</span>     
+                                        <span class="token number">6'd49</span> <span class="token punctuation">:</span> I2C_RDATA<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span> <span class="token operator">&lt;=</span> I2C_SDAT<span class="token punctuation">;</span>    
+                                        <span class="token number">6'd50</span> <span class="token punctuation">:</span> I2C_RDATA<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token operator">&lt;=</span> I2C_SDAT<span class="token punctuation">;</span>    
+                                        <span class="token number">6'd51</span> <span class="token punctuation">:</span> I2C_RDATA<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">&lt;=</span> I2C_SDAT<span class="token punctuation">;</span>    
+                                        <span class="token number">6'd52</span> <span class="token punctuation">:</span> I2C_RDATA<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">&lt;=</span> I2C_SDAT<span class="token punctuation">;</span>         
+                                        <span class="token number">6'd53</span> <span class="token punctuation">:</span> I2C_BIT     <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span>            
+                                        <span class="token number">6'd54</span> <span class="token punctuation">:</span> I2C_BIT     <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>            
+                                        <span class="token number">6'd55</span> <span class="token punctuation">:</span> <span class="token keyword">begin</span>    SCLK <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span> I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token keyword">end</span>
+                                        <span class="token number">6'd56</span> <span class="token punctuation">:</span> SCLK <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span>    
+                                        <span class="token number">6'd57</span> <span class="token punctuation">:</span> <span class="token keyword">begin</span> I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> END <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> <span class="token keyword">end</span> 
+                                        <span class="token keyword">default</span> <span class="token punctuation">:</span> <span class="token keyword">begin</span> I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> SCLK <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> <span class="token keyword">end</span>
+                                    <span class="token keyword">endcase</span>
+                                <span class="token keyword">end</span>
+                        <span class="token keyword">end</span>
+                    <span class="token keyword">else</span>
+                        <span class="token keyword">begin</span>
+                            SCLK <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+                            I2C_BIT <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> 
+                            ACKW1 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> ACKW2 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> ACKW3 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> 
+                            ACKR1 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> ACKR2 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span> ACKR3 <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+                            END <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+                            I2C_RDATA <span class="token operator">&lt;=</span> I2C_RDATA<span class="token punctuation">;</span>
+                        <span class="token keyword">end</span>
+                <span class="token keyword">end</span>
+        <span class="token keyword">end</span>
+
+<span class="token keyword">endmodule</span></code></pre>
+<p>[  完  ]</p>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+            </div>
+            <hr/>
+
+            
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/Verilog/">
+                                    <span class="chip bg-color">Verilog</span>
+                                </a>
+                            
+                                <a href="/tags/IIC/">
+                                    <span class="chip bg-color">IIC</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="qq,wechat,weibo,douban" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/posts/502546194/">
+                    <div class="card-image">
+                        
+                        <img src="/medias/featureimages/verilog.jpg" class="responsive-img" alt="Verilog Demo_10 SCCB">
+                        
+                        <span class="card-title">Verilog Demo_10 SCCB</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            本文整理 SCCB驱动控制方法
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-03-28
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/FPGA-%E4%BE%8B%E7%A8%8B/" class="post-category">
+                                    FPGA-例程
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Verilog/">
+                        <span class="chip bg-color">Verilog</span>
+                    </a>
+                    
+                    <a href="/tags/SCCB/">
+                        <span class="chip bg-color">SCCB</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/posts/2565030233/">
+                    <div class="card-image">
+                        
+                        <img src="/medias/featureimages/verilog.jpg" class="responsive-img" alt="Verilog Demo_8 UART">
+                        
+                        <span class="card-title">Verilog Demo_8 UART</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            本文整理 UART驱动控制方法
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-28
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/FPGA-%E4%BE%8B%E7%A8%8B/" class="post-category">
+                                    FPGA-例程
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Verilog/">
+                        <span class="chip bg-color">Verilog</span>
+                    </a>
+                    
+                    <a href="/tags/UART/">
+                        <span class="chip bg-color">UART</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('2'),
+            headingSelector: 'h2, h3, h4 ,h5 ,h6'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4 ,h5 ,h6').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    
+    <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2020</span>
+            <a href="https://wuyasheng.github.io" target="_blank">yasheng</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+            
+
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2020";
+                    var startMonth = "3";
+                    var startDate = "19";
+                    var startHour = "12";
+                    var startMinute = "37";
+                    var startSecond = "12";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
+            <br>
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+
+
+
+            <br>
+            
+            
+            
+            
+            <canvas class="fireworks" style="position: fixed; left: 0; top: 0; z-index: 1; pointer-events: none;" ></canvas>
+            <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script>
+            <script type="text/javascript" src="/js/fireworks.js"></script>
+            
+
+
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/wuyasheng" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:1058349718@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1058349718" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1058349718" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <script type="text/javascript" src="/libs/background/ribbon-dynamic.js" async="async"></script>
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","width":160,"height":320},"mobile":{"show":false},"react":{"opacity":0.5}});</script><script>!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).bottom&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script></body>
+
+<script type="text/javascript">
+    var OriginTitile=document.title,st;
+    document.addEventListener("visibilitychange",function(){
+        document.hidden?(document.title="(≥◇≤) 你找不到我了",clearTimeout(st)):(document.title="(Ő∀Ő3)哇！你好厉害",st=setTimeout(function(){document.title=OriginTitile},3e3))
+    })
+</script>
+
+
+</html>

@@ -1,0 +1,1880 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Verilog Demo_14 SPI, Wonderful">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>Verilog Demo_14 SPI | Wonderful</title>
+    <link rel="icon" type="image/png" href="/medias/logo.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<style type="text/css" lang="css">
+    #loading-container{
+        position: fixed;
+        top: 0;
+        left: 0;
+        min-height: 100vh;
+        width: 100vw;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: #FFF;
+        text-align: center;
+        /* loader页面消失采用渐隐的方式*/
+        -webkit-transition: opacity 1s ease;
+        -moz-transition: opacity 1s ease;
+        -o-transition: opacity 1s ease;
+        transition: opacity 1s ease;
+    }
+    .loading-image{
+        width: 120px;
+        height: 50px;
+        transform: translate(-50%);
+    }
+
+    .loading-image div:nth-child(2) {
+        -webkit-animation: pacman-balls 1s linear 0s infinite;
+        animation: pacman-balls 1s linear 0s infinite
+    }
+
+    .loading-image div:nth-child(3) {
+        -webkit-animation: pacman-balls 1s linear .33s infinite;
+        animation: pacman-balls 1s linear .33s infinite
+    }
+
+    .loading-image div:nth-child(4) {
+        -webkit-animation: pacman-balls 1s linear .66s infinite;
+        animation: pacman-balls 1s linear .66s infinite
+    }
+
+    .loading-image div:nth-child(5) {
+        -webkit-animation: pacman-balls 1s linear .99s infinite;
+        animation: pacman-balls 1s linear .99s infinite
+    }
+
+   .loading-image div:first-of-type {
+        width: 0;
+        height: 0;
+        border: 25px solid #49b1f5;
+        border-right-color: transparent;
+        border-radius: 25px;
+        -webkit-animation: rotate_pacman_half_up .5s 0s infinite;
+        animation: rotate_pacman_half_up .5s 0s infinite;
+    }
+    .loading-image div:nth-child(2) {
+        width: 0;
+        height: 0;
+        border: 25px solid #49b1f5;
+        border-right-color: transparent;
+        border-radius: 25px;
+        -webkit-animation: rotate_pacman_half_down .5s 0s infinite;
+        animation: rotate_pacman_half_down .5s 0s infinite;
+        margin-top: -50px;
+    }
+    @-webkit-keyframes rotate_pacman_half_up {0% {transform: rotate(270deg)}50% {transform: rotate(1turn)}to {transform: rotate(270deg)}}
+
+    @keyframes rotate_pacman_half_up {0% {transform: rotate(270deg)}50% {transform: rotate(1turn)}to {transform: rotate(270deg)}}
+
+    @-webkit-keyframes rotate_pacman_half_down {0% {transform: rotate(90deg)}50% {transform: rotate(0deg)}to {transform: rotate(90deg)}}
+
+    @keyframes rotate_pacman_half_down {0% {transform: rotate(90deg)}50% {transform: rotate(0deg)}to {transform: rotate(90deg)}}
+
+    @-webkit-keyframes pacman-balls {75% {opacity: .7}to {transform: translate(-100px, -6.25px)}}
+
+    @keyframes pacman-balls {75% {opacity: .7}to {transform: translate(-100px, -6.25px)}}
+
+
+    .loading-image div:nth-child(3),
+    .loading-image div:nth-child(4),
+    .loading-image div:nth-child(5),
+    .loading-image div:nth-child(6){
+        background-color: #49b1f5;
+        width: 15px;
+        height: 15px;
+        border-radius: 100%;
+        margin: 2px;
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        transform: translateY(-6.25px);
+        top: 25px;
+        left: 100px;
+    }
+    .loading-text{
+        margin-bottom: 20vh;
+        text-align: center;
+        color: #2c3e50;
+        font-size: 2rem;
+        box-sizing: border-box;
+        padding: 0 10px;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    @media only screen and (max-width: 500px) {
+         .loading-text{
+            font-size: 1.5rem;
+         }
+    }
+    .fadeout {
+        opacity: 0;
+        filter: alpha(opacity=0);
+    }
+    /* logo出现动画 */
+    @-webkit-keyframes fadeInDown{0%{opacity:0;-webkit-transform:translate3d(0,-100%,0);transform:translate3d(0,-100%,0)}100%{opacity:1;-webkit-transform:none;transform:none}}
+    @keyframes fadeInDown{0%{opacity:0;-webkit-transform:translate3d(0,-100%,0);}}
+ </style>
+ <script>
+(function () {
+    const loaded = function(){
+       setTimeout(function(){
+            const loader = document.getElementById("loading-container");
+            loader.className="fadeout" ;//使用渐隐的方法淡出loading page
+            // document.getElementById("body-wrap").style.display="flex";
+            setTimeout(function(){
+                loader.style.display="none";
+            },1000); 
+        },1000);//强制显示loading page 1s  
+    };
+    loaded();
+})()
+ </script><meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="Wonderful" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"><style type="text/css" lang="css">
+    #loading-container{
+        position: fixed;
+        top: 0;
+        left: 0;
+        min-height: 100vh;
+        width: 100vw;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: #FFF;
+        text-align: center;
+        /* loader页面消失采用渐隐的方式*/
+        -webkit-transition: opacity 1s ease;
+        -moz-transition: opacity 1s ease;
+        -o-transition: opacity 1s ease;
+        transition: opacity 1s ease;
+    }
+    .loading-image{
+        width: 120px;
+        height: 50px;
+        transform: translate(-50%);
+    }
+
+    .loading-image div:nth-child(2) {
+        -webkit-animation: pacman-balls 1s linear 0s infinite;
+        animation: pacman-balls 1s linear 0s infinite
+    }
+
+    .loading-image div:nth-child(3) {
+        -webkit-animation: pacman-balls 1s linear .33s infinite;
+        animation: pacman-balls 1s linear .33s infinite
+    }
+
+    .loading-image div:nth-child(4) {
+        -webkit-animation: pacman-balls 1s linear .66s infinite;
+        animation: pacman-balls 1s linear .66s infinite
+    }
+
+    .loading-image div:nth-child(5) {
+        -webkit-animation: pacman-balls 1s linear .99s infinite;
+        animation: pacman-balls 1s linear .99s infinite
+    }
+
+   .loading-image div:first-of-type {
+        width: 0;
+        height: 0;
+        border: 25px solid #49b1f5;
+        border-right-color: transparent;
+        border-radius: 25px;
+        -webkit-animation: rotate_pacman_half_up .5s 0s infinite;
+        animation: rotate_pacman_half_up .5s 0s infinite;
+    }
+    .loading-image div:nth-child(2) {
+        width: 0;
+        height: 0;
+        border: 25px solid #49b1f5;
+        border-right-color: transparent;
+        border-radius: 25px;
+        -webkit-animation: rotate_pacman_half_down .5s 0s infinite;
+        animation: rotate_pacman_half_down .5s 0s infinite;
+        margin-top: -50px;
+    }
+    @-webkit-keyframes rotate_pacman_half_up {0% {transform: rotate(270deg)}50% {transform: rotate(1turn)}to {transform: rotate(270deg)}}
+
+    @keyframes rotate_pacman_half_up {0% {transform: rotate(270deg)}50% {transform: rotate(1turn)}to {transform: rotate(270deg)}}
+
+    @-webkit-keyframes rotate_pacman_half_down {0% {transform: rotate(90deg)}50% {transform: rotate(0deg)}to {transform: rotate(90deg)}}
+
+    @keyframes rotate_pacman_half_down {0% {transform: rotate(90deg)}50% {transform: rotate(0deg)}to {transform: rotate(90deg)}}
+
+    @-webkit-keyframes pacman-balls {75% {opacity: .7}to {transform: translate(-100px, -6.25px)}}
+
+    @keyframes pacman-balls {75% {opacity: .7}to {transform: translate(-100px, -6.25px)}}
+
+
+    .loading-image div:nth-child(3),
+    .loading-image div:nth-child(4),
+    .loading-image div:nth-child(5),
+    .loading-image div:nth-child(6){
+        background-color: #49b1f5;
+        width: 15px;
+        height: 15px;
+        border-radius: 100%;
+        margin: 2px;
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        transform: translateY(-6.25px);
+        top: 25px;
+        left: 100px;
+    }
+    .loading-text{
+        margin-bottom: 20vh;
+        text-align: center;
+        color: #2c3e50;
+        font-size: 2rem;
+        box-sizing: border-box;
+        padding: 0 10px;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    @media only screen and (max-width: 500px) {
+         .loading-text{
+            font-size: 1.5rem;
+         }
+    }
+    .fadeout {
+        opacity: 0;
+        filter: alpha(opacity=0);
+    }
+    /* logo出现动画 */
+    @-webkit-keyframes fadeInDown{0%{opacity:0;-webkit-transform:translate3d(0,-100%,0);transform:translate3d(0,-100%,0)}100%{opacity:1;-webkit-transform:none;transform:none}}
+    @keyframes fadeInDown{0%{opacity:0;-webkit-transform:translate3d(0,-100%,0);}}
+ </style>
+ <script>
+(function () {
+    const loaded = function(){
+       setTimeout(function(){
+            const loader = document.getElementById("loading-container");
+            loader.className="fadeout" ;//使用渐隐的方法淡出loading page
+            // document.getElementById("body-wrap").style.display="flex";
+            setTimeout(function(){
+                loader.style.display="none";
+            },1000); 
+        },1000);//强制显示loading page 1s  
+    };
+    loaded();
+})()
+ </script></head>
+
+
+
+
+ <div id="loading-container">
+     <p class="loading-text">玩命加载中 . . . </p> 
+     <div class="loading-image">
+         <div></div>
+         <div></div>
+         <div></div>
+         <div></div> 
+         <div></div>
+     </div>
+ </div><body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Wonderful</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="" class="waves-effect waves-light">
+
+      
+      <i class="fas fa-list" style="zoom: 0.6;"></i>
+      
+      <span>资源</span>
+      <i class="fas fa-chevron-down" aria-hidden="true" style="zoom: 0.6;"></i>
+    </a>
+    <ul class="sub-nav menus_item_child ">
+      
+      <li>
+        <a href="/source_list/software">
+          
+          <i class="fas fa-database" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>软件推荐</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/source_list/websites">
+          
+          <i class="fas fa-book" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>网站推荐</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/source_list/experience">
+          
+          <i class="fas fa-file-alt" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>经验记录</span>
+        </a>
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Wonderful</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="javascript:;">
+			
+				<i class="fa-fw fas fa-list"></i>
+			
+			资源
+			<span class="m-icon"><i class="fas fa-chevron-right"></i></span>
+		</a>
+            <ul  style="background:  ;" >
+              
+                <li>   
+				
+                  <a href="/source_list/software " style="margin-left:75px";>
+				  
+				   <i class="fa fas fa-database" style="position: absolute;left:50px" ></i>
+			      
+		          <span>软件推荐</span>
+                  </a>
+                </li>
+              
+                <li>   
+				
+                  <a href="/source_list/websites " style="margin-left:75px";>
+				  
+				   <i class="fa fas fa-book" style="position: absolute;left:50px" ></i>
+			      
+		          <span>网站推荐</span>
+                  </a>
+                </li>
+              
+                <li>   
+				
+                  <a href="/source_list/experience " style="margin-left:75px";>
+				  
+				   <i class="fa fas fa-file-alt" style="position: absolute;left:50px" ></i>
+			      
+		          <span>经验记录</span>
+                  </a>
+                </li>
+               
+            </ul>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+
+
+
+    </nav>
+
+
+
+</header>
+
+
+
+    
+<script src="/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
+                alert('密码错误，将返回主页！');
+                location.href = '/';
+            }
+        }
+    })();
+</script>
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/verilog.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">Verilog Demo_14 SPI</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Verilog/">
+                                <span class="chip bg-color">Verilog</span>
+                            </a>
+                        
+                            <a href="/tags/spi/">
+                                <span class="chip bg-color">spi</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/FPGA-%E4%BE%8B%E7%A8%8B/" class="post-category">
+                                FPGA-例程
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-03-29
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    3.4k
+                </div>
+                
+
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="SPI-设计原理及方法"><a href="#SPI-设计原理及方法" class="headerlink" title="SPI 设计原理及方法"></a>SPI 设计原理及方法</h2><hr>
+<p>注 : 本文整理摘抄复制 SPI 相关内容， <a href="https://www.cnblogs.com/liujinggang/p/9609739.html" target="_blank" rel="noopener">参考文1</a>、<a href="https://www.cnblogs.com/lobster89/p/5197266.html" target="_blank" rel="noopener">参考文2</a>、<a href="https://www.jianshu.com/p/9f011f119198?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation" target="_blank" rel="noopener">参考文3</a></p>
+<h3 id="SPI简介"><a href="#SPI简介" class="headerlink" title="SPI简介"></a>SPI简介</h3><p>SPI（Serial Peripheral Interface，串行外围设备接口），是Motorola公司提出的一种同步串行接口技术，是一种高速、全双工、同步通信总线，在芯片中只占用四根管脚用来控制及数据传输，广泛用于EEPROM、Flash、RTC（实时时钟）、ADC（数模转换器）、DSP（数字信号处理器）以及数字信号解码器上。SPI通信的速度很容易达到好几兆bps，所以可以用SPI总线传输一些未压缩的音频以及压缩的视频。</p>
+<p>下图是只有2个chip利用SPI总线进行通信的结构图</p>
+<img src="/medias/loading/loading.gif" data-original="/images/post_images/verilog_demo_14_spi/spi_01.png">
+
+<p>可知SPI总线传输只需要4根线就能完成，这四根线的作用分别如下：</p>
+<table>
+<thead>
+<tr>
+<th>引脚名称</th>
+<th>别称</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CS/SS(Chip Select/Slave Select)</td>
+<td>SPI Slave选择信</td>
+<td>低电平表示从机被选中(低电平有效)；</td>
+</tr>
+<tr>
+<td>SCK(Serial Clock)</td>
+<td>串行时钟线</td>
+<td>Master向Slave传输时钟信号，控制数据交换的时机和速率；</td>
+</tr>
+<tr>
+<td>MOSI(Master Out Slave in)</td>
+<td>Tx-channel</td>
+<td>SPI主机给SPI从机发送数据；</td>
+</tr>
+<tr>
+<td>MISO(Master In Slave Out)</td>
+<td>Rx-channel</td>
+<td>SPI主机接收SPI从机传输过来的数据；</td>
+</tr>
+</tbody></table>
+<h3 id="SPI总线特点"><a href="#SPI总线特点" class="headerlink" title="SPI总线特点"></a><strong>SPI总线特点</strong></h3><ol>
+<li><p>采用主从模式（Master-Slave）的控制方式，支持单Master多Slave。SPI规定了两个SPI设备之间通信必须由主设备Master来控制从设备Slave。也就是说，如果FPGA是主机的情况下，不管是FPGA给芯片发送数据还是从芯片中接收数据，写Verilog逻辑的时候片选信号CS与串行时钟信号SCK必须由FPGA来产生。同时一个Master可以设置多个片选(Chip Select)来控制多个Slave。SPI协议还规定Slave设备的clock由Master通过SCK管脚提供给Slave，Slave本身不能产生或控制clock，没有clock则Slave不能正常工作。单Master多Slave的典型结构如下图所示</p>
+<img src="/medias/loading/loading.gif" data-original="/images/post_images/verilog_demo_14_spi/spi_02.png">
+</li>
+<li><p>SPI总线在传输数据的同时也传输了时钟信号，所以SPI协议是一种同步（Synchronous）传输协议。Master会根据将要交换的数据产生相应的时钟脉冲，组成时钟信号，时钟信号通过时钟极性(CPOL)和时钟相位(CPHA)控制两个SPI设备何时交换数据以及何时对接收数据进行采样，保证数据在两个设备之间是同步传输的。</p>
+</li>
+<li><p>SPI总线协议是一种全双工的串行通信协议，数据传输时高位在前，低位在后。SPI协议规定一个SPI设备不能在数据通信过程中仅仅充当一个发送者（Transmitter）或者接受者（Receiver）。在片选信号CS为0的情况下，每个clock周期内，SPI设备都会发送并接收1 bit数据，相当于有1 bit数据被交换了。数据传输高位在前，低位在后（MSB first）。SPI主从结构内部数据传输示意图如下图所示</p>
+<img src="/medias/loading/loading.gif" data-original="/images/post_images/verilog_demo_14_spi/spi_03.png">
+
+</li>
+</ol>
+<h3 id="SPI总线传输的模式"><a href="#SPI总线传输的模式" class="headerlink" title="SPI总线传输的模式"></a><strong>SPI总线传输的模式</strong></h3><p>SPI总线传输一共有4中模式，这4种模式分别由时钟极性(CPOL，Clock Polarity)和时钟相位(CPHA，Clock Phase)来定义，其中CPOL参数规定了SCK时钟信号空闲状态的电平，CPHA规定了数据是在SCK时钟的上升沿被采样还是下降沿被采样。这四种模式的时序图如下图所示：</p>
+<img src="/medias/loading/loading.gif" data-original="/images/post_images/verilog_demo_14_spi/spi_04.png">
+
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>条件</th>
+<th>解析</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>模式0</td>
+<td>CPOL= 0，CPHA= 0</td>
+<td>SCK串行时钟线空闲是为低电平，数据在SCK时钟的上升沿被采样，数据在SCK时钟的下降沿切换</td>
+</tr>
+<tr>
+<td>模式1</td>
+<td>CPOL= 0，CPHA= 1</td>
+<td>SCK串行时钟线空闲是为低电平，数据在SCK时钟的下降沿被采样，数据在SCK时钟的上升沿切换</td>
+</tr>
+<tr>
+<td>模式2</td>
+<td>CPOL= 1，CPHA= 0</td>
+<td>SCK串行时钟线空闲是为高电平，数据在SCK时钟的下降沿被采样，数据在SCK时钟的上升沿切换</td>
+</tr>
+<tr>
+<td>模式3</td>
+<td>CPOL= 1，CPHA= 1</td>
+<td>SCK串行时钟线空闲是为高电平，数据在SCK时钟的上升沿被采样，数据在SCK时钟的下降沿切换</td>
+</tr>
+</tbody></table>
+<p>其中比较常用的模式是模式0和模式3。为了更清晰的描述SPI总线的时序，下面展现了模式0下的SPI时序图</p>
+<img src="/medias/loading/loading.gif" data-original="/images/post_images/verilog_demo_14_spi/spi_05.png">
+
+<p>上图清晰的表明在模式0下，在空闲状态下，SCK串行时钟线为低电平，当SS被主机拉低以后，数据传输开始，数据线MOSI和MISO的数据切换(Toggling)发生在时钟的下降沿(上图的黑色虚线)，而数据线MOSI和MISO的数据的采样(Sampling)发生在数据的正中间(上图中的灰色实线)。下图清晰的描述了其他三种模式数据线MOSI和MISO的数据切换(Toggling)位置和数据采样位置的关系图</p>
+<img src="/medias/loading/loading.gif" data-original="/images/post_images/verilog_demo_14_spi/spi_06.png">
+
+<h3 id="SPI模块设计"><a href="#SPI模块设计" class="headerlink" title="SPI模块设计"></a><strong>SPI模块设计</strong></h3><p>Verilog编写的SPI模块除了进行SPI通信的四根线以外还要包括一些时钟、复位、使能、并行的输入输出以及完成标志位。其框图如下所示</p>
+<img src="/medias/loading/loading.gif" data-original="/images/post_images/verilog_demo_14_spi/spi_07.png">
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>I_clk</td>
+<td>系统时钟信号</td>
+</tr>
+<tr>
+<td>I_rst_n</td>
+<td>系统复位信号</td>
+</tr>
+<tr>
+<td>I_tx_en</td>
+<td>主机给从机发送数据的使能信号，当I_tx_en为1时主机才能给从机发送数据；</td>
+</tr>
+<tr>
+<td>I_rx _en</td>
+<td>主机从从机接收数据的使能信号，当I_rx_en为1时主机才能从从机接收数据；</td>
+</tr>
+<tr>
+<td>I_data_in</td>
+<td>主机要发送的并行数据</td>
+</tr>
+<tr>
+<td>O_data_out</td>
+<td>从机接收回来的串行数据并行化以后的并行数据；</td>
+</tr>
+<tr>
+<td>O_tx_done</td>
+<td>主机给从机发送数据完成的标志位，发送完成后会产生一个高脉冲；</td>
+</tr>
+<tr>
+<td>O_rx_done</td>
+<td>主机从从机接收数据完成的标志位，接收完成后会产生一个高脉冲；</td>
+</tr>
+<tr>
+<td>O_spi_cs</td>
+<td>标准SPI总线协议片选信号</td>
+</tr>
+<tr>
+<td>O_spi_sck</td>
+<td>标准SPI总线协议时钟信号</td>
+</tr>
+<tr>
+<td>O_spi_mosi</td>
+<td>标准SPI总线协议接收信号</td>
+</tr>
+<tr>
+<td>I_spi_miso</td>
+<td>标准SPI总线协议发送信号</td>
+</tr>
+</tbody></table>
+<p>要想实现上文模式0的时序，最简单的办法还是设计一个状态机。为了方便说明，这里把模式0的时序再在下面贴一遍</p>
+<img src="/medias/loading/loading.gif" data-original="/images/post_images/verilog_demo_14_spi/spi_08.png">
+
+<p>以FPGA去控制或读写QSPI Flash为例，FPGA是SPI主机，QSPI是SPI从机。</p>
+<p><strong>发送</strong>：当FPGA通过SPI总线往QSPI Flash中发送一个字节(8-bit)的数据时，首先FPGA把CS/SS片选信号设置为0，表示准备开始发送数据，整个发送数据过程其实可以分为16个状态：</p>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th align="left">动作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>状态0</td>
+<td align="left">SCK为0，MOSI为要发送的数据的最高位，即I_data_in[7]</td>
+</tr>
+<tr>
+<td>状态1</td>
+<td align="left">SCK为1，MOSI保持不变</td>
+</tr>
+<tr>
+<td>状态2</td>
+<td align="left">SCK为0，MOSI为要发送的数据的次高位，即I_data_in[6]</td>
+</tr>
+<tr>
+<td>状态3</td>
+<td align="left">SCK为1，MOSI保持不变</td>
+</tr>
+<tr>
+<td>状态4</td>
+<td align="left">SCK为0，MOSI为要发送的数据的下一位，即I_data_in[5]</td>
+</tr>
+<tr>
+<td>状态5</td>
+<td align="left">SCK为1，MOSI保持不变</td>
+</tr>
+<tr>
+<td>状态6</td>
+<td align="left">SCK为0，MOSI为要发送的数据的下一位，即I_data_in[4]</td>
+</tr>
+<tr>
+<td>状态7</td>
+<td align="left">SCK为1，MOSI保持不变</td>
+</tr>
+<tr>
+<td>状态8</td>
+<td align="left">SCK为0，MOSI为要发送的数据的下一位，即I_data_in[3]</td>
+</tr>
+<tr>
+<td>状态9</td>
+<td align="left">SCK为1，MOSI保持不变</td>
+</tr>
+<tr>
+<td>状态10</td>
+<td align="left">SCK为0，MOSI为要发送的数据的下一位，即I_data_in[2]</td>
+</tr>
+<tr>
+<td>状态11</td>
+<td align="left">SCK为1，MOSI保持不变</td>
+</tr>
+<tr>
+<td>状态12</td>
+<td align="left">SCK为0，MOSI为要发送的数据的下一位，即I_data_in[1]</td>
+</tr>
+<tr>
+<td>状态13</td>
+<td align="left">SCK为1，MOSI保持不变</td>
+</tr>
+<tr>
+<td>状态14</td>
+<td align="left">SCK为0，MOSI为要发送的数据的下一位，即I_data_in[0]</td>
+</tr>
+<tr>
+<td>状态15</td>
+<td align="left">SCK为1，MOSI保持不变</td>
+</tr>
+</tbody></table>
+<p>一个字节数据发送完毕以后，产生一个发送完成标志位O_tx_done并把CS/SS信号拉高完成一次发送。通过观察上面的状态可以发现状态编号为奇数的状态要做的操作实际上是一模一样的，所以写代码的时候为了精简代码，可以把状态号为奇数的状态全部整合到一起。</p>
+<p><strong>接收</strong>：当FPGA通过SPI总线从QSPI Flash中接收一个字节(8-bit)的数据时，首先FPGA把CS/SS片选信号设置为0，表示准备开始接收数据，整个接收数据过程其实也可以分为16个状态，但是与发送过程不同的是，为了保证接收到的数据准确，必须在数据的正中间采样，也就是说模式0时序图中灰色实线的地方才是代码中锁存数据的地方，所以接收过程的每个状态执行的操作为：</p>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>状态0</td>
+<td>SCK为0，不锁存MISO上的数据</td>
+</tr>
+<tr>
+<td>状态1</td>
+<td>SCK为1，锁存MISO上的数据，即把MISO上的数据赋值给O_data_out[7]</td>
+</tr>
+<tr>
+<td>状态2</td>
+<td>SCK为0，不锁存MISO上的数据</td>
+</tr>
+<tr>
+<td>状态3</td>
+<td>SCK为1，锁存MISO上的数据，即把MISO上的数据赋值给O_data_out[6]</td>
+</tr>
+<tr>
+<td>状态4</td>
+<td>SCK为0，不锁存MISO上的数据</td>
+</tr>
+<tr>
+<td>状态5</td>
+<td>SCK为1，锁存MISO上的数据，即把MISO上的数据赋值给O_data_out[5]</td>
+</tr>
+<tr>
+<td>状态6</td>
+<td>SCK为0，不锁存MISO上的数据</td>
+</tr>
+<tr>
+<td>状态7</td>
+<td>SCK为1，锁存MISO上的数据，即把MISO上的数据赋值给O_data_out[4]</td>
+</tr>
+<tr>
+<td>状态8</td>
+<td>SCK为0，不锁存MISO上的数据</td>
+</tr>
+<tr>
+<td>状态9</td>
+<td>SCK为1，锁存MISO上的数据，即把MISO上的数据赋值给O_data_out[3]</td>
+</tr>
+<tr>
+<td>状态10</td>
+<td>SCK为0，不锁存MISO上的数据</td>
+</tr>
+<tr>
+<td>状态11</td>
+<td>SCK为1，锁存MISO上的数据，即把MISO上的数据赋值给O_data_out[2]</td>
+</tr>
+<tr>
+<td>状态12</td>
+<td>SCK为0，不锁存MISO上的数据</td>
+</tr>
+<tr>
+<td>状态13</td>
+<td>SCK为1，锁存MISO上的数据，即把MISO上的数据赋值给O_data_out[1]</td>
+</tr>
+<tr>
+<td>状态14</td>
+<td>SCK为0，不锁存MISO上的数据</td>
+</tr>
+<tr>
+<td>状态15</td>
+<td>SCK为1，锁存MISO上的数据，即把MISO上的数据赋值给O_data_out[0]</td>
+</tr>
+</tbody></table>
+<p>一个字节数据接收完毕以后，产生一个接收完成标志位O_rx_done并把CS/SS信号拉高完成一次数据的接收。通过观察上面的状态可以发现状态编号为偶数的状态要做的操作实际上是一模一样的，所以写代码的时候为了精简代码，可以把状态号为偶数的状态全部整合到一起。而这一点刚好与发送过程的状态刚好相反。</p>
+<h3 id="SPI代码"><a href="#SPI代码" class="headerlink" title="SPI代码"></a>SPI代码</h3><pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">module</span> spi_module
+<span class="token punctuation">(</span>
+    <span class="token keyword">input</span>               I_clk       <span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 全局时钟50MHz</span>
+    <span class="token keyword">input</span>               I_rst_n     <span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 复位信号，低电平有效</span>
+    <span class="token keyword">input</span>               I_rx_en     <span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 读使能信号</span>
+    <span class="token keyword">input</span>               I_tx_en     <span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 发送使能信号</span>
+    <span class="token keyword">input</span>        <span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>  I_data_in   <span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 要发送的数据</span>
+    <span class="token keyword">output</span>  <span class="token keyword">reg</span>  <span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>  O_data_out  <span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 接收到的数据</span>
+    <span class="token keyword">output</span>  <span class="token keyword">reg</span>         O_tx_done   <span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 发送一个字节完毕标志位</span>
+    <span class="token keyword">output</span>  <span class="token keyword">reg</span>         O_rx_done   <span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 接收一个字节完毕标志位</span>
+
+    <span class="token comment" spellcheck="true">// 四线标准SPI信号定义</span>
+    <span class="token keyword">input</span>               I_spi_miso  <span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// SPI串行输入，用来接收从机的数据</span>
+    <span class="token keyword">output</span>  <span class="token keyword">reg</span>         O_spi_sck   <span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// SPI时钟</span>
+    <span class="token keyword">output</span>  <span class="token keyword">reg</span>         O_spi_cs    <span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// SPI片选信号</span>
+    <span class="token keyword">output</span>  <span class="token keyword">reg</span>         O_spi_mosi    <span class="token comment" spellcheck="true">// SPI输出，用来给从机发送数据          </span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">reg</span> <span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>   R_tx_state      <span class="token punctuation">;</span> 
+<span class="token keyword">reg</span> <span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>   R_rx_state      <span class="token punctuation">;</span>
+
+<span class="token important">always @</span><span class="token punctuation">(</span><span class="token keyword">posedge</span> I_clk <span class="token keyword">or</span> <span class="token keyword">negedge</span> I_rst_n<span class="token punctuation">)</span>
+<span class="token keyword">begin</span>
+    <span class="token function">if</span><span class="token punctuation">(</span><span class="token operator">!</span>I_rst_n<span class="token punctuation">)</span>
+        <span class="token keyword">begin</span>
+            R_tx_state  <span class="token operator">&lt;=</span>  <span class="token number">4'd0</span>    <span class="token punctuation">;</span>
+            R_rx_state  <span class="token operator">&lt;=</span>  <span class="token number">4'd0</span>    <span class="token punctuation">;</span>
+            O_spi_cs    <span class="token operator">&lt;=</span>  <span class="token number">1'b1</span>    <span class="token punctuation">;</span>
+            O_spi_sck   <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>    <span class="token punctuation">;</span>
+            O_spi_mosi  <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>    <span class="token punctuation">;</span>
+            O_tx_done   <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>    <span class="token punctuation">;</span>
+            O_rx_done   <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>    <span class="token punctuation">;</span>
+            O_data_out  <span class="token operator">&lt;=</span>  <span class="token number">8'd0</span>    <span class="token punctuation">;</span>
+        <span class="token keyword">end</span> 
+    <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>I_tx_en<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 发送使能信号打开的情况下</span>
+        <span class="token keyword">begin</span>
+            O_spi_cs    <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>    <span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 把片选CS拉低</span>
+            <span class="token function">case</span><span class="token punctuation">(</span>R_tx_state<span class="token punctuation">)</span>
+                <span class="token number">4'd1</span><span class="token punctuation">,</span> <span class="token number">4'd3</span> <span class="token punctuation">,</span> <span class="token number">4'd5</span> <span class="token punctuation">,</span> <span class="token number">4'd7</span>  <span class="token punctuation">,</span> 
+                <span class="token number">4'd9</span><span class="token punctuation">,</span> <span class="token number">4'd11</span><span class="token punctuation">,</span> <span class="token number">4'd13</span><span class="token punctuation">,</span> <span class="token number">4'd15</span> <span class="token punctuation">:</span> <span class="token comment" spellcheck="true">//整合奇数状态</span>
+                    <span class="token keyword">begin</span>
+                        O_spi_sck   <span class="token operator">&lt;=</span>  <span class="token number">1'b1</span>                <span class="token punctuation">;</span>
+                        R_tx_state  <span class="token operator">&lt;=</span>  R_tx_state <span class="token operator">+</span> <span class="token number">1'b1</span>   <span class="token punctuation">;</span>
+                        O_tx_done   <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>                <span class="token punctuation">;</span>
+                    <span class="token keyword">end</span>
+                <span class="token number">4'd0</span><span class="token punctuation">:</span>    <span class="token comment" spellcheck="true">// 发送第7位</span>
+                    <span class="token keyword">begin</span>
+                        O_spi_mosi  <span class="token operator">&lt;=</span>  I_data_in<span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">]</span>        <span class="token punctuation">;</span>
+                        O_spi_sck   <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>                <span class="token punctuation">;</span>
+                        R_tx_state  <span class="token operator">&lt;=</span>  R_tx_state <span class="token operator">+</span> <span class="token number">1'b1</span>   <span class="token punctuation">;</span>
+                        O_tx_done   <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>                <span class="token punctuation">;</span>
+                    <span class="token keyword">end</span>
+                <span class="token number">4'd2</span><span class="token punctuation">:</span>    <span class="token comment" spellcheck="true">// 发送第6位</span>
+                    <span class="token keyword">begin</span>
+                        O_spi_mosi  <span class="token operator">&lt;=</span>  I_data_in<span class="token punctuation">[</span><span class="token number">6</span><span class="token punctuation">]</span>        <span class="token punctuation">;</span>
+                        O_spi_sck   <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>                <span class="token punctuation">;</span>
+                        R_tx_state  <span class="token operator">&lt;=</span>  R_tx_state <span class="token operator">+</span> <span class="token number">1'b1</span>   <span class="token punctuation">;</span>
+                        O_tx_done   <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>                <span class="token punctuation">;</span>
+                    <span class="token keyword">end</span>
+                <span class="token number">4'd4</span><span class="token punctuation">:</span>    <span class="token comment" spellcheck="true">// 发送第5位</span>
+                    <span class="token keyword">begin</span>
+                        O_spi_mosi  <span class="token operator">&lt;=</span>  I_data_in<span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">]</span>        <span class="token punctuation">;</span>
+                        O_spi_sck   <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>                <span class="token punctuation">;</span>
+                        R_tx_state  <span class="token operator">&lt;=</span>  R_tx_state <span class="token operator">+</span> <span class="token number">1'b1</span>   <span class="token punctuation">;</span>
+                        O_tx_done   <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>                <span class="token punctuation">;</span>
+                    <span class="token keyword">end</span> 
+                <span class="token number">4'd6</span><span class="token punctuation">:</span>    <span class="token comment" spellcheck="true">// 发送第4位</span>
+                    <span class="token keyword">begin</span>
+                        O_spi_mosi  <span class="token operator">&lt;=</span>  I_data_in<span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">]</span>        <span class="token punctuation">;</span>
+                        O_spi_sck   <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>                <span class="token punctuation">;</span>
+                        R_tx_state  <span class="token operator">&lt;=</span>  R_tx_state <span class="token operator">+</span> <span class="token number">1'b1</span>   <span class="token punctuation">;</span>
+                        O_tx_done   <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>                <span class="token punctuation">;</span>
+                    <span class="token keyword">end</span> 
+                <span class="token number">4'd8</span><span class="token punctuation">:</span>    <span class="token comment" spellcheck="true">// 发送第3位</span>
+                    <span class="token keyword">begin</span>
+                        O_spi_mosi  <span class="token operator">&lt;=</span>  I_data_in<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span>        <span class="token punctuation">;</span>
+                        O_spi_sck   <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>                <span class="token punctuation">;</span>
+                        R_tx_state  <span class="token operator">&lt;=</span>  R_tx_state <span class="token operator">+</span> <span class="token number">1'b1</span>   <span class="token punctuation">;</span>
+                        O_tx_done   <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>                <span class="token punctuation">;</span>
+                    <span class="token keyword">end</span>                            
+                <span class="token number">4'd10</span><span class="token punctuation">:</span>    <span class="token comment" spellcheck="true">// 发送第2位</span>
+                    <span class="token keyword">begin</span>
+                        O_spi_mosi  <span class="token operator">&lt;=</span>  I_data_in<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span>        <span class="token punctuation">;</span>
+                        O_spi_sck   <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>                <span class="token punctuation">;</span>
+                        R_tx_state  <span class="token operator">&lt;=</span>  R_tx_state <span class="token operator">+</span> <span class="token number">1'b1</span>   <span class="token punctuation">;</span>
+                        O_tx_done   <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>                <span class="token punctuation">;</span>
+                    <span class="token keyword">end</span> 
+                <span class="token number">4'd12</span><span class="token punctuation">:</span>    <span class="token comment" spellcheck="true">// 发送第1位</span>
+                    <span class="token keyword">begin</span>
+                        O_spi_mosi  <span class="token operator">&lt;=</span>  I_data_in<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>        <span class="token punctuation">;</span>
+                        O_spi_sck   <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>                <span class="token punctuation">;</span>
+                        R_tx_state  <span class="token operator">&lt;=</span>  R_tx_state <span class="token operator">+</span> <span class="token number">1'b1</span>   <span class="token punctuation">;</span>
+                        O_tx_done   <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>                <span class="token punctuation">;</span>
+                    <span class="token keyword">end</span> 
+                <span class="token number">4'd14</span><span class="token punctuation">:</span>    <span class="token comment" spellcheck="true">// 发送第0位</span>
+                    <span class="token keyword">begin</span>
+                        O_spi_mosi  <span class="token operator">&lt;=</span>  I_data_in<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>        <span class="token punctuation">;</span>
+                        O_spi_sck   <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>                <span class="token punctuation">;</span>
+                        R_tx_state  <span class="token operator">&lt;=</span>  R_tx_state <span class="token operator">+</span> <span class="token number">1'b1</span>   <span class="token punctuation">;</span>
+                        O_tx_done   <span class="token operator">&lt;=</span>  <span class="token number">1'b1</span>                <span class="token punctuation">;</span>
+                    <span class="token keyword">end</span>
+                <span class="token keyword">default</span><span class="token punctuation">:</span>R_tx_state  <span class="token operator">&lt;=</span>  <span class="token number">4'd0</span>                <span class="token punctuation">;</span>   
+            <span class="token keyword">endcase</span> 
+        <span class="token keyword">end</span>
+    <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>I_rx_en<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 接收使能信号打开的情况下</span>
+        <span class="token keyword">begin</span>
+            O_spi_cs    <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>        <span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 拉低片选信号CS</span>
+            <span class="token function">case</span><span class="token punctuation">(</span>R_rx_state<span class="token punctuation">)</span>
+                <span class="token number">4'd0</span><span class="token punctuation">,</span> <span class="token number">4'd2</span> <span class="token punctuation">,</span> <span class="token number">4'd4</span> <span class="token punctuation">,</span> <span class="token number">4'd6</span>  <span class="token punctuation">,</span> 
+                <span class="token number">4'd8</span><span class="token punctuation">,</span> <span class="token number">4'd10</span><span class="token punctuation">,</span> <span class="token number">4'd12</span><span class="token punctuation">,</span> <span class="token number">4'd14</span> <span class="token punctuation">:</span> <span class="token comment" spellcheck="true">//整合偶数状态</span>
+                    <span class="token keyword">begin</span>
+                        O_spi_sck   　　 <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>                <span class="token punctuation">;</span>
+                        R_rx_state  　　 <span class="token operator">&lt;=</span>  R_rx_state <span class="token operator">+</span> <span class="token number">1'b1</span>   <span class="token punctuation">;</span>
+                        O_rx_done   　　 <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>                <span class="token punctuation">;</span>
+                    <span class="token keyword">end</span>
+                <span class="token number">4'd1</span><span class="token punctuation">:</span>    <span class="token comment" spellcheck="true">// 接收第7位</span>
+                    <span class="token keyword">begin</span>                       
+                        O_spi_sck       <span class="token operator">&lt;=</span>  <span class="token number">1'b1</span>                <span class="token punctuation">;</span>
+                        R_rx_state      <span class="token operator">&lt;=</span>  R_rx_state <span class="token operator">+</span> <span class="token number">1'b1</span>   <span class="token punctuation">;</span>
+                        O_rx_done       <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>                <span class="token punctuation">;</span>
+                        O_data_out<span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">]</span>   <span class="token operator">&lt;=</span>  I_spi_miso          <span class="token punctuation">;</span>   
+                    <span class="token keyword">end</span>
+                <span class="token number">4'd3</span><span class="token punctuation">:</span>    <span class="token comment" spellcheck="true">// 接收第6位</span>
+                    <span class="token keyword">begin</span>
+                        O_spi_sck       <span class="token operator">&lt;=</span>  <span class="token number">1'b1</span>                <span class="token punctuation">;</span>
+                        R_rx_state      <span class="token operator">&lt;=</span>  R_rx_state <span class="token operator">+</span> <span class="token number">1'b1</span>   <span class="token punctuation">;</span>
+                        O_rx_done       <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>                <span class="token punctuation">;</span>
+                        O_data_out<span class="token punctuation">[</span><span class="token number">6</span><span class="token punctuation">]</span>   <span class="token operator">&lt;=</span>  I_spi_miso          <span class="token punctuation">;</span> 
+                    <span class="token keyword">end</span>
+                <span class="token number">4'd5</span><span class="token punctuation">:</span>    <span class="token comment" spellcheck="true">// 接收第5位</span>
+                    <span class="token keyword">begin</span>
+                        O_spi_sck       <span class="token operator">&lt;=</span>  <span class="token number">1'b1</span>                <span class="token punctuation">;</span>
+                        R_rx_state      <span class="token operator">&lt;=</span>  R_rx_state <span class="token operator">+</span> <span class="token number">1'b1</span>   <span class="token punctuation">;</span>
+                        O_rx_done       <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>                <span class="token punctuation">;</span>
+                        O_data_out<span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">]</span>   <span class="token operator">&lt;=</span>  I_spi_miso          <span class="token punctuation">;</span> 
+                    <span class="token keyword">end</span> 
+                <span class="token number">4'd7</span><span class="token punctuation">:</span>    <span class="token comment" spellcheck="true">// 接收第4位</span>
+                    <span class="token keyword">begin</span>
+                        O_spi_sck       <span class="token operator">&lt;=</span>  <span class="token number">1'b1</span>                <span class="token punctuation">;</span>
+                        R_rx_state      <span class="token operator">&lt;=</span>  R_rx_state <span class="token operator">+</span> <span class="token number">1'b1</span>   <span class="token punctuation">;</span>
+                        O_rx_done       <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>                <span class="token punctuation">;</span>
+                        O_data_out<span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">]</span>   <span class="token operator">&lt;=</span>  I_spi_miso          <span class="token punctuation">;</span> 
+                    <span class="token keyword">end</span> 
+                <span class="token number">4'd9</span><span class="token punctuation">:</span>    <span class="token comment" spellcheck="true">// 接收第3位</span>
+                    <span class="token keyword">begin</span>
+                        O_spi_sck       <span class="token operator">&lt;=</span>  <span class="token number">1'b1</span>                <span class="token punctuation">;</span>
+                        R_rx_state      <span class="token operator">&lt;=</span>  R_rx_state <span class="token operator">+</span> <span class="token number">1'b1</span>   <span class="token punctuation">;</span>
+                        O_rx_done       <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>                <span class="token punctuation">;</span>
+                        O_data_out<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span>   <span class="token operator">&lt;=</span>  I_spi_miso          <span class="token punctuation">;</span> 
+                    <span class="token keyword">end</span>                            
+                <span class="token number">4'd11</span><span class="token punctuation">:</span>    <span class="token comment" spellcheck="true">// 接收第2位</span>
+                    <span class="token keyword">begin</span>
+                        O_spi_sck       <span class="token operator">&lt;=</span>  <span class="token number">1'b1</span>                <span class="token punctuation">;</span>
+                        R_rx_state      <span class="token operator">&lt;=</span>  R_rx_state <span class="token operator">+</span> <span class="token number">1'b1</span>   <span class="token punctuation">;</span>
+                        O_rx_done       <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>                <span class="token punctuation">;</span>
+                        O_data_out<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span>   <span class="token operator">&lt;=</span>  I_spi_miso          <span class="token punctuation">;</span> 
+                    <span class="token keyword">end</span> 
+                <span class="token number">4'd13</span><span class="token punctuation">:</span>    <span class="token comment" spellcheck="true">// 接收第1位</span>
+                    <span class="token keyword">begin</span>
+                        O_spi_sck       <span class="token operator">&lt;=</span>  <span class="token number">1'b1</span>                <span class="token punctuation">;</span>
+                        R_rx_state      <span class="token operator">&lt;=</span>  R_rx_state <span class="token operator">+</span> <span class="token number">1'b1</span>   <span class="token punctuation">;</span>
+                        O_rx_done       <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>                <span class="token punctuation">;</span>
+                        O_data_out<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>   <span class="token operator">&lt;=</span>  I_spi_miso          <span class="token punctuation">;</span> 
+                    <span class="token keyword">end</span> 
+                <span class="token number">4'd15</span><span class="token punctuation">:</span>    <span class="token comment" spellcheck="true">// 接收第0位</span>
+                    <span class="token keyword">begin</span>
+                        O_spi_sck       <span class="token operator">&lt;=</span>  <span class="token number">1'b1</span>                <span class="token punctuation">;</span>
+                        R_rx_state      <span class="token operator">&lt;=</span>  R_rx_state <span class="token operator">+</span> <span class="token number">1'b1</span>   <span class="token punctuation">;</span>
+                        O_rx_done       <span class="token operator">&lt;=</span>  <span class="token number">1'b1</span>                <span class="token punctuation">;</span>
+                        O_data_out<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>   <span class="token operator">&lt;=</span>  I_spi_miso          <span class="token punctuation">;</span> 
+                    <span class="token keyword">end</span>
+                <span class="token keyword">default</span><span class="token punctuation">:</span>R_rx_state  <span class="token operator">&lt;=</span>  <span class="token number">4'd0</span>                    <span class="token punctuation">;</span>   
+            <span class="token keyword">endcase</span> 
+        <span class="token keyword">end</span>    
+    <span class="token keyword">else</span>
+        <span class="token keyword">begin</span>
+            R_tx_state  <span class="token operator">&lt;=</span>  <span class="token number">4'd0</span>    <span class="token punctuation">;</span>
+            R_rx_state  <span class="token operator">&lt;=</span>  <span class="token number">4'd0</span>    <span class="token punctuation">;</span>
+            O_tx_done   <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>    <span class="token punctuation">;</span>
+            O_rx_done   <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>    <span class="token punctuation">;</span>
+            O_spi_cs    <span class="token operator">&lt;=</span>  <span class="token number">1'b1</span>    <span class="token punctuation">;</span>
+            O_spi_sck   <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>    <span class="token punctuation">;</span>
+            O_spi_mosi  <span class="token operator">&lt;=</span>  <span class="token number">1'b0</span>    <span class="token punctuation">;</span>
+            O_data_out  <span class="token operator">&lt;=</span>  <span class="token number">8'd0</span>    <span class="token punctuation">;</span>
+        <span class="token keyword">end</span>      
+<span class="token keyword">end</span>
+
+<span class="token keyword">endmodule</span></code></pre>
+<p>​      </p>
+<p>​      </p>
+<p>[  完  ]</p>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+            </div>
+            <hr/>
+
+            
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/Verilog/">
+                                    <span class="chip bg-color">Verilog</span>
+                                </a>
+                            
+                                <a href="/tags/spi/">
+                                    <span class="chip bg-color">spi</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="qq,wechat,weibo,douban" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/posts/3505248845/">
+                    <div class="card-image">
+                        
+                        <img src="/medias/featureimages/verilog.jpg" class="responsive-img" alt="Verilog Demo_15 SDRAM">
+                        
+                        <span class="card-title">Verilog Demo_15 SDRAM</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            本文整理 SDRAM 的相关知识
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-03-29
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/FPGA-%E4%BE%8B%E7%A8%8B/" class="post-category">
+                                    FPGA-例程
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Verilog/">
+                        <span class="chip bg-color">Verilog</span>
+                    </a>
+                    
+                    <a href="/tags/sdram/">
+                        <span class="chip bg-color">sdram</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/posts/3752417558/">
+                    <div class="card-image">
+                        
+                        <img src="/medias/featureimages/verilog.jpg" class="responsive-img" alt="Verilog Demo_13 RAM">
+                        
+                        <span class="card-title">Verilog Demo_13 RAM</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            本文整理 RAM 的相关知识
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-29
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/FPGA-%E4%BE%8B%E7%A8%8B/" class="post-category">
+                                    FPGA-例程
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Verilog/">
+                        <span class="chip bg-color">Verilog</span>
+                    </a>
+                    
+                    <a href="/tags/ram/">
+                        <span class="chip bg-color">ram</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('2'),
+            headingSelector: 'h2, h3, h4 ,h5 ,h6'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4 ,h5 ,h6').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    
+    <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2020</span>
+            <a href="https://wuyasheng.github.io" target="_blank">yasheng</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+            
+
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2020";
+                    var startMonth = "3";
+                    var startDate = "19";
+                    var startHour = "12";
+                    var startMinute = "37";
+                    var startSecond = "12";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
+            <br>
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+
+
+
+            <br>
+            
+            
+            
+            
+            <canvas class="fireworks" style="position: fixed; left: 0; top: 0; z-index: 1; pointer-events: none;" ></canvas>
+            <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script>
+            <script type="text/javascript" src="/js/fireworks.js"></script>
+            
+
+
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/wuyasheng" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:1058349718@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1058349718" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1058349718" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <script type="text/javascript" src="/libs/background/ribbon-dynamic.js" async="async"></script>
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","width":160,"height":320},"mobile":{"show":false},"react":{"opacity":0.5}});</script><script>!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).bottom&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script></body>
+
+<script type="text/javascript">
+    var OriginTitile=document.title,st;
+    document.addEventListener("visibilitychange",function(){
+        document.hidden?(document.title="(≥◇≤) 你找不到我了",clearTimeout(st)):(document.title="(Ő∀Ő3)哇！你好厉害",st=setTimeout(function(){document.title=OriginTitile},3e3))
+    })
+</script>
+
+
+</html>

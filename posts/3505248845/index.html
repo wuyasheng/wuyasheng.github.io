@@ -1,0 +1,2028 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Verilog Demo_15 SDRAM, Wonderful">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>Verilog Demo_15 SDRAM | Wonderful</title>
+    <link rel="icon" type="image/png" href="/medias/logo.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<style type="text/css" lang="css">
+    #loading-container{
+        position: fixed;
+        top: 0;
+        left: 0;
+        min-height: 100vh;
+        width: 100vw;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: #FFF;
+        text-align: center;
+        /* loader页面消失采用渐隐的方式*/
+        -webkit-transition: opacity 1s ease;
+        -moz-transition: opacity 1s ease;
+        -o-transition: opacity 1s ease;
+        transition: opacity 1s ease;
+    }
+    .loading-image{
+        width: 120px;
+        height: 50px;
+        transform: translate(-50%);
+    }
+
+    .loading-image div:nth-child(2) {
+        -webkit-animation: pacman-balls 1s linear 0s infinite;
+        animation: pacman-balls 1s linear 0s infinite
+    }
+
+    .loading-image div:nth-child(3) {
+        -webkit-animation: pacman-balls 1s linear .33s infinite;
+        animation: pacman-balls 1s linear .33s infinite
+    }
+
+    .loading-image div:nth-child(4) {
+        -webkit-animation: pacman-balls 1s linear .66s infinite;
+        animation: pacman-balls 1s linear .66s infinite
+    }
+
+    .loading-image div:nth-child(5) {
+        -webkit-animation: pacman-balls 1s linear .99s infinite;
+        animation: pacman-balls 1s linear .99s infinite
+    }
+
+   .loading-image div:first-of-type {
+        width: 0;
+        height: 0;
+        border: 25px solid #49b1f5;
+        border-right-color: transparent;
+        border-radius: 25px;
+        -webkit-animation: rotate_pacman_half_up .5s 0s infinite;
+        animation: rotate_pacman_half_up .5s 0s infinite;
+    }
+    .loading-image div:nth-child(2) {
+        width: 0;
+        height: 0;
+        border: 25px solid #49b1f5;
+        border-right-color: transparent;
+        border-radius: 25px;
+        -webkit-animation: rotate_pacman_half_down .5s 0s infinite;
+        animation: rotate_pacman_half_down .5s 0s infinite;
+        margin-top: -50px;
+    }
+    @-webkit-keyframes rotate_pacman_half_up {0% {transform: rotate(270deg)}50% {transform: rotate(1turn)}to {transform: rotate(270deg)}}
+
+    @keyframes rotate_pacman_half_up {0% {transform: rotate(270deg)}50% {transform: rotate(1turn)}to {transform: rotate(270deg)}}
+
+    @-webkit-keyframes rotate_pacman_half_down {0% {transform: rotate(90deg)}50% {transform: rotate(0deg)}to {transform: rotate(90deg)}}
+
+    @keyframes rotate_pacman_half_down {0% {transform: rotate(90deg)}50% {transform: rotate(0deg)}to {transform: rotate(90deg)}}
+
+    @-webkit-keyframes pacman-balls {75% {opacity: .7}to {transform: translate(-100px, -6.25px)}}
+
+    @keyframes pacman-balls {75% {opacity: .7}to {transform: translate(-100px, -6.25px)}}
+
+
+    .loading-image div:nth-child(3),
+    .loading-image div:nth-child(4),
+    .loading-image div:nth-child(5),
+    .loading-image div:nth-child(6){
+        background-color: #49b1f5;
+        width: 15px;
+        height: 15px;
+        border-radius: 100%;
+        margin: 2px;
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        transform: translateY(-6.25px);
+        top: 25px;
+        left: 100px;
+    }
+    .loading-text{
+        margin-bottom: 20vh;
+        text-align: center;
+        color: #2c3e50;
+        font-size: 2rem;
+        box-sizing: border-box;
+        padding: 0 10px;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    @media only screen and (max-width: 500px) {
+         .loading-text{
+            font-size: 1.5rem;
+         }
+    }
+    .fadeout {
+        opacity: 0;
+        filter: alpha(opacity=0);
+    }
+    /* logo出现动画 */
+    @-webkit-keyframes fadeInDown{0%{opacity:0;-webkit-transform:translate3d(0,-100%,0);transform:translate3d(0,-100%,0)}100%{opacity:1;-webkit-transform:none;transform:none}}
+    @keyframes fadeInDown{0%{opacity:0;-webkit-transform:translate3d(0,-100%,0);}}
+ </style>
+ <script>
+(function () {
+    const loaded = function(){
+       setTimeout(function(){
+            const loader = document.getElementById("loading-container");
+            loader.className="fadeout" ;//使用渐隐的方法淡出loading page
+            // document.getElementById("body-wrap").style.display="flex";
+            setTimeout(function(){
+                loader.style.display="none";
+            },1000); 
+        },1000);//强制显示loading page 1s  
+    };
+    loaded();
+})()
+ </script><meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="Wonderful" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"><style type="text/css" lang="css">
+    #loading-container{
+        position: fixed;
+        top: 0;
+        left: 0;
+        min-height: 100vh;
+        width: 100vw;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: #FFF;
+        text-align: center;
+        /* loader页面消失采用渐隐的方式*/
+        -webkit-transition: opacity 1s ease;
+        -moz-transition: opacity 1s ease;
+        -o-transition: opacity 1s ease;
+        transition: opacity 1s ease;
+    }
+    .loading-image{
+        width: 120px;
+        height: 50px;
+        transform: translate(-50%);
+    }
+
+    .loading-image div:nth-child(2) {
+        -webkit-animation: pacman-balls 1s linear 0s infinite;
+        animation: pacman-balls 1s linear 0s infinite
+    }
+
+    .loading-image div:nth-child(3) {
+        -webkit-animation: pacman-balls 1s linear .33s infinite;
+        animation: pacman-balls 1s linear .33s infinite
+    }
+
+    .loading-image div:nth-child(4) {
+        -webkit-animation: pacman-balls 1s linear .66s infinite;
+        animation: pacman-balls 1s linear .66s infinite
+    }
+
+    .loading-image div:nth-child(5) {
+        -webkit-animation: pacman-balls 1s linear .99s infinite;
+        animation: pacman-balls 1s linear .99s infinite
+    }
+
+   .loading-image div:first-of-type {
+        width: 0;
+        height: 0;
+        border: 25px solid #49b1f5;
+        border-right-color: transparent;
+        border-radius: 25px;
+        -webkit-animation: rotate_pacman_half_up .5s 0s infinite;
+        animation: rotate_pacman_half_up .5s 0s infinite;
+    }
+    .loading-image div:nth-child(2) {
+        width: 0;
+        height: 0;
+        border: 25px solid #49b1f5;
+        border-right-color: transparent;
+        border-radius: 25px;
+        -webkit-animation: rotate_pacman_half_down .5s 0s infinite;
+        animation: rotate_pacman_half_down .5s 0s infinite;
+        margin-top: -50px;
+    }
+    @-webkit-keyframes rotate_pacman_half_up {0% {transform: rotate(270deg)}50% {transform: rotate(1turn)}to {transform: rotate(270deg)}}
+
+    @keyframes rotate_pacman_half_up {0% {transform: rotate(270deg)}50% {transform: rotate(1turn)}to {transform: rotate(270deg)}}
+
+    @-webkit-keyframes rotate_pacman_half_down {0% {transform: rotate(90deg)}50% {transform: rotate(0deg)}to {transform: rotate(90deg)}}
+
+    @keyframes rotate_pacman_half_down {0% {transform: rotate(90deg)}50% {transform: rotate(0deg)}to {transform: rotate(90deg)}}
+
+    @-webkit-keyframes pacman-balls {75% {opacity: .7}to {transform: translate(-100px, -6.25px)}}
+
+    @keyframes pacman-balls {75% {opacity: .7}to {transform: translate(-100px, -6.25px)}}
+
+
+    .loading-image div:nth-child(3),
+    .loading-image div:nth-child(4),
+    .loading-image div:nth-child(5),
+    .loading-image div:nth-child(6){
+        background-color: #49b1f5;
+        width: 15px;
+        height: 15px;
+        border-radius: 100%;
+        margin: 2px;
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        transform: translateY(-6.25px);
+        top: 25px;
+        left: 100px;
+    }
+    .loading-text{
+        margin-bottom: 20vh;
+        text-align: center;
+        color: #2c3e50;
+        font-size: 2rem;
+        box-sizing: border-box;
+        padding: 0 10px;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    @media only screen and (max-width: 500px) {
+         .loading-text{
+            font-size: 1.5rem;
+         }
+    }
+    .fadeout {
+        opacity: 0;
+        filter: alpha(opacity=0);
+    }
+    /* logo出现动画 */
+    @-webkit-keyframes fadeInDown{0%{opacity:0;-webkit-transform:translate3d(0,-100%,0);transform:translate3d(0,-100%,0)}100%{opacity:1;-webkit-transform:none;transform:none}}
+    @keyframes fadeInDown{0%{opacity:0;-webkit-transform:translate3d(0,-100%,0);}}
+ </style>
+ <script>
+(function () {
+    const loaded = function(){
+       setTimeout(function(){
+            const loader = document.getElementById("loading-container");
+            loader.className="fadeout" ;//使用渐隐的方法淡出loading page
+            // document.getElementById("body-wrap").style.display="flex";
+            setTimeout(function(){
+                loader.style.display="none";
+            },1000); 
+        },1000);//强制显示loading page 1s  
+    };
+    loaded();
+})()
+ </script></head>
+
+
+
+
+ <div id="loading-container">
+     <p class="loading-text">玩命加载中 . . . </p> 
+     <div class="loading-image">
+         <div></div>
+         <div></div>
+         <div></div>
+         <div></div> 
+         <div></div>
+     </div>
+ </div><body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Wonderful</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="" class="waves-effect waves-light">
+
+      
+      <i class="fas fa-list" style="zoom: 0.6;"></i>
+      
+      <span>资源</span>
+      <i class="fas fa-chevron-down" aria-hidden="true" style="zoom: 0.6;"></i>
+    </a>
+    <ul class="sub-nav menus_item_child ">
+      
+      <li>
+        <a href="/source_list/software">
+          
+          <i class="fas fa-database" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>软件推荐</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/source_list/websites">
+          
+          <i class="fas fa-book" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>网站推荐</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/source_list/experience">
+          
+          <i class="fas fa-file-alt" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>经验记录</span>
+        </a>
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Wonderful</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="javascript:;">
+			
+				<i class="fa-fw fas fa-list"></i>
+			
+			资源
+			<span class="m-icon"><i class="fas fa-chevron-right"></i></span>
+		</a>
+            <ul  style="background:  ;" >
+              
+                <li>   
+				
+                  <a href="/source_list/software " style="margin-left:75px";>
+				  
+				   <i class="fa fas fa-database" style="position: absolute;left:50px" ></i>
+			      
+		          <span>软件推荐</span>
+                  </a>
+                </li>
+              
+                <li>   
+				
+                  <a href="/source_list/websites " style="margin-left:75px";>
+				  
+				   <i class="fa fas fa-book" style="position: absolute;left:50px" ></i>
+			      
+		          <span>网站推荐</span>
+                  </a>
+                </li>
+              
+                <li>   
+				
+                  <a href="/source_list/experience " style="margin-left:75px";>
+				  
+				   <i class="fa fas fa-file-alt" style="position: absolute;left:50px" ></i>
+			      
+		          <span>经验记录</span>
+                  </a>
+                </li>
+               
+            </ul>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+
+
+
+    </nav>
+
+
+
+</header>
+
+
+
+    
+<script src="/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
+                alert('密码错误，将返回主页！');
+                location.href = '/';
+            }
+        }
+    })();
+</script>
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/verilog.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">Verilog Demo_15 SDRAM</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Verilog/">
+                                <span class="chip bg-color">Verilog</span>
+                            </a>
+                        
+                            <a href="/tags/sdram/">
+                                <span class="chip bg-color">sdram</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/FPGA-%E4%BE%8B%E7%A8%8B/" class="post-category">
+                                FPGA-例程
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-03-29
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    5.9k
+                </div>
+                
+
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="SDRAM-原理"><a href="#SDRAM-原理" class="headerlink" title="SDRAM 原理"></a>SDRAM 原理</h2><hr>
+<p>注 : 本文整理摘抄复制 SDRAM 相关内容， <a href="http://dengkanwen.com/105.html" target="_blank" rel="noopener">SDRAM原理参考文章</a>、<a href="https://www.cnblogs.com/JissXbon/p/6947279.html" target="_blank" rel="noopener">参考文2</a>、<a href="https://blog.csdn.net/eydwyz/article/details/52945642" target="_blank" rel="noopener">参考文3</a>、<a href="https://blog.csdn.net/lusics/article/details/53646233" target="_blank" rel="noopener">参考文4</a>、<a href="https://www.cnblogs.com/chengqi521/p/7909437.html" target="_blank" rel="noopener">参考文5</a>、<a href="http://www.chinastor.com/baike/storage/020I62322017.html" target="_blank" rel="noopener">参考文6</a></p>
+<h3 id="存储器介绍"><a href="#存储器介绍" class="headerlink" title="存储器介绍"></a>存储器介绍</h3><p>SRAM、DRAM、SDRAM、DDR3、DDR4介绍及区别</p>
+<p><strong>SRAM</strong>：静态随机访问存储器</p>
+<p>一个SRAM存储单元由4个晶体管和2个电阻器组成，利用晶体管的状态切换来存储数据，而不是电容器，因此读数据时不存在漏电问题，不需要刷新操作。但是由于SRAM需要的晶体管数多，因此成本高。</p>
+<p><strong>DRAM</strong>：动态随机访问存储器</p>
+<p>一个DRAM存储单元由1个晶体管和1个电容器组成，利用电容量存储电量的多少来存储数据，由于电容器存在漏电问题，因此需要定期刷新。读数据时，电容量的电量会消失，因此每次访问之后，也需要刷新，以防止数据丢失。</p>
+<p><strong>SDRAM</strong>：同步动态随机访问存储器</p>
+<p>同步是指 Memory工作需要同步时钟，内部的命令的发送与数据的传输都以它为基准。传统的DRAM在两个读周期之间需要等待一段时间，用于充电操作。而SDRAM一个模组有两个bank，在对一个bank充电时，可以操作另一个bank，实现流水线。</p>
+<p>SDRAM的发展已经经历了五代：分别是SDR SDRAM、 DDR SDRAM、 DDR2 SDRAM、 DDR3 SDRAM、 DDR4 SDRAM。</p>
+<p>DDR3：2005年制造出DDR3的原型产品。2007年，市场开始使用DDR3内存芯片。</p>
+<p>与DDR2相比，DDR3采用8bit预取，因此提供更高的传输速率(2133MT/s)；更低的工作电压（1.5V，DDR2工作电压为1.8V），另外采用了不同的封装工艺，因此能耗更低。</p>
+<p>延迟周期同样比DDR2增长，引脚数增加。</p>
+<p>DDR4：2011年，samsung宣布生产出第一个DDR4内存模块。2012年，samsung、Micron等开始量产DDR4 SDRAM芯片。</p>
+<p>与DDR3相比，DDR4提供更高的时钟频率和传输速率（4166MT/s）；更低的工作电压（1.05~1.2V），因此能耗更低。<br>转自中国存储网，原文链接：<a href="http://www.chinastor.com/baike/storage/020I62322017.html" target="_blank" rel="noopener">http://www.chinastor.com/baike/storage/020I62322017.html</a></p>
+<h3 id="SDRAM介绍"><a href="#SDRAM介绍" class="headerlink" title="SDRAM介绍"></a>SDRAM介绍</h3><p>SDRAM（Synchronous Dynamic Random Access Memory），同步动态随机存储器。同步是指 Memory工作需要同步时钟，内部的命令的发送与数据的传输都以它为基准；动态是指存储阵列需要不断的刷新来保证存储的数据不丢失，因为SDRAM中存储数据是通过电容来工作的，大家知道电容在自然放置状态是会有放电的，如果电放完了，也就意味着SDRAM中的数据丢失了，所以SDRAM需要在电容的电量放完之前进行刷新；随机是指数据不是线性依次存储，而是自由指定地址进行数据的读写。</p>
+<h3 id="SDRAM的内部结构"><a href="#SDRAM的内部结构" class="headerlink" title="SDRAM的内部结构"></a>SDRAM的内部结构</h3><p>SDRAM内部其实是一个存储阵列，阵列就如同一张表格一样，将数据填进去。和表格的检索原理一样，先确定一个行（Row），再确定一个列（Col），我们就可以准确的找到所需要的单元格，这就是内存芯片寻址的基本原理。对于内存，这个单元格可以成为存储单元，那么这个表格（存储阵列）就是逻辑Bank (Logic Bank,下文简称Bank).</p>
+<img src="/medias/loading/loading.gif" data-original="/images/post_images/verilog_demo_15_sdram/sdram_01.png">
+
+<p>对SDRAM进行寻址的方式为：先确定Bank的地址，再确定行和列的地址。</p>
+<h3 id="SDRAM内存容量计算方式"><a href="#SDRAM内存容量计算方式" class="headerlink" title="SDRAM内存容量计算方式"></a>SDRAM内存容量计算方式</h3><p><strong>128Mb Synchronous DRAM based on 2M x 4Bank x16 I/O</strong></p>
+<p>128Mb表示SDRAM的总容量，2M：表示1个Bank共有2M个地址，也就是说一个bank有2M个存储单元；4Bank表示有4个Bank；16 I/O表示位宽为16位，数据总线用的是16位的，1个存储单元能存储的最大的数为2^16-1=65535。然后再根据各个参数算下容量：2M x 4 x 16b = 128Mb .</p>
+<h3 id="SDRAM芯片主要引脚介绍"><a href="#SDRAM芯片主要引脚介绍" class="headerlink" title="SDRAM芯片主要引脚介绍"></a>SDRAM芯片主要引脚介绍</h3><table>
+<thead>
+<tr>
+<th>引脚</th>
+<th>介绍</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CLK</td>
+<td>SDRAM工作的时钟，并且所有的输入信号都是在CLK的上升沿进行检测的，也就是说我们给SDRAM给的任何命令，一定要在CLK的上升沿保持稳定，以免SDRAM获取我们给出的命令时出现错误。</td>
+</tr>
+<tr>
+<td>CKE</td>
+<td>时钟使能信号，是用来控制SDRAM内部时钟是否工作的一个信号（在SDRAM内部也是有时钟的哦）</td>
+</tr>
+<tr>
+<td>CS</td>
+<td>片选信号，这里需要注意的是，如果要对SDRAM进行操作，必须要将片选信号拉低</td>
+</tr>
+<tr>
+<td>BA0，BA1</td>
+<td>Bank地址线，用来给bank的地址，可以控制SDRAM的4个bank</td>
+</tr>
+<tr>
+<td>A0～A11</td>
+<td>地址线，当我们选择SDRAM某个Bank的Row地址的时候，需要到12根地址线（A0～A11）；当选择Col地址的时候，只用A0～A8这9根线；A10这个信号可以用来控制Auto-precharge。</td>
+</tr>
+<tr>
+<td>RAS、CAS、WE</td>
+<td>这三根线就是用来给SDRAM发命令的，包括初始化、读、写、自动充电等命令。</td>
+</tr>
+<tr>
+<td>UDQM、LDQM：</td>
+<td>数据输入/输出掩码。</td>
+</tr>
+<tr>
+<td>DQ0～DQ15</td>
+<td>SDRAM的数据线，为双向的，向SDRAM写数据或者从SDRAM中读出来的数据都是在DQ上进行传输的</td>
+</tr>
+</tbody></table>
+<p>大家看到上面的A0～A11这根地址总线既可以来控制row也可以控制col，而且控制col地址与控制row地址用到的线的数量又不一样，可能会有些疑问，下面解释一下：</p>
+<p>SDRAM的厂商一般为了节约成本，采用同一总线来对SDRAM进行寻址是无可厚非的，对于Row地址用到了12根线，也就是总共有2^12=4096个Row地址，而col地址使用9根线，也就是有2^9=512个col地址，而总共加起来的话，一个Bank就有4096×512=2097152 (2x1024x1024)  ,也就是有2M个地址，这样的话，就与我们前面计算SDRAM的容量想吻合了。</p>
+<p><strong>掩码（UDQM、LDQM）的作用</strong></p>
+<p>就拿咱们使用的这块SDRAM芯片来讲，数据线有16根，也就是说明我们数据的位数可以达到16位，但是呢，请注意，也许在我们使用SDRAM的时候，也许我们在向SDRAM写数据的时候，我们生成的数据只有8位，但FPGA是与SDRAM的16根数据线连在一起的，这个时候，存到SDRAM中的数据还是16位的，所以为了避免这个问题，我们就可以使用掩码来屏蔽掉高8位了。当然掩码在读数据的时候起到的作用也是类似的。</p>
+<h2 id="SDRAM驱动"><a href="#SDRAM驱动" class="headerlink" title="SDRAM驱动"></a>SDRAM驱动</h2><h3 id="SDRAM相关操作时序"><a href="#SDRAM相关操作时序" class="headerlink" title="SDRAM相关操作时序"></a>SDRAM相关操作时序</h3><h4 id="SDRAM初始化"><a href="#SDRAM初始化" class="headerlink" title="SDRAM初始化"></a>SDRAM初始化</h4><p>先找到SDRAM最开始的状态“POWER ON”，这是刚上电的状态。在“POWER ON”状态给‘Precharge’命令之后就会跳转到“Precharge”状态，然后自动跳转至“IDLE”状态。在“IDLE”状态下，我们需要给SDRAM两次Auto-refresh命令，然后接着需要进行模式寄存器设置，对模式寄存器设计完毕之后，我们的初始化过程也就结束了。</p>
+<img src="/medias/loading/loading.gif" data-original="/images/post_images/verilog_demo_15_sdram/sdram_02.png">
+
+<h4 id="SDRAM写操作"><a href="#SDRAM写操作" class="headerlink" title="SDRAM写操作"></a>SDRAM写操作</h4><p>在状态转移图中，我们可以发现在初始化完成之后，对SDRAM进行读或者写操作之前，我们还需要有一个命令”ACT”（这个命令在我们的初始化时序图中也出现了，只是我们是拿到了这里来讲），这个命令的意思说成大白话就是”行有效”命令，就是让SDRAM中的某一行活动起来，以便我们进行读或写。</p>
+<p>在正式讲写操作之前，还有一点希望大家能注意一下，可能细心的朋友已经发现了，在我们的状态转移图中有”WRITE”和”WRITEA”这两个状态，处于这两个状态时，我们都可以对SDRAM进行写操作，只是说在”WRITEA”状态，我们每写完一个突发长度的数据之后，SDRAM会自动跳出这个状态进行刷新，而在”WRITE”状态，是需要给相应的指令之后才会跳出”WRITE”状态的，所以为了提高SDRAM的运行速度，我们一般采用不让SDRAM进入”WRITEA”状态来提高速度。当然”READ”和”READA”这两个状态的区别也是这样的。</p>
+<img src="/medias/loading/loading.gif" data-original="/images/post_images/verilog_demo_15_sdram/sdram_03.png">
+
+<h4 id="SDRAM读操作"><a href="#SDRAM读操作" class="headerlink" title="SDRAM读操作"></a>SDRAM读操作</h4><p>下面来说说我们的读操作，其实读操作和写操作是类似的，</p>
+<img src="/medias/loading/loading.gif" data-original="/images/post_images/verilog_demo_15_sdram/sdram_04.png">
+
+<h4 id="SDRAM的自动刷新操作"><a href="#SDRAM的自动刷新操作" class="headerlink" title="SDRAM的自动刷新操作"></a>SDRAM的自动刷新操作</h4><p>前面多次提到了SDRAM的自动刷新，SDRAM为什么要自动刷新，相信大家通过前面的介绍已经知道原因了，可以说如果SDRAM到了该刷新的时间没有进行刷新，那不管我们给SDRAM写进去了多少数据都是白搭，所以大家一定要高度重视SDRAM的刷新操作，到了该刷新的时候就一定要给刷新的命令。SDRAM内部电容保存数据的最长时间是64ms，而我们一个BANK有4096行，64ms/4096～=15us，也就是说为了保证SDRAM内部的数据不被丢失，两次刷新之间的最大时间间隔为15us，所以为了能让SDRAM有更多的时间进行读或者写，我们就设定SDRAM刷新的周期为15us.</p>
+<p>在这里补充一个小知识，SDRAM每进行一次刷新，是对每一行进行操作的，并不是单独针对每一个电容进行充电，所以每进行一次刷新，该行中的电容进行充电我们可以理解为是同步发生的。</p>
+<img src="/medias/loading/loading.gif" data-original="/images/post_images/verilog_demo_15_sdram/sdram_05.png">
+
+<h3 id="SDRAM驱动原理"><a href="#SDRAM驱动原理" class="headerlink" title="SDRAM驱动原理"></a>SDRAM驱动原理</h3><p>SDRAM是每隔15us进行刷新一次，但是如果当SDRAM需要进行刷新时，而SDRAM正在写数据，这两个操作之间怎么进行协调呢？因为我们是肯定需要保证写的数据不能丢失，所以，我们可以考虑这样来做：如果刷新的时间到了，先让写操作把正在写的4个数据（突发长度为4）写完，然后再去进行刷新操作。而如果在执行读操作也遇到需要刷新的情况，我们也可以这样来做，先让数据读完，再去执行刷新操作。</p>
+<p>大家看完可能会想，说是这么说，那代码怎么来写呢？似乎还是没什么思路。大家可以想象一下，我们写的SDRAM控制器是肯定包括初始化、读操作、写操作及自动刷新这些操作的，既然这样，我们就可以给每一个操作写上一个模块独立开来，这样也便于我们每个模块的调试，显然这种思路是正确的。那怎么让我们的各个模块工作起来呢，虽然都是独立的模块，但很显然这几个模块之间又是相互关联的。就拿上面刚才说的那个情况来讲，如果SDRAM需要刷新了，而SDRAM却正在执行写操作，那我们刷新模块与写模块之间怎么进行控制呢？这个问题解决了，读模块与刷新模块之间的这个问题也可以很轻松的解决。</p>
+<img src="/medias/loading/loading.gif" data-original="/images/post_images/verilog_demo_15_sdram/sdram_06.png">
+
+<img src="/medias/loading/loading.gif" data-original="/images/post_images/verilog_demo_15_sdram/sdram_07.png">
+
+<p>在仲裁模块中，初始化操作完成之后便进入到了“ARBIT”仲裁状态，只有处于仲裁状态的时候，仲裁机才能向其他模块发送命令。</p>
+<p>当状态机处于“WRITE”写状态时，如果SDRAM刷新的时间到了，刷新模块同时向写模块和仲裁模块发送刷新请求ref_req信号，当写模块接受到ref_req之后，写模块在写完当前4个数据（突发长度为4）之后，写模块的写结束标志flag_wr_end拉高，然后状态机进入“ARBIT”仲裁状态；</p>
+<p>处于仲裁状态之后，此时有刷新请求ref_req，然后状态机跳转到“AREF”状态并且仲裁模块发送ref_en刷新使能，然后刷新模块将刷新请求信号ref_req拉低并给sdram发送刷新的命令。</p>
+<p>等刷新完毕之后，刷新模块给仲裁模块发送flag_ref_end刷新结束标志，状态机跳转到“ARBIT”仲裁状态。</p>
+<p>当刷新完跳转到“ARBIT”仲裁状态之后，如果之前全部数据仍然没有写完（指的是全部数据，并不是一个突发长度的4个数据），那么此时仍然要给仲裁模块写请求“wr_req”，然后仲裁模块经过一系列判断之后，如果符合写操作的时机，那就给写模块一个写使能信号“wr_en”，然后跳转到“WRITE”写状态并且写模块开始工作。</p>
+<h3 id="仲裁模块代码"><a href="#仲裁模块代码" class="headerlink" title="仲裁模块代码"></a>仲裁模块代码</h3><pre class=" language-verilog"><code class="language-verilog"><span class="token comment" spellcheck="true">//state</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            state    <span class="token operator">&lt;=</span>    IDLE<span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">case</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span>
+            IDLE<span class="token punctuation">:</span>
+                <span class="token function">if</span><span class="token punctuation">(</span>key<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>
+                    state    <span class="token operator">&lt;=</span>    INIT<span class="token punctuation">;</span>
+                <span class="token keyword">else</span>
+                    state    <span class="token operator">&lt;=</span>    IDLE<span class="token punctuation">;</span>
+            INIT<span class="token punctuation">:</span>
+                <span class="token function">if</span><span class="token punctuation">(</span>flag_init_end <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>    <span class="token comment" spellcheck="true">//初始化结束标志</span>
+                    state    <span class="token operator">&lt;=</span>    ARBIT<span class="token punctuation">;</span>
+                <span class="token keyword">else</span>
+                    state    <span class="token operator">&lt;=</span>    INIT<span class="token punctuation">;</span>
+            ARBIT<span class="token punctuation">:</span>
+                <span class="token function">if</span><span class="token punctuation">(</span>ref_req <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>    <span class="token comment" spellcheck="true">//刷新请求到来且已经写完</span>
+                    state    <span class="token operator">&lt;=</span>    AREF<span class="token punctuation">;</span>
+                <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>ref_req <span class="token operator">==</span> <span class="token number">1'b0</span> <span class="token operator">&amp;&amp;</span> rd_en <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>    <span class="token comment" spellcheck="true">//默认读操作优先于写操作</span>
+                    state    <span class="token operator">&lt;=</span>    READ<span class="token punctuation">;</span>            
+                <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>ref_req <span class="token operator">==</span> <span class="token number">1'b0</span> <span class="token operator">&amp;&amp;</span> wr_en <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>    <span class="token comment" spellcheck="true">//无刷新请求且写请求到来</span>
+                    state    <span class="token operator">&lt;=</span>    WRITE<span class="token punctuation">;</span>
+                <span class="token keyword">else</span>
+                    state    <span class="token operator">&lt;=</span>    ARBIT<span class="token punctuation">;</span>
+            AREF<span class="token punctuation">:</span>
+                <span class="token function">if</span><span class="token punctuation">(</span>flag_ref_end <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>
+                    state    <span class="token operator">&lt;=</span>    ARBIT<span class="token punctuation">;</span>
+                <span class="token keyword">else</span>
+                    state    <span class="token operator">&lt;=</span>    AREF<span class="token punctuation">;</span>
+            WRITE<span class="token punctuation">:</span>
+                <span class="token function">if</span><span class="token punctuation">(</span>flag_wr_end <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>
+                    state    <span class="token operator">&lt;=</span>    ARBIT<span class="token punctuation">;</span>
+                <span class="token keyword">else</span>
+                    state    <span class="token operator">&lt;=</span>    WRITE<span class="token punctuation">;</span>
+            READ<span class="token punctuation">:</span>
+                <span class="token function">if</span><span class="token punctuation">(</span>flag_rd_end <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>
+                    state    <span class="token operator">&lt;=</span>    ARBIT<span class="token punctuation">;</span>
+                <span class="token keyword">else</span>
+                    state    <span class="token operator">&lt;=</span>    READ<span class="token punctuation">;</span>
+            <span class="token keyword">default</span><span class="token punctuation">:</span>
+                state    <span class="token operator">&lt;=</span>    IDLE<span class="token punctuation">;</span>            
+        <span class="token keyword">endcase</span></code></pre>
+<h3 id="初始化模块代码"><a href="#初始化模块代码" class="headerlink" title="初始化模块代码"></a>初始化模块代码</h3><p>首先，我们需要有200us的稳定期，所以我们便有了一个200us的计数器cnt_200us，而这个计数器是根据flag_200us的低电平来工作的。</p>
+<p>falg_200us在200us计时之后一直拉高。在200us计满，即flag_200us拉高之后，我们就需要先给一个“NOP”命令，然后给两次“Precharge”命令，同时选中ALL Banks。</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">module</span>    <span class="token function">sdram_init</span><span class="token punctuation">(</span>
+        <span class="token keyword">input</span>    <span class="token keyword">wire</span>        sclk<span class="token punctuation">,</span>        <span class="token comment" spellcheck="true">//系统时钟为50M，即T=20ns</span>
+        <span class="token keyword">input</span>    <span class="token keyword">wire</span>        s_rst_n<span class="token punctuation">,</span>
+
+        <span class="token keyword">output</span>    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    cmd_reg<span class="token punctuation">,</span>    <span class="token comment" spellcheck="true">//sdram命令寄存器</span>
+        <span class="token keyword">output</span>    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">11</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    sdram_addr<span class="token punctuation">,</span>    <span class="token comment" spellcheck="true">//地址线</span>
+        <span class="token keyword">output</span>    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    sdram_bank<span class="token punctuation">,</span>    <span class="token comment" spellcheck="true">//bank地址</span>
+        <span class="token keyword">output</span>    <span class="token keyword">reg</span>        flag_init_end    <span class="token comment" spellcheck="true">//sdram初始化结束标志    </span>
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">parameter</span>    CMD_END        <span class="token operator">=</span>    <span class="token number">4'd11</span><span class="token punctuation">,</span>        <span class="token comment" spellcheck="true">//初始化结束时的命令计数器的值</span>
+            CNT_200US    <span class="token operator">=</span>    <span class="token number">14'd1_0000</span><span class="token punctuation">,</span>    
+            NOP        <span class="token operator">=</span>    <span class="token number">4'b0111</span><span class="token punctuation">,</span>    <span class="token comment" spellcheck="true">//空操作命令</span>
+            PRECHARGE    <span class="token operator">=</span>    <span class="token number">4'b0010</span><span class="token punctuation">,</span>    <span class="token comment" spellcheck="true">//预充电命令</span>
+            AUTO_REF    <span class="token operator">=</span>    <span class="token number">4'b0001</span><span class="token punctuation">,</span>    <span class="token comment" spellcheck="true">//自刷新命令</span>
+            MRSET        <span class="token operator">=</span>    <span class="token number">4'b0000</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//模式寄存器设置命令</span>
+
+    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">13</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    cnt_200us<span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">//200us计数器</span>
+    <span class="token keyword">reg</span>        flag_200us<span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">//200us结束标志（200us结束后，一直拉高）</span>
+    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    cnt_cmd<span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">//命令计数器，便于控制在某个时候发送特定指令</span>
+    <span class="token keyword">reg</span>        flag_init<span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">//初始化标志：初始化结束后，该标志拉低</span>
+<span class="token comment" spellcheck="true">//flag_init </span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            flag_init    <span class="token operator">&lt;=</span>    <span class="token number">1'b1</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>cnt_cmd <span class="token operator">==</span> CMD_END<span class="token punctuation">)</span>
+            flag_init    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>    
+<span class="token comment" spellcheck="true">//cnt_200us    </span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            cnt_200us    <span class="token operator">&lt;=</span>    <span class="token number">14'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>cnt_200us <span class="token operator">==</span> CNT_200US<span class="token punctuation">)</span>
+            cnt_200us    <span class="token operator">&lt;=</span>    <span class="token number">14'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>flag_200us <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            cnt_200us    <span class="token operator">&lt;=</span>    cnt_200us <span class="token operator">+</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//flag_200us</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            flag_200us    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>cnt_200us <span class="token operator">==</span> CNT_200US<span class="token punctuation">)</span>
+            flag_200us    <span class="token operator">&lt;=</span>    <span class="token number">1'b1</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//cnt_cmd</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            cnt_cmd    <span class="token operator">&lt;=</span>    <span class="token number">4'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>flag_200us <span class="token operator">==</span> <span class="token number">1'b1</span> <span class="token operator">&amp;&amp;</span> flag_init <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>
+            cnt_cmd    <span class="token operator">&lt;=</span>    cnt_cmd <span class="token operator">+</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//flag_init_end</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            flag_init_end    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>cnt_cmd <span class="token operator">==</span> CMD_END<span class="token punctuation">)</span>
+            flag_init_end    <span class="token operator">&lt;=</span>    <span class="token number">1'b1</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span>
+            flag_init_end    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//cmd_reg</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            cmd_reg    <span class="token operator">&lt;=</span>    NOP<span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>cnt_200us <span class="token operator">==</span> CNT_200US<span class="token punctuation">)</span>
+            cmd_reg    <span class="token operator">&lt;=</span>    PRECHARGE<span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>flag_200us<span class="token punctuation">)</span>
+            <span class="token function">case</span><span class="token punctuation">(</span>cnt_cmd<span class="token punctuation">)</span>
+                <span class="token number">4'd0</span><span class="token punctuation">:</span>
+                    cmd_reg    <span class="token operator">&lt;=</span>    AUTO_REF<span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//预充电命令</span>
+                <span class="token number">4'd6</span><span class="token punctuation">:</span>
+                    cmd_reg    <span class="token operator">&lt;=</span>    AUTO_REF<span class="token punctuation">;</span>
+                <span class="token number">4'd10</span><span class="token punctuation">:</span>
+                    cmd_reg    <span class="token operator">&lt;=</span>    MRSET<span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">//模式寄存器设置</span>
+                <span class="token keyword">default</span><span class="token punctuation">:</span>
+                    cmd_reg    <span class="token operator">&lt;=</span>    NOP<span class="token punctuation">;</span>
+            <span class="token keyword">endcase</span>
+<span class="token comment" spellcheck="true">//sdram_addr</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            sdram_addr    <span class="token operator">&lt;=</span>    <span class="token number">12'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">case</span><span class="token punctuation">(</span>cnt_cmd<span class="token punctuation">)</span>
+            <span class="token number">4'd0</span><span class="token punctuation">:</span>
+                sdram_addr    <span class="token operator">&lt;=</span>    <span class="token number">12'b0100_0000_0000</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//预充电时，A10拉高，对所有Bank操作</span>
+            <span class="token number">4'd10</span><span class="token punctuation">:</span>
+                sdram_addr    <span class="token operator">&lt;=</span>    <span class="token number">12'b0000_0011_0010</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//模式寄存器设置时的指令:CAS=2,Burst Length=4;</span>
+            <span class="token keyword">default</span><span class="token punctuation">:</span>
+                sdram_addr    <span class="token operator">&lt;=</span>    <span class="token number">12'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">endcase</span>
+<span class="token comment" spellcheck="true">//sdram_bank</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            sdram_bank    <span class="token operator">&lt;=</span>    <span class="token number">2'd0</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//这里仅仅只是初始化，在模式寄存器设置时才会用到且其值为全零，故不赋值</span>
+
+<span class="token comment" spellcheck="true">//sdram_clk</span>
+    <span class="token keyword">assign</span>    sdram_clk    <span class="token operator">=</span>    <span class="token operator">~</span>sclk<span class="token punctuation">;</span>
+
+<span class="token keyword">endmodule</span></code></pre>
+<h3 id="写操作模块代码"><a href="#写操作模块代码" class="headerlink" title="写操作模块代码"></a>写操作模块代码</h3><p>在模块端口列表中，用key_wr来接收写请求信号，这个写请求信号，是在没有写完之前一直拉高的，在写完了全部数据之后才拉低的。</p>
+<p>在写模块中，让SDRAM循环着写16’h0012，16’h1203，16’h562f，16’hfe12这四个数据。</p>
+<p>另外一点，在这个写模块中，每写完4个数据，也就是突发结束后，有一个写完标志，从而使状态机跳转到仲裁状态，然后如果数据没写完，由于写请求是拉高的，所以如果此时没有刷新请求，那状态机还是会跳转到写状态继续写的。</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">module</span>    <span class="token function">sdram_write</span><span class="token punctuation">(</span>
+        <span class="token keyword">input</span>    <span class="token keyword">wire</span>        sclk<span class="token punctuation">,</span>
+        <span class="token keyword">input</span>    <span class="token keyword">wire</span>        s_rst_n<span class="token punctuation">,</span>
+        <span class="token keyword">input</span>    <span class="token keyword">wire</span>        key_wr<span class="token punctuation">,</span>
+        <span class="token keyword">input</span>    <span class="token keyword">wire</span>        wr_en<span class="token punctuation">,</span>        <span class="token comment" spellcheck="true">//来自仲裁模块的写使能</span>
+        <span class="token keyword">input</span>    <span class="token keyword">wire</span>        ref_req<span class="token punctuation">,</span>    <span class="token comment" spellcheck="true">//来自刷新模块的刷新请求</span>
+        <span class="token keyword">input</span>    <span class="token keyword">wire</span>    <span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    state<span class="token punctuation">,</span>        <span class="token comment" spellcheck="true">//顶层模块的状态</span>
+
+        <span class="token keyword">output</span>    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    sdram_dq<span class="token punctuation">,</span>    <span class="token comment" spellcheck="true">//sdram输入/输出端口</span>
+        <span class="token comment" spellcheck="true">//output    reg    [3:0]    sdram_dqm,    //输入/输出掩码</span>
+        <span class="token keyword">output</span>    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">11</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    sdram_addr<span class="token punctuation">,</span>    <span class="token comment" spellcheck="true">//sdram地址线</span>
+        <span class="token keyword">output</span>    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    sdram_bank<span class="token punctuation">,</span>    <span class="token comment" spellcheck="true">//sdram的bank地址线</span>
+        <span class="token keyword">output</span>    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    sdram_cmd<span class="token punctuation">,</span>    <span class="token comment" spellcheck="true">//sdram的命令寄存器</span>
+        <span class="token keyword">output</span>    <span class="token keyword">reg</span>        wr_req<span class="token punctuation">,</span>        <span class="token comment" spellcheck="true">//写请求（不在写状态时向仲裁进行写请求）</span>
+        <span class="token keyword">output</span>    <span class="token keyword">reg</span>        flag_wr_end    <span class="token comment" spellcheck="true">//写结束标志（有刷新请求来时，向仲裁输出写结束）</span>
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">parameter</span>    NOP    <span class="token operator">=</span>    <span class="token number">4'b0111</span><span class="token punctuation">,</span>    <span class="token comment" spellcheck="true">//NOP命令</span>
+            ACT    <span class="token operator">=</span>    <span class="token number">4'b0011</span><span class="token punctuation">,</span>    <span class="token comment" spellcheck="true">//ACT命令</span>
+            WR    <span class="token operator">=</span>    <span class="token number">4'b0100</span><span class="token punctuation">,</span>    <span class="token comment" spellcheck="true">//写命令（需要将A10拉高）</span>
+            PRE    <span class="token operator">=</span>    <span class="token number">4'b0010</span><span class="token punctuation">,</span>    <span class="token comment" spellcheck="true">//precharge命令</span>
+            CMD_END    <span class="token operator">=</span>    <span class="token number">4'd8</span><span class="token punctuation">,</span>
+            COL_END    <span class="token operator">=</span>    <span class="token number">9'd508</span><span class="token punctuation">,</span>        <span class="token comment" spellcheck="true">//最后四个列地址的第一个地址</span>
+            ROW_END    <span class="token operator">=</span>    <span class="token number">12'd4095</span><span class="token punctuation">,</span>    <span class="token comment" spellcheck="true">//行地址结束</span>
+            AREF    <span class="token operator">=</span>    <span class="token number">6'b10_0000</span><span class="token punctuation">,</span>    <span class="token comment" spellcheck="true">//自动刷新状态</span>
+            WRITE    <span class="token operator">=</span>    <span class="token number">6'b00_1000</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//状态机的写状态</span>
+
+    <span class="token keyword">reg</span>        flag_act<span class="token punctuation">;</span>            <span class="token comment" spellcheck="true">//需要发送ACT的标志            </span>
+    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    cmd_cnt<span class="token punctuation">;</span>            <span class="token comment" spellcheck="true">//命令计数器</span>
+    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">11</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    row_addr<span class="token punctuation">;</span>            <span class="token comment" spellcheck="true">//行地址</span>
+    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">11</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    row_addr_reg<span class="token punctuation">;</span>            <span class="token comment" spellcheck="true">//行地址寄存器</span>
+    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    col_addr<span class="token punctuation">;</span>            <span class="token comment" spellcheck="true">//列地址</span>
+    <span class="token keyword">reg</span>        flag_pre<span class="token punctuation">;</span>            <span class="token comment" spellcheck="true">//在sdram内部为写状态时需要给precharge命令的标志</span>
+
+<span class="token comment" spellcheck="true">//flag_pre</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            flag_pre    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>col_addr <span class="token operator">==</span> <span class="token number">9'd0</span> <span class="token operator">&amp;&amp;</span> flag_wr_end <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>
+            flag_pre    <span class="token operator">&lt;=</span>    <span class="token number">1'b1</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>flag_wr_end <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>
+            flag_pre    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">//flag_act</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            flag_act    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>flag_wr_end<span class="token punctuation">)</span>
+            flag_act    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>ref_req <span class="token operator">==</span> <span class="token number">1'b1</span> <span class="token operator">&amp;&amp;</span> state <span class="token operator">==</span> AREF<span class="token punctuation">)</span>
+            flag_act    <span class="token operator">&lt;=</span>    <span class="token number">1'b1</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//wr_req</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            wr_req    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>wr_en <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>
+            wr_req    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>state <span class="token operator">!=</span> WRITE <span class="token operator">&amp;&amp;</span> key_wr <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>
+            wr_req    <span class="token operator">&lt;=</span>    <span class="token number">1'b1</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//flag_wr_end</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            flag_wr_end    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>cmd_cnt <span class="token operator">==</span> CMD_END<span class="token punctuation">)</span>
+            flag_wr_end    <span class="token operator">&lt;=</span>    <span class="token number">1'b1</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span>
+            flag_wr_end    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//cmd_cnt</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            cmd_cnt    <span class="token operator">&lt;=</span>    <span class="token number">4'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>state <span class="token operator">==</span> WRITE<span class="token punctuation">)</span>
+            cmd_cnt    <span class="token operator">&lt;=</span>    cmd_cnt <span class="token operator">+</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> 
+            cmd_cnt    <span class="token operator">&lt;=</span>    <span class="token number">4'd0</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">//sdram_cmd</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            sdram_cmd    <span class="token operator">&lt;=</span>    <span class="token number">4'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">case</span><span class="token punctuation">(</span>cmd_cnt<span class="token punctuation">)</span>
+            <span class="token number">3'd1</span><span class="token punctuation">:</span>
+                <span class="token function">if</span><span class="token punctuation">(</span>flag_pre <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>
+                    sdram_cmd    <span class="token operator">&lt;=</span>    PRE<span class="token punctuation">;</span>
+                <span class="token keyword">else</span>
+                    sdram_cmd    <span class="token operator">&lt;=</span>    NOP<span class="token punctuation">;</span>
+            <span class="token number">3'd2</span><span class="token punctuation">:</span>
+                <span class="token function">if</span><span class="token punctuation">(</span>flag_act <span class="token operator">==</span> <span class="token number">1'b1</span> <span class="token operator">||</span> col_addr <span class="token operator">==</span> <span class="token number">9'd0</span><span class="token punctuation">)</span>
+                    sdram_cmd    <span class="token operator">&lt;=</span>    ACT<span class="token punctuation">;</span>
+                <span class="token keyword">else</span>
+                    sdram_cmd    <span class="token operator">&lt;=</span>    NOP<span class="token punctuation">;</span>
+            <span class="token number">3'd3</span><span class="token punctuation">:</span>         
+                sdram_cmd    <span class="token operator">&lt;=</span>    WR<span class="token punctuation">;</span>
+
+            <span class="token keyword">default</span><span class="token punctuation">:</span>
+                sdram_cmd    <span class="token operator">&lt;=</span>    NOP<span class="token punctuation">;</span>        
+        <span class="token keyword">endcase</span>
+<span class="token comment" spellcheck="true">//sdram_dq</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            sdram_dq    <span class="token operator">&lt;=</span>    <span class="token number">16'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">case</span><span class="token punctuation">(</span>cmd_cnt<span class="token punctuation">)</span>
+            <span class="token number">3'd3</span><span class="token punctuation">:</span>
+                sdram_dq    <span class="token operator">&lt;=</span>    <span class="token number">16'h0012</span><span class="token punctuation">;</span>
+            <span class="token number">3'd4</span><span class="token punctuation">:</span>
+                sdram_dq    <span class="token operator">&lt;=</span>    <span class="token number">16'h1203</span><span class="token punctuation">;</span>
+            <span class="token number">3'd5</span><span class="token punctuation">:</span>
+                sdram_dq    <span class="token operator">&lt;=</span>    <span class="token number">16'h562f</span><span class="token punctuation">;</span>
+            <span class="token number">3'd6</span><span class="token punctuation">:</span>
+                sdram_dq    <span class="token operator">&lt;=</span>    <span class="token number">16'hfe12</span><span class="token punctuation">;</span>
+            <span class="token keyword">default</span><span class="token punctuation">:</span>
+                sdram_dq    <span class="token operator">&lt;=</span>    <span class="token number">16'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">endcase</span>
+<span class="token comment" spellcheck="true">/* //sdram_dq_m
+    always    @(posedge sclk or negedge s_rst_n)
+        if(s_rst_n == 1'b0)
+            sdram_dqm    &lt;=    4'd0; */</span>
+<span class="token comment" spellcheck="true">//row_addr_reg</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            row_addr_reg    <span class="token operator">&lt;=</span>    <span class="token number">12'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>row_addr_reg <span class="token operator">==</span> ROW_END <span class="token operator">&amp;&amp;</span> col_addr <span class="token operator">==</span> COL_END <span class="token operator">&amp;&amp;</span> cmd_cnt <span class="token operator">==</span> CMD_END<span class="token punctuation">)</span>
+            row_addr_reg    <span class="token operator">&lt;=</span>    <span class="token number">12'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>col_addr <span class="token operator">==</span> COL_END <span class="token operator">&amp;&amp;</span> flag_wr_end <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>
+            row_addr_reg    <span class="token operator">&lt;=</span>    row_addr_reg <span class="token operator">+</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">//row_addr</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            row_addr    <span class="token operator">&lt;=</span>    <span class="token number">12'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">case</span><span class="token punctuation">(</span>cmd_cnt<span class="token punctuation">)</span>
+        <span class="token comment" spellcheck="true">//因为下边的命令是通过行、列地址分开再给addr赋值，所以需要提前一个周期赋值，以保证在命令到来时能读到正确的地址</span>
+            <span class="token number">3'd2</span><span class="token punctuation">:</span>
+                row_addr    <span class="token operator">&lt;=</span>    <span class="token number">12'b0000_0000_0000</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//在写命令时，不允许auto-precharge    </span>
+            <span class="token keyword">default</span><span class="token punctuation">:</span>
+                row_addr    <span class="token operator">&lt;=</span>    row_addr_reg<span class="token punctuation">;</span>
+        <span class="token keyword">endcase</span>
+<span class="token comment" spellcheck="true">//col_addr</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            col_addr    <span class="token operator">&lt;=</span>    <span class="token number">9'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>col_addr <span class="token operator">==</span> COL_END <span class="token operator">&amp;&amp;</span> cmd_cnt <span class="token operator">==</span> CMD_END<span class="token punctuation">)</span>
+            col_addr    <span class="token operator">&lt;=</span>    <span class="token number">9'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>cmd_cnt <span class="token operator">==</span> CMD_END<span class="token punctuation">)</span>
+            col_addr    <span class="token operator">&lt;=</span>    col_addr <span class="token operator">+</span> <span class="token number">3'd4</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//sdram_addr</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            sdram_addr    <span class="token operator">&lt;=</span>    <span class="token number">12'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">case</span><span class="token punctuation">(</span>cmd_cnt<span class="token punctuation">)</span>
+            <span class="token number">3'd2</span><span class="token punctuation">:</span>
+                sdram_addr    <span class="token operator">&lt;=</span>    row_addr<span class="token punctuation">;</span>
+            <span class="token number">3'd3</span><span class="token punctuation">:</span>
+                sdram_addr    <span class="token operator">&lt;=</span>    col_addr<span class="token punctuation">;</span>
+
+            <span class="token keyword">default</span><span class="token punctuation">:</span>
+                sdram_addr    <span class="token operator">&lt;=</span>    row_addr<span class="token punctuation">;</span>
+        <span class="token keyword">endcase</span>
+<span class="token comment" spellcheck="true">//sdram_bank</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            sdram_bank    <span class="token operator">&lt;=</span>    <span class="token number">2'b00</span><span class="token punctuation">;</span>
+<span class="token keyword">endmodule</span></code></pre>
+<h3 id="读操作模块代码"><a href="#读操作模块代码" class="headerlink" title="读操作模块代码"></a>读操作模块代码</h3><pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">module</span>    <span class="token function">sdram_read</span><span class="token punctuation">(</span>
+        <span class="token keyword">input</span>    <span class="token keyword">wire</span>        sclk<span class="token punctuation">,</span>
+        <span class="token keyword">input</span>    <span class="token keyword">wire</span>        s_rst_n<span class="token punctuation">,</span>
+        <span class="token keyword">input</span>    <span class="token keyword">wire</span>        rd_en<span class="token punctuation">,</span>
+        <span class="token keyword">input</span>    <span class="token keyword">wire</span>    <span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    state<span class="token punctuation">,</span>
+        <span class="token keyword">input</span>    <span class="token keyword">wire</span>        ref_req<span class="token punctuation">,</span>        <span class="token comment" spellcheck="true">//自动刷新请求</span>
+        <span class="token keyword">input</span>    <span class="token keyword">wire</span>        key_rd<span class="token punctuation">,</span>            <span class="token comment" spellcheck="true">//来自外部的读请求信号</span>
+        <span class="token keyword">input</span>    <span class="token keyword">wire</span>    <span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    rd_dq<span class="token punctuation">,</span>        <span class="token comment" spellcheck="true">//sdram的数据端口</span>
+
+        <span class="token keyword">output</span>    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    sdram_cmd<span class="token punctuation">,</span>
+        <span class="token keyword">output</span>    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">11</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    sdram_addr<span class="token punctuation">,</span>
+        <span class="token keyword">output</span>    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    sdram_bank<span class="token punctuation">,</span>
+        <span class="token keyword">output</span>    <span class="token keyword">reg</span>        rd_req<span class="token punctuation">,</span>            <span class="token comment" spellcheck="true">//读请求</span>
+        <span class="token keyword">output</span>    <span class="token keyword">reg</span>        flag_rd_end        <span class="token comment" spellcheck="true">//突发读结束标志</span>
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">parameter</span>    NOP    <span class="token operator">=</span>    <span class="token number">4'b0111</span><span class="token punctuation">,</span>
+            PRE    <span class="token operator">=</span>    <span class="token number">4'b0010</span><span class="token punctuation">,</span>
+            ACT    <span class="token operator">=</span>    <span class="token number">4'b0011</span><span class="token punctuation">,</span>
+            RD    <span class="token operator">=</span>    <span class="token number">4'b0101</span><span class="token punctuation">,</span>        <span class="token comment" spellcheck="true">//SDRAM的读命令（给读命令时需要给A10拉低）</span>
+            CMD_END    <span class="token operator">=</span>    <span class="token number">4'd12</span><span class="token punctuation">,</span>            <span class="token comment" spellcheck="true">//</span>
+            COL_END    <span class="token operator">=</span>    <span class="token number">9'd508</span><span class="token punctuation">,</span>            <span class="token comment" spellcheck="true">//最后四个列地址的第一个地址</span>
+            ROW_END    <span class="token operator">=</span>    <span class="token number">12'd4095</span><span class="token punctuation">,</span>        <span class="token comment" spellcheck="true">//行地址结束</span>
+            AREF    <span class="token operator">=</span>    <span class="token number">6'b10_0000</span><span class="token punctuation">,</span>        <span class="token comment" spellcheck="true">//自动刷新状态</span>
+            READ    <span class="token operator">=</span>    <span class="token number">6'b01_0000</span><span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">//状态机的读状态</span>
+
+    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">11</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    row_addr<span class="token punctuation">;</span>
+    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    col_addr<span class="token punctuation">;</span>
+    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    cmd_cnt<span class="token punctuation">;</span>
+    <span class="token keyword">reg</span>        flag_act<span class="token punctuation">;</span>                <span class="token comment" spellcheck="true">//发送ACT命令标志（单独设立标志，便于跑高速）</span>
+
+<span class="token comment" spellcheck="true">//flag_act</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            flag_act    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>flag_rd_end <span class="token operator">==</span> <span class="token number">1'b1</span> <span class="token operator">&amp;&amp;</span> ref_req <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>
+            flag_act    <span class="token operator">&lt;=</span>    <span class="token number">1'b1</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>flag_rd_end <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>
+            flag_act    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//rd_req</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            rd_req    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>rd_en <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>
+            rd_req    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>key_rd <span class="token operator">==</span> <span class="token number">1'b1</span> <span class="token operator">&amp;&amp;</span> state <span class="token operator">!=</span> READ<span class="token punctuation">)</span>
+            rd_req    <span class="token operator">&lt;=</span>    <span class="token number">1'b1</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//cmd_cnt</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            cmd_cnt    <span class="token operator">&lt;=</span>    <span class="token number">4'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>state <span class="token operator">==</span> READ<span class="token punctuation">)</span>
+            cmd_cnt    <span class="token operator">&lt;=</span>    cmd_cnt <span class="token operator">+</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span>
+            cmd_cnt    <span class="token operator">&lt;=</span>    <span class="token number">4'd0</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//flag_rd_end</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            flag_rd_end    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>cmd_cnt <span class="token operator">==</span> CMD_END<span class="token punctuation">)</span>
+            flag_rd_end    <span class="token operator">&lt;=</span>    <span class="token number">1'b1</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span>
+            flag_rd_end    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//row_addr</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            row_addr    <span class="token operator">&lt;=</span>    <span class="token number">12'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>row_addr <span class="token operator">==</span> ROW_END <span class="token operator">&amp;&amp;</span> col_addr <span class="token operator">==</span> COL_END <span class="token operator">&amp;&amp;</span> flag_rd_end <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>
+            row_addr    <span class="token operator">&lt;=</span>    <span class="token number">12'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>col_addr <span class="token operator">==</span> COL_END <span class="token operator">&amp;&amp;</span> flag_rd_end <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>
+            row_addr    <span class="token operator">&lt;=</span>    row_addr <span class="token operator">+</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//col_addr</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            col_addr    <span class="token operator">&lt;=</span>    <span class="token number">9'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>col_addr <span class="token operator">==</span> COL_END <span class="token operator">&amp;&amp;</span> flag_rd_end <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>
+            col_addr    <span class="token operator">&lt;=</span>    <span class="token number">9'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>flag_rd_end <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>
+            col_addr    <span class="token operator">&lt;=</span>    col_addr <span class="token operator">+</span> <span class="token number">3'd4</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//cmd_cnt</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            cmd_cnt    <span class="token operator">&lt;=</span>    <span class="token number">4'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>state <span class="token operator">==</span> READ<span class="token punctuation">)</span>
+            cmd_cnt    <span class="token operator">&lt;=</span>    cmd_cnt <span class="token operator">+</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span>
+            cmd_cnt    <span class="token operator">&lt;=</span>    <span class="token number">4'd0</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//sdram_cmd</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            sdram_cmd    <span class="token operator">&lt;=</span>    NOP<span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">case</span><span class="token punctuation">(</span>cmd_cnt<span class="token punctuation">)</span>
+            <span class="token number">4'd2</span><span class="token punctuation">:</span>
+                <span class="token function">if</span><span class="token punctuation">(</span>col_addr <span class="token operator">==</span> <span class="token number">9'd0</span><span class="token punctuation">)</span>
+                    sdram_cmd    <span class="token operator">&lt;=</span>    PRE<span class="token punctuation">;</span>
+                <span class="token keyword">else</span>
+                    sdram_cmd    <span class="token operator">&lt;=</span>    NOP<span class="token punctuation">;</span>
+            <span class="token number">4'd3</span><span class="token punctuation">:</span>    
+                <span class="token function">if</span><span class="token punctuation">(</span>flag_act <span class="token operator">==</span> <span class="token number">1'b1</span> <span class="token operator">||</span> col_addr <span class="token operator">==</span> <span class="token number">9'd0</span><span class="token punctuation">)</span>
+                    sdram_cmd    <span class="token operator">&lt;=</span>    ACT<span class="token punctuation">;</span>
+                <span class="token keyword">else</span>
+                    sdram_cmd    <span class="token operator">&lt;=</span>    NOP<span class="token punctuation">;</span>
+            <span class="token number">4'd4</span><span class="token punctuation">:</span>
+                sdram_cmd    <span class="token operator">&lt;=</span>    RD<span class="token punctuation">;</span>
+            <span class="token keyword">default</span><span class="token punctuation">:</span>
+                sdram_cmd    <span class="token operator">&lt;=</span>    NOP<span class="token punctuation">;</span>
+        <span class="token keyword">endcase</span>
+<span class="token comment" spellcheck="true">//sdram_addr</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            sdram_addr    <span class="token operator">&lt;=</span>    <span class="token number">12'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">case</span><span class="token punctuation">(</span>cmd_cnt<span class="token punctuation">)</span>
+            <span class="token number">4'd4</span><span class="token punctuation">:</span>
+                sdram_addr    <span class="token operator">&lt;=</span>    <span class="token operator">{</span><span class="token number">3'd0</span><span class="token punctuation">,</span> col_addr<span class="token operator">}</span><span class="token punctuation">;</span>
+            <span class="token keyword">default</span><span class="token punctuation">:</span>
+                sdram_addr    <span class="token operator">&lt;=</span>    row_addr<span class="token punctuation">;</span>
+        <span class="token keyword">endcase</span>
+<span class="token comment" spellcheck="true">//sdram_bank</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            sdram_bank    <span class="token operator">&lt;=</span>    <span class="token number">2'd0</span><span class="token punctuation">;</span>
+<span class="token keyword">endmodule</span></code></pre>
+<h3 id="自动刷新模块代码"><a href="#自动刷新模块代码" class="headerlink" title="自动刷新模块代码"></a>自动刷新模块代码</h3><pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">module</span>    <span class="token function">auto_refresh</span><span class="token punctuation">(</span>
+        <span class="token keyword">input</span>    <span class="token keyword">wire</span>        sclk<span class="token punctuation">,</span>
+        <span class="token keyword">input</span>    <span class="token keyword">wire</span>        s_rst_n<span class="token punctuation">,</span>
+        <span class="token keyword">input</span>    <span class="token keyword">wire</span>        ref_en<span class="token punctuation">,</span>
+        <span class="token keyword">input</span>    <span class="token keyword">wire</span>        flag_init_end<span class="token punctuation">,</span>    <span class="token comment" spellcheck="true">//初始化结束标志（初始化结束后，启动自刷新标志）</span>
+
+        <span class="token keyword">output</span>    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">11</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    sdram_addr<span class="token punctuation">,</span>
+        <span class="token keyword">output</span>    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    sdram_bank<span class="token punctuation">,</span>
+        <span class="token keyword">output</span>    <span class="token keyword">reg</span>        ref_req<span class="token punctuation">,</span>
+        <span class="token keyword">output</span>    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    cmd_reg<span class="token punctuation">,</span>
+        <span class="token keyword">output</span>    <span class="token keyword">reg</span>        flag_ref_end
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">parameter</span>    BANK    <span class="token operator">=</span>    <span class="token number">12'd0100_0000_0000</span><span class="token punctuation">,</span>    <span class="token comment" spellcheck="true">//自动刷新是对所有bank刷新</span>
+            CMD_END    <span class="token operator">=</span>    <span class="token number">4'd10</span><span class="token punctuation">,</span>
+            CNT_END    <span class="token operator">=</span>    <span class="token number">10'd749</span><span class="token punctuation">,</span>    <span class="token comment" spellcheck="true">//15us计时结束</span>
+            NOP    <span class="token operator">=</span>    <span class="token number">4'b0111</span><span class="token punctuation">,</span>    <span class="token comment" spellcheck="true">//</span>
+            PRE    <span class="token operator">=</span>    <span class="token number">4'b0010</span><span class="token punctuation">,</span>    <span class="token comment" spellcheck="true">//precharge命令</span>
+            AREF    <span class="token operator">=</span>    <span class="token number">4'b0001</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//auto-refresh命令</span>
+
+
+    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">9</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    cnt_15ms<span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//15ms计数器</span>
+    <span class="token keyword">reg</span>        flag_ref<span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//处于自刷新阶段标志</span>
+    <span class="token keyword">reg</span>        flag_start<span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//自动刷新启动标志</span>
+    <span class="token keyword">reg</span>    <span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    cnt_cmd<span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//指令计数器</span>
+<span class="token comment" spellcheck="true">//flag_start</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            flag_start    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>flag_init_end <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>
+            flag_start    <span class="token operator">&lt;=</span>    <span class="token number">1'b1</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//cnt_15ms</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            cnt_15ms    <span class="token operator">&lt;=</span>    <span class="token number">10'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>cnt_15ms <span class="token operator">==</span> CNT_END<span class="token punctuation">)</span>
+            cnt_15ms    <span class="token operator">&lt;=</span>    <span class="token number">10'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>flag_start <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>
+            cnt_15ms    <span class="token operator">&lt;=</span>    cnt_15ms <span class="token operator">+</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//flag_ref</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            flag_ref    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>cnt_cmd <span class="token operator">==</span> CMD_END<span class="token punctuation">)</span>
+            flag_ref    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>ref_en <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>
+            flag_ref    <span class="token operator">&lt;=</span>    <span class="token number">1'b1</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//cnt_cmd</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            cnt_cmd    <span class="token operator">&lt;=</span>    <span class="token number">4'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>flag_ref <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>
+            cnt_cmd    <span class="token operator">&lt;=</span>    cnt_cmd <span class="token operator">+</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span>
+            cnt_cmd    <span class="token operator">&lt;=</span>    <span class="token number">4'd0</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//flag_ref_end</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            flag_ref_end    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>cnt_cmd <span class="token operator">==</span> CMD_END<span class="token punctuation">)</span>
+            flag_ref_end    <span class="token operator">&lt;=</span>    <span class="token number">1'b1</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span>
+            flag_ref_end    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//cmd_reg</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            cmd_reg    <span class="token operator">&lt;=</span>    NOP<span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">case</span><span class="token punctuation">(</span>cnt_cmd<span class="token punctuation">)</span>
+            <span class="token number">3'd0</span><span class="token punctuation">:</span>
+                <span class="token function">if</span><span class="token punctuation">(</span>flag_ref <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>
+                    cmd_reg    <span class="token operator">&lt;=</span>    PRE<span class="token punctuation">;</span>
+                <span class="token keyword">else</span>
+                    cmd_reg    <span class="token operator">&lt;=</span>    NOP<span class="token punctuation">;</span>
+            <span class="token number">3'd1</span><span class="token punctuation">:</span>
+                cmd_reg    <span class="token operator">&lt;=</span>    AREF<span class="token punctuation">;</span>
+            <span class="token number">3'd5</span><span class="token punctuation">:</span>
+                cmd_reg    <span class="token operator">&lt;=</span>    AREF<span class="token punctuation">;</span>
+            <span class="token keyword">default</span><span class="token punctuation">:</span>
+                cmd_reg    <span class="token operator">&lt;=</span>    NOP<span class="token punctuation">;</span>
+        <span class="token keyword">endcase</span>
+<span class="token comment" spellcheck="true">//sdram_addr</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            sdram_addr    <span class="token operator">&lt;=</span>    <span class="token number">12'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">case</span><span class="token punctuation">(</span>cnt_cmd<span class="token punctuation">)</span>
+            <span class="token number">4'd0</span><span class="token punctuation">:</span>
+                sdram_addr    <span class="token operator">&lt;=</span>    BANK<span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//bank进行刷新时指定allbank or signle bank</span>
+            <span class="token keyword">default</span><span class="token punctuation">:</span>
+                sdram_addr    <span class="token operator">&lt;=</span>    <span class="token number">12'd0</span><span class="token punctuation">;</span>
+        <span class="token keyword">endcase</span>
+<span class="token comment" spellcheck="true">//sdram_bank</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            sdram_bank    <span class="token operator">&lt;=</span>    <span class="token number">2'd0</span><span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">//刷新指定的bank</span>
+<span class="token comment" spellcheck="true">//ref_req</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            ref_req    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>ref_en <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">)</span>
+            ref_req    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>cnt_15ms <span class="token operator">==</span> CNT_END<span class="token punctuation">)</span>
+            ref_req    <span class="token operator">&lt;=</span>    <span class="token number">1'b1</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//flag_ref_end</span>
+    <span class="token important">always </span>   @<span class="token punctuation">(</span><span class="token keyword">posedge</span> sclk <span class="token keyword">or</span> <span class="token keyword">negedge</span> s_rst_n<span class="token punctuation">)</span>
+        <span class="token function">if</span><span class="token punctuation">(</span>s_rst_n <span class="token operator">==</span> <span class="token number">1'b0</span><span class="token punctuation">)</span>
+            flag_ref_end    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>cnt_cmd <span class="token operator">==</span> CMD_END<span class="token punctuation">)</span>
+            flag_ref_end    <span class="token operator">&lt;=</span>    <span class="token number">1'b1</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span>
+            flag_ref_end    <span class="token operator">&lt;=</span>    <span class="token number">1'b0</span><span class="token punctuation">;</span>
+
+<span class="token keyword">endmodule</span></code></pre>
+<p>​       </p>
+<p>​        </p>
+<p>[  完  ]</p>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+            </div>
+            <hr/>
+
+            
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/Verilog/">
+                                    <span class="chip bg-color">Verilog</span>
+                                </a>
+                            
+                                <a href="/tags/sdram/">
+                                    <span class="chip bg-color">sdram</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="qq,wechat,weibo,douban" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/posts/2051595482/">
+                    <div class="card-image">
+                        
+                        <img src="/medias/featureimages/verilog.jpg" class="responsive-img" alt="Verilog Demo_16 M序列">
+                        
+                        <span class="card-title">Verilog Demo_16 M序列</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            本文整理M序列发生器相关内容
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-03-30
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/FPGA-%E4%BE%8B%E7%A8%8B/" class="post-category">
+                                    FPGA-例程
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Verilog/">
+                        <span class="chip bg-color">Verilog</span>
+                    </a>
+                    
+                    <a href="/tags/M%E5%BA%8F%E5%88%97/">
+                        <span class="chip bg-color">M序列</span>
+                    </a>
+                    
+                    <a href="/tags/%E4%BC%AA%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97/">
+                        <span class="chip bg-color">伪随机序列</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/posts/956237880/">
+                    <div class="card-image">
+                        
+                        <img src="/medias/featureimages/verilog.jpg" class="responsive-img" alt="Verilog Demo_14 SPI">
+                        
+                        <span class="card-title">Verilog Demo_14 SPI</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            本文整理 SPI 的相关知识
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-29
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/FPGA-%E4%BE%8B%E7%A8%8B/" class="post-category">
+                                    FPGA-例程
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Verilog/">
+                        <span class="chip bg-color">Verilog</span>
+                    </a>
+                    
+                    <a href="/tags/spi/">
+                        <span class="chip bg-color">spi</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('2'),
+            headingSelector: 'h2, h3, h4 ,h5 ,h6'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4 ,h5 ,h6').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    
+    <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2020</span>
+            <a href="https://wuyasheng.github.io" target="_blank">yasheng</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+            
+
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2020";
+                    var startMonth = "3";
+                    var startDate = "19";
+                    var startHour = "12";
+                    var startMinute = "37";
+                    var startSecond = "12";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
+            <br>
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+
+
+
+            <br>
+            
+            
+            
+            
+            <canvas class="fireworks" style="position: fixed; left: 0; top: 0; z-index: 1; pointer-events: none;" ></canvas>
+            <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script>
+            <script type="text/javascript" src="/js/fireworks.js"></script>
+            
+
+
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/wuyasheng" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:1058349718@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1058349718" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1058349718" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <script type="text/javascript" src="/libs/background/ribbon-dynamic.js" async="async"></script>
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","width":160,"height":320},"mobile":{"show":false},"react":{"opacity":0.5}});</script><script>!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).bottom&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script></body>
+
+<script type="text/javascript">
+    var OriginTitile=document.title,st;
+    document.addEventListener("visibilitychange",function(){
+        document.hidden?(document.title="(≥◇≤) 你找不到我了",clearTimeout(st)):(document.title="(Ő∀Ő3)哇！你好厉害",st=setTimeout(function(){document.title=OriginTitile},3e3))
+    })
+</script>
+
+
+</html>

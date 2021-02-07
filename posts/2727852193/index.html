@@ -1,0 +1,1968 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Verilog 语法总结, Wonderful">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>Verilog 语法总结 | Wonderful</title>
+    <link rel="icon" type="image/png" href="/medias/logo.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<style type="text/css" lang="css">
+    #loading-container{
+        position: fixed;
+        top: 0;
+        left: 0;
+        min-height: 100vh;
+        width: 100vw;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: #FFF;
+        text-align: center;
+        /* loader页面消失采用渐隐的方式*/
+        -webkit-transition: opacity 1s ease;
+        -moz-transition: opacity 1s ease;
+        -o-transition: opacity 1s ease;
+        transition: opacity 1s ease;
+    }
+    .loading-image{
+        width: 120px;
+        height: 50px;
+        transform: translate(-50%);
+    }
+
+    .loading-image div:nth-child(2) {
+        -webkit-animation: pacman-balls 1s linear 0s infinite;
+        animation: pacman-balls 1s linear 0s infinite
+    }
+
+    .loading-image div:nth-child(3) {
+        -webkit-animation: pacman-balls 1s linear .33s infinite;
+        animation: pacman-balls 1s linear .33s infinite
+    }
+
+    .loading-image div:nth-child(4) {
+        -webkit-animation: pacman-balls 1s linear .66s infinite;
+        animation: pacman-balls 1s linear .66s infinite
+    }
+
+    .loading-image div:nth-child(5) {
+        -webkit-animation: pacman-balls 1s linear .99s infinite;
+        animation: pacman-balls 1s linear .99s infinite
+    }
+
+   .loading-image div:first-of-type {
+        width: 0;
+        height: 0;
+        border: 25px solid #49b1f5;
+        border-right-color: transparent;
+        border-radius: 25px;
+        -webkit-animation: rotate_pacman_half_up .5s 0s infinite;
+        animation: rotate_pacman_half_up .5s 0s infinite;
+    }
+    .loading-image div:nth-child(2) {
+        width: 0;
+        height: 0;
+        border: 25px solid #49b1f5;
+        border-right-color: transparent;
+        border-radius: 25px;
+        -webkit-animation: rotate_pacman_half_down .5s 0s infinite;
+        animation: rotate_pacman_half_down .5s 0s infinite;
+        margin-top: -50px;
+    }
+    @-webkit-keyframes rotate_pacman_half_up {0% {transform: rotate(270deg)}50% {transform: rotate(1turn)}to {transform: rotate(270deg)}}
+
+    @keyframes rotate_pacman_half_up {0% {transform: rotate(270deg)}50% {transform: rotate(1turn)}to {transform: rotate(270deg)}}
+
+    @-webkit-keyframes rotate_pacman_half_down {0% {transform: rotate(90deg)}50% {transform: rotate(0deg)}to {transform: rotate(90deg)}}
+
+    @keyframes rotate_pacman_half_down {0% {transform: rotate(90deg)}50% {transform: rotate(0deg)}to {transform: rotate(90deg)}}
+
+    @-webkit-keyframes pacman-balls {75% {opacity: .7}to {transform: translate(-100px, -6.25px)}}
+
+    @keyframes pacman-balls {75% {opacity: .7}to {transform: translate(-100px, -6.25px)}}
+
+
+    .loading-image div:nth-child(3),
+    .loading-image div:nth-child(4),
+    .loading-image div:nth-child(5),
+    .loading-image div:nth-child(6){
+        background-color: #49b1f5;
+        width: 15px;
+        height: 15px;
+        border-radius: 100%;
+        margin: 2px;
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        transform: translateY(-6.25px);
+        top: 25px;
+        left: 100px;
+    }
+    .loading-text{
+        margin-bottom: 20vh;
+        text-align: center;
+        color: #2c3e50;
+        font-size: 2rem;
+        box-sizing: border-box;
+        padding: 0 10px;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    @media only screen and (max-width: 500px) {
+         .loading-text{
+            font-size: 1.5rem;
+         }
+    }
+    .fadeout {
+        opacity: 0;
+        filter: alpha(opacity=0);
+    }
+    /* logo出现动画 */
+    @-webkit-keyframes fadeInDown{0%{opacity:0;-webkit-transform:translate3d(0,-100%,0);transform:translate3d(0,-100%,0)}100%{opacity:1;-webkit-transform:none;transform:none}}
+    @keyframes fadeInDown{0%{opacity:0;-webkit-transform:translate3d(0,-100%,0);}}
+ </style>
+ <script>
+(function () {
+    const loaded = function(){
+       setTimeout(function(){
+            const loader = document.getElementById("loading-container");
+            loader.className="fadeout" ;//使用渐隐的方法淡出loading page
+            // document.getElementById("body-wrap").style.display="flex";
+            setTimeout(function(){
+                loader.style.display="none";
+            },1000); 
+        },1000);//强制显示loading page 1s  
+    };
+    loaded();
+})()
+ </script><meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="Wonderful" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"><style type="text/css" lang="css">
+    #loading-container{
+        position: fixed;
+        top: 0;
+        left: 0;
+        min-height: 100vh;
+        width: 100vw;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: #FFF;
+        text-align: center;
+        /* loader页面消失采用渐隐的方式*/
+        -webkit-transition: opacity 1s ease;
+        -moz-transition: opacity 1s ease;
+        -o-transition: opacity 1s ease;
+        transition: opacity 1s ease;
+    }
+    .loading-image{
+        width: 120px;
+        height: 50px;
+        transform: translate(-50%);
+    }
+
+    .loading-image div:nth-child(2) {
+        -webkit-animation: pacman-balls 1s linear 0s infinite;
+        animation: pacman-balls 1s linear 0s infinite
+    }
+
+    .loading-image div:nth-child(3) {
+        -webkit-animation: pacman-balls 1s linear .33s infinite;
+        animation: pacman-balls 1s linear .33s infinite
+    }
+
+    .loading-image div:nth-child(4) {
+        -webkit-animation: pacman-balls 1s linear .66s infinite;
+        animation: pacman-balls 1s linear .66s infinite
+    }
+
+    .loading-image div:nth-child(5) {
+        -webkit-animation: pacman-balls 1s linear .99s infinite;
+        animation: pacman-balls 1s linear .99s infinite
+    }
+
+   .loading-image div:first-of-type {
+        width: 0;
+        height: 0;
+        border: 25px solid #49b1f5;
+        border-right-color: transparent;
+        border-radius: 25px;
+        -webkit-animation: rotate_pacman_half_up .5s 0s infinite;
+        animation: rotate_pacman_half_up .5s 0s infinite;
+    }
+    .loading-image div:nth-child(2) {
+        width: 0;
+        height: 0;
+        border: 25px solid #49b1f5;
+        border-right-color: transparent;
+        border-radius: 25px;
+        -webkit-animation: rotate_pacman_half_down .5s 0s infinite;
+        animation: rotate_pacman_half_down .5s 0s infinite;
+        margin-top: -50px;
+    }
+    @-webkit-keyframes rotate_pacman_half_up {0% {transform: rotate(270deg)}50% {transform: rotate(1turn)}to {transform: rotate(270deg)}}
+
+    @keyframes rotate_pacman_half_up {0% {transform: rotate(270deg)}50% {transform: rotate(1turn)}to {transform: rotate(270deg)}}
+
+    @-webkit-keyframes rotate_pacman_half_down {0% {transform: rotate(90deg)}50% {transform: rotate(0deg)}to {transform: rotate(90deg)}}
+
+    @keyframes rotate_pacman_half_down {0% {transform: rotate(90deg)}50% {transform: rotate(0deg)}to {transform: rotate(90deg)}}
+
+    @-webkit-keyframes pacman-balls {75% {opacity: .7}to {transform: translate(-100px, -6.25px)}}
+
+    @keyframes pacman-balls {75% {opacity: .7}to {transform: translate(-100px, -6.25px)}}
+
+
+    .loading-image div:nth-child(3),
+    .loading-image div:nth-child(4),
+    .loading-image div:nth-child(5),
+    .loading-image div:nth-child(6){
+        background-color: #49b1f5;
+        width: 15px;
+        height: 15px;
+        border-radius: 100%;
+        margin: 2px;
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        transform: translateY(-6.25px);
+        top: 25px;
+        left: 100px;
+    }
+    .loading-text{
+        margin-bottom: 20vh;
+        text-align: center;
+        color: #2c3e50;
+        font-size: 2rem;
+        box-sizing: border-box;
+        padding: 0 10px;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    @media only screen and (max-width: 500px) {
+         .loading-text{
+            font-size: 1.5rem;
+         }
+    }
+    .fadeout {
+        opacity: 0;
+        filter: alpha(opacity=0);
+    }
+    /* logo出现动画 */
+    @-webkit-keyframes fadeInDown{0%{opacity:0;-webkit-transform:translate3d(0,-100%,0);transform:translate3d(0,-100%,0)}100%{opacity:1;-webkit-transform:none;transform:none}}
+    @keyframes fadeInDown{0%{opacity:0;-webkit-transform:translate3d(0,-100%,0);}}
+ </style>
+ <script>
+(function () {
+    const loaded = function(){
+       setTimeout(function(){
+            const loader = document.getElementById("loading-container");
+            loader.className="fadeout" ;//使用渐隐的方法淡出loading page
+            // document.getElementById("body-wrap").style.display="flex";
+            setTimeout(function(){
+                loader.style.display="none";
+            },1000); 
+        },1000);//强制显示loading page 1s  
+    };
+    loaded();
+})()
+ </script></head>
+
+
+
+
+ <div id="loading-container">
+     <p class="loading-text">玩命加载中 . . . </p> 
+     <div class="loading-image">
+         <div></div>
+         <div></div>
+         <div></div>
+         <div></div> 
+         <div></div>
+     </div>
+ </div><body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Wonderful</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="" class="waves-effect waves-light">
+
+      
+      <i class="fas fa-list" style="zoom: 0.6;"></i>
+      
+      <span>资源</span>
+      <i class="fas fa-chevron-down" aria-hidden="true" style="zoom: 0.6;"></i>
+    </a>
+    <ul class="sub-nav menus_item_child ">
+      
+      <li>
+        <a href="/source_list/software">
+          
+          <i class="fas fa-database" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>软件推荐</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/source_list/websites">
+          
+          <i class="fas fa-book" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>网站推荐</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/source_list/experience">
+          
+          <i class="fas fa-file-alt" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>经验记录</span>
+        </a>
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Wonderful</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="javascript:;">
+			
+				<i class="fa-fw fas fa-list"></i>
+			
+			资源
+			<span class="m-icon"><i class="fas fa-chevron-right"></i></span>
+		</a>
+            <ul  style="background:  ;" >
+              
+                <li>   
+				
+                  <a href="/source_list/software " style="margin-left:75px";>
+				  
+				   <i class="fa fas fa-database" style="position: absolute;left:50px" ></i>
+			      
+		          <span>软件推荐</span>
+                  </a>
+                </li>
+              
+                <li>   
+				
+                  <a href="/source_list/websites " style="margin-left:75px";>
+				  
+				   <i class="fa fas fa-book" style="position: absolute;left:50px" ></i>
+			      
+		          <span>网站推荐</span>
+                  </a>
+                </li>
+              
+                <li>   
+				
+                  <a href="/source_list/experience " style="margin-left:75px";>
+				  
+				   <i class="fa fas fa-file-alt" style="position: absolute;left:50px" ></i>
+			      
+		          <span>经验记录</span>
+                  </a>
+                </li>
+               
+            </ul>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+
+
+
+    </nav>
+
+
+
+</header>
+
+
+
+    
+<script src="/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
+                alert('密码错误，将返回主页！');
+                location.href = '/';
+            }
+        }
+    })();
+</script>
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/verilog.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">Verilog 语法总结</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Verilog/">
+                                <span class="chip bg-color">Verilog</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/FPGA-%E6%80%BB%E7%BB%93/" class="post-category">
+                                FPGA-总结
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-03-26
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    15.3k
+                </div>
+                
+
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="Verilog-语法总结"><a href="#Verilog-语法总结" class="headerlink" title="Verilog 语法总结"></a>Verilog 语法总结</h2><hr>
+<p>注 : 本文内容来自整理摘抄至《Verilog 数字系统设计教程-第3版》夏宇闻</p>
+<h3 id="1-Verilog-基本知识"><a href="#1-Verilog-基本知识" class="headerlink" title="1   Verilog 基本知识"></a>1   Verilog 基本知识</h3><h4 id="1-1-硬件描述语言（HDL）"><a href="#1-1-硬件描述语言（HDL）" class="headerlink" title="1.1   硬件描述语言（HDL）"></a>1.1   硬件描述语言（HDL）</h4><p>​        硬件描述语言(HDL, hardware description language)是一种用形式化方法来描述数字电路和系统的语言。数字电路系统的设计者利用这种语言可以从上层到下层(从抽象到具体)逐层描述自己的设计思想,用一系列分层次的模块来表示极其复杂的数字系统。然后利用电子设计自动化(以下简称为EDA)工具逐层进行仿真验证,再把其中需要变为具体物理电路的模块组合经由自动综合工具转换到门级电路网表。接下去再用专用集成电路(ASIC)或现场可编程门阵列(FPGA)自动布局布线工具把网表转换为具体电路布线结构的实现。在制成物理器件之前,还可以用 Verilog的门级模型(原语元件或UDP)来代替具体基本元件。因其逻辑功能和延时特性与真实的物理元件完全一致,所以在仿真工具的支持下能验证复杂数字系统物理结构的正确性,使投片的成功率达到100%。</p>
+<h4 id="1-2-Verilog-HDL-和-VHDL-的比较"><a href="#1-2-Verilog-HDL-和-VHDL-的比较" class="headerlink" title="1.2   Verilog HDL   和  VHDL  的比较"></a>1.2   Verilog HDL   和  VHDL  的比较</h4><p>​        Verilog HDL和VHDL都是用于逻辑设计的硬件描述语言,并且都已成为IEEE标准。VHDL是在1987年成为IEEE标准, Verilog HDL则在1995年才正式成为IEEE标准。之所以VHDL比 Verilog HDL早成为IEEE标准,这是因为VHDL是由美国军方组织开发的,而 Verilog HDL则是从一个普通的民间公司的私有财产转化而来,基于 Verilog HDL的优越性,才成为IEEE标准,因而有更强的生命力VHDL其英文全名为 VHSIC Hardware Description Language,而 VHSIC则是very High Speed Integerated Circuit的缩写词,意为甚高速集成电路,故VHDL其准确的中文译名为甚高速集成电路的硬件描述语言。Verilog HDL和VHDL作为描述硬件电路设计的语言,其共同的特点在于:能形式化地抽象表示电路的行为和结构;支持逻辑设计中层次与范围的描述;可借用高级语言的精巧结构来简化电路行为的描述;具有电路仿真与验证机制以保证设计的正确性;支持电路描述由高层到低层的综合转换;硬件描述与实现工艺无关(有关工艺参数可通过语言提供的属性包括进去);便于文档管理;易于理解和设计重用。</p>
+<img src="/medias/loading/loading.gif" data-original="/images/post_images/verilog_syntax/Verilog_VHDL.png">
+
+
+<p>​        Verilog适合系统级( system)、算法级( alogrithem)、寄存器传输级(RTL)、逻辑级(logic)、门级(gate)、电路开关级( switch)设计,而 System Verilog是 Verilog语言的扩展和延伸,更适用于可重用的可综合IP和可重用的验证用IP设计,以及特大型(千万门级以上)基于IP的系统级设计和验证。</p>
+<h4 id="1-3-Verilog-HDL设计的优点"><a href="#1-3-Verilog-HDL设计的优点" class="headerlink" title="1.3   Verilog HDL设计的优点"></a>1.3   Verilog HDL设计的优点</h4><p>​        采用 Verilog输入法时,由于 Verilog HDL的标准化,可以很容易地把完成的设计移植到不同厂家的不同芯片中去,并在不同规模的应用时可以较容易地做修改。这不仅是因为用 Verilog HDL所完成的设计,其信号位数是很容易改变的,来适应不同规模的应用;在仿真验证时,仿真测试矢量还可以用同一种描述语言来完成,而且还因为采用 Verilog HDL综合器生成的数字逻辑是一种标准的电子设计互换格式(EDIF)文件,独立于所采用的实现工艺。有关工艺参数的描述可以通过 Verilog HDL提供的属性包括进去,然后利用不同厂家的布局布线工具,在不同工艺的芯片上实现；</p>
+<p>​        采用 Verilog输入法最大的优点是其与工艺无关性。这使得工程师在功能设计、逻辑验证阶段,可以不必过多考虑门级及工艺实现的具体细节,只需要利用系统设计时对芯片的要求,施加不同的约束条件,即可设计出实际电路。实际上这是利用了计算机的巨大能力在EDA工具的帮助下,把逻辑验证与具体工艺库匹配、布线及时延计算分成不同的阶段来实现从而减轻了人们的烦琐劳动。</p>
+<h4 id="1-4-固核、硬核、软核"><a href="#1-4-固核、硬核、软核" class="headerlink" title="1.4  固核、硬核、软核"></a>1.4  固核、硬核、软核</h4><p>​        把在某一种现场可编程门阵列(FPGA)器件上实现的、经验证是正确的、总门数在5000门以上电路结构编码文件称为“固核”( firm core)。</p>
+<p>​        把在某一种专用集成电路工艺的(ASIC)器件上实现的、经验证是正确的、总门数在5000门以上的电路结构版图掩膜称为“硬核”(hardcore)。</p>
+<p>​        把功能经过验证的、可综合的、实现后电路结构总门数在5000门以上的 Verilog HDL模型称为“软核”( Soft core)。</p>
+<h4 id="1-5-Verilog-HDL设计方法"><a href="#1-5-Verilog-HDL设计方法" class="headerlink" title="1.5  Verilog HDL设计方法"></a>1.5  Verilog HDL设计方法</h4><p>​        现代集成电路制造工艺技术的改进,使得在一个芯片上集成数十万乃至数千万个器件成为可能。但很难设想仅由一个设计师独立设计如此大规模的电路而不出现错误。利用层次化、结构化的设计方法,一个完整的硬件设计任务首先由总设计师( Architect)划分为若干个可操作的模块,编制出相应的模型(行为的或结构的),通过仿真加以验证后,再把这些模块分配<br>给下一层的设计师。这就允许多个设计者同时设计一个硬件系统中的不同模块,其中每个设计者负责自已所承担的部分;而由上一层设计师对其下层设计者完成的设计用行为级上层模块对其所做的设计进行验证。为了提高设计质量,如果其中有一部分模块可由商业渠道得到,用户可以购买它们的知识产权的使用权(IP核的重用),以节省时间和开发经费;自顶向下(Top-Down)的设计方法。</p>
+<h3 id="2-Verilog语法基本概念"><a href="#2-Verilog语法基本概念" class="headerlink" title="2  Verilog语法基本概念"></a>2  Verilog语法基本概念</h3><h4 id="Verilog-描述模型类型"><a href="#Verilog-描述模型类型" class="headerlink" title="Verilog 描述模型类型"></a>Verilog 描述模型类型</h4><p>​        Verilog HDl是一种用于数字系统设计的语言。用 Verilog HDL描述的电路设计就是电路的 Verilog HDL模型,也称为模块。 Verilog hdl既是一种行为描述的语言也是一种结构描述的语言。这就是说,无论描述电路功能行为的模块或描述元器件或较大部件互联的膜块都可以用 Verilog语言来建立电路模型。如果按照一定的规则和风格编写,功能行为模可以通过工具自动地转换为门级互联的结构模块。 Verilog模型可以是实际电路的不同级刷的抽象。这些抽象的级别和它们所对应的模型类型共有以下5种,现分别给以简述</p>
+<ol>
+<li><p>系统级( system-level):用语言提供的高级结构能够实现待设计模块的外部性能的模型。</p>
+</li>
+<li><p>算法级( algorithm-level):用语言提供的高级结构能够实现算法运行的模型。</p>
+</li>
+<li><p>RTL级( register transfer level):描述数据在寄存器之间的流动和如何处理、控制这些数据流动的模型。</p>
+</li>
+<li><p>门级( gate-level):描述逻辑门以及逻辑门之间连接的模型。</p>
+</li>
+<li><p>开关级( switch-level):描述器件中三极管和储存节点以及它们之间连接的模型。</p>
+</li>
+</ol>
+<p>前三种都属于行为描述,只有RTL级才与逻辑电路有明确的对应关系。</p>
+<p>门级与逻辑电路有确定的连接关系,前四种数字系统设计工程师必须掌握。</p>
+<h3 id="3-模块结构、数据类型和基本运算符号"><a href="#3-模块结构、数据类型和基本运算符号" class="headerlink" title="3  模块结构、数据类型和基本运算符号"></a>3  模块结构、数据类型和基本运算符号</h3><h4 id="3-1-模块的结构"><a href="#3-1-模块的结构" class="headerlink" title="3.1   模块的结构"></a>3.1   模块的结构</h4><pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">module</span> <span class="token operator">&lt;</span>模块名<span class="token operator">></span> <span class="token punctuation">(</span><span class="token operator">&lt;</span>端口列表<span class="token operator">></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token operator">&lt;</span>I<span class="token operator">/</span>O说明<span class="token operator">></span>
+<span class="token operator">&lt;</span>内部信号声明<span class="token operator">></span>
+<span class="token operator">&lt;</span>功能定义<span class="token operator">></span>
+<span class="token keyword">endmodule</span></code></pre>
+<h5 id="3-1-1-模块端口声明"><a href="#3-1-1-模块端口声明" class="headerlink" title="3.1.1   模块端口声明"></a>3.1.1   模块端口声明</h5><pre><code>module &lt;模块名&gt; (端口1,端口2,端口3,端口4,………);</code></pre><h5 id="3-1-2-模块内容"><a href="#3-1-2-模块内容" class="headerlink" title="3.1.2   模块内容"></a>3.1.2   模块内容</h5><p>模块的内容包括I/O说明、内部信号声明和功能定义。</p>
+<ol>
+<li>I/O说明的格式</li>
+</ol>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">input</span>     <span class="token punctuation">[</span>信号位宽<span class="token operator">-</span><span class="token number">1</span> <span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">]</span> 端口名<span class="token number">1</span><span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">//输入口说明</span>
+<span class="token keyword">output</span>     <span class="token punctuation">[</span>信号位宽<span class="token operator">-</span><span class="token number">1</span> <span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">]</span> 端口名<span class="token number">1</span><span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">//输出口说明</span>
+<span class="token keyword">inout</span>     <span class="token punctuation">[</span>信号位宽<span class="token operator">-</span><span class="token number">1</span> <span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">]</span> 断口名<span class="token number">1</span><span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">//输入输出口说明</span></code></pre>
+<ol start="2">
+<li>内部信号说明</li>
+</ol>
+<p>在模块内用到的与端口有关的wire和reg类型变量的声明。</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">wire</span>     <span class="token punctuation">[</span>width<span class="token operator">-</span><span class="token number">1</span> <span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">]</span>    W变量<span class="token number">1</span>，W变量<span class="token number">2</span>…<span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">//定义位宽为width的线型信号</span>
+<span class="token keyword">reg</span>     <span class="token punctuation">[</span>width<span class="token operator">-</span><span class="token number">1</span> <span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">]</span>    R变量<span class="token number">1</span>，R变量<span class="token number">2</span>…<span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">//定义位宽为width的寄存器型信号</span>
+<span class="token keyword">reg</span>     <span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>             mem        <span class="token punctuation">[</span><span class="token number">255</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//定义了256个8位的寄存器型数据。</span></code></pre>
+<ol start="3">
+<li>功能定义</li>
+</ol>
+<p>模块中最重要的部分是逻辑功能定义。由3种方法可以在模块中产生逻辑。</p>
+<p>1）用assign声明语句</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">assign</span> a <span class="token operator">=</span> b <span class="token operator">&amp;</span> c<span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">//连续赋值语句</span></code></pre>
+<p>2）用实例元件</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">and</span> <span class="token number">#2</span> <span class="token function">u1</span><span class="token punctuation">(</span>q<span class="token punctuation">,</span> a<span class="token punctuation">,</span> b<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>3）用always块</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token important">always @</span><span class="token punctuation">(</span><span class="token keyword">posedge</span> clk <span class="token keyword">or</span> <span class="token keyword">posedge</span> clr<span class="token punctuation">)</span><span class="token keyword">begin</span>    <span class="token comment" spellcheck="true">//异步复位D触发器</span>
+    <span class="token function">if</span><span class="token punctuation">(</span>clr<span class="token punctuation">)</span> 
+        q <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>en<span class="token punctuation">)</span> 
+        q <span class="token operator">&lt;=</span> d<span class="token punctuation">;</span>
+<span class="token keyword">end</span></code></pre>
+<p>assign是描述组合逻辑最常用的方法之一。</p>
+<p>always既可用来描述组合逻辑电路也可以用来描述时序逻辑。</p>
+<h5 id="3-1-3-要点"><a href="#3-1-3-要点" class="headerlink" title="3.1.3  要点"></a>3.1.3  要点</h5><p>1） 在verilog模块中所有过程块（initial, always）、连续赋值语句、实例引用都是并行的；</p>
+<p>2） 他们表示的是一种通过变量名互相连接的关系</p>
+<p>3） 在同一模块中这三者出现的先后顺序没有关系。</p>
+<p>只有连续赋值语句 assign 和实例引用语句可以独立于过程块而存在于模块功能定义部分。</p>
+<h4 id="3-2-数据类型"><a href="#3-2-数据类型" class="headerlink" title="3.2  数据类型"></a>3.2  数据类型</h4><p>​        Verilog HDL中总共有 19 种数据类型。数据类型是用来表示数字电路硬件中的数据储存和传送元素的。在本教材中先介绍4个最基本的数据类型,它们是:  reg型、wire型、 Integer型和 parameter型;<br>​        其他的类型是:large型、medium型、scalared型、time型、smll型、tri型、trio型、tril型、 triand型、 trior型、 trireg型、 vectored型、wand型和wor型。这14种数据类型除 time 型外都与基本逻辑单元建库有关,与系统设计没有很大的关系。在一般电路设计自动化的环境下,仿真用的基本部件库是由半导体厂家和EDA工具厂家共同提供的。系统设计工程师不必过多地关心门级和开关级的 Verilog HDL语法现象。Verilog HDL语言中也有常量和变量之分,它们分别属于以上这些类型。下面就最常用的几种进行介绍。</p>
+<h5 id="3-2-1-常量"><a href="#3-2-1-常量" class="headerlink" title="3.2.1 常量"></a>3.2.1 常量</h5><h6 id="3-2-1-1-数字"><a href="#3-2-1-1-数字" class="headerlink" title="3.2.1.1 数字"></a>3.2.1.1 数字</h6><p>数字表达方式有以下3种:</p>
+<p>1)  &lt;位宽&gt; &lt;进制&gt; &lt;数字&gt;，这是一种全面的描述方式。<br>2)  &lt;进制&gt;&lt;数字&gt;这种描述方式中，数字的位宽采用默认位宽(这由具体的机器系统决定,但至少32位)。<br>3)  &lt;数字&gt;这种描述方式中，采用默认进制(十进制)。<br>在表达式中,位宽指明了数字的精确位数。例如:一个4位二进制数的数字的位宽为4,一个4位十六进制数数字的位宽为16(因为每单个十六进制数就要用4位二进制数来表示)见下例:</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token number">8'b10101100</span>        <span class="token comment" spellcheck="true">//位宽为8的数的二进制表示,b表示二进制</span>
+<span class="token number">8'ha2</span>            <span class="token comment" spellcheck="true">//位宽为8的数的十六进制表示,h表示十六进制</span></code></pre>
+<ol>
+<li>整数</li>
+</ol>
+<p>(1)整数在 Verilog HDL中,整型常量即整常数有以下4种进制表示形式:<br>1)二进制整数(b或B);<br>2)十进制整数(d或D);<br>3)十六进制整数(h或H);<br>4)八进制整数(o或O)。</p>
+<ol start="2">
+<li><p>x 和 z 值</p>
+<p>在数字电路中,x代表不定值,z代表高阻值。一个x可以用来定义十六进制数的4位二进制数的状态,八进制数的3位,二进制数的1位。z的表示方式同x类似。z还有一种表达方式是可以写作“?”。在使用case表达式时建议使用这种写法,以提高程序的可读性。见下例:</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token number">4'b10x0</span>        <span class="token comment" spellcheck="true">//位宽为4的二进制数从低位数起第2位为不定值</span>
+<span class="token number">4'b101z</span>    <span class="token comment" spellcheck="true">//位宽为4的二进制数从低位数起第1位为高阻值</span>
+<span class="token number">12'dz</span>    <span class="token comment" spellcheck="true">//位宽为12的十进制数,其值为高阻值(第1种表达方式)</span>
+<span class="token number">12'd?</span>        <span class="token comment" spellcheck="true">//位宽为12的十进制数,其值为高阻值(第2种表达方式)</span>
+<span class="token number">8'h4x</span>        <span class="token comment" spellcheck="true">//位宽为8的十六进制数,其低4位值为不定值</span></code></pre>
+</li>
+<li><p>负数</p>
+<p>一个数字可以被定义为负数,只需在位宽表达式前加一个减号,减号必须写在<br>数字定义表达式的最前面。注意:减号不可以放在位宽和进制之间,也不可以放在进制和具体的数之间。见下例:</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token operator">-</span><span class="token number">8'd5</span>    <span class="token comment" spellcheck="true">//这个表达式代表5的补数(用八位二进制数表示)</span>
+<span class="token number">8</span>'d<span class="token operator">-</span><span class="token number">5</span>    <span class="token comment" spellcheck="true">//非法格式</span></code></pre>
+</li>
+<li><p>下划线( underscore)</p>
+<p>下划线可以用来分隔开数的表达以提高程序可读性。它不可以用在位宽和进制处,只能用在具体的数字之间。见下例:</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token number">16'b1010_1011_1111_1010</span>    <span class="token comment" spellcheck="true">//合法格式</span>
+<span class="token number">8'b_0011_1010</span>    <span class="token comment" spellcheck="true">//非法格式</span></code></pre>
+<p>当常量不说明位数时,默认值是32位,每个字母用8位的ASCⅡ值表示。例:</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token number">10</span>    <span class="token operator">=</span> <span class="token number">32'd10</span> <span class="token operator">=</span> <span class="token number">32'b1010</span>
+<span class="token number">1</span> <span class="token operator">=</span>    <span class="token number">32'd1</span> <span class="token operator">=</span>    <span class="token number">32'b1</span>
+<span class="token operator">-</span><span class="token number">1</span>    <span class="token operator">=</span>    <span class="token operator">-</span><span class="token number">32'd1</span> <span class="token operator">=</span> <span class="token number">32'hFFFFFFFF</span>
+<span class="token number">'BX</span> <span class="token operator">=</span>    <span class="token number">32</span> BX    <span class="token operator">=</span>    <span class="token number">32'BXXXXXXX</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>X
+<span class="token string">"AB"</span>    <span class="token operator">=</span>    <span class="token number">16'B01000001_01000010</span>        <span class="token comment" spellcheck="true">//字符串AB,为十六进制数16h4142</span></code></pre>
+</li>
+</ol>
+<h6 id="3-2-1-2-参数（parameter）型"><a href="#3-2-1-2-参数（parameter）型" class="headerlink" title="3.2.1.2 参数（parameter）型"></a>3.2.1.2 参数（parameter）型</h6><p>​        在 Verilog hDI中用 parameter来定义常量,即用 parameter来定义一个标识符代表一个常量,称为符号常量,即标识符形式的常量,采用标识符代表一个常量可提高程序的可读性和可维护性。 parameter型数据是一种常数型的数据,其说明格式如下:</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">parameter</span> 参数名<span class="token number">1</span> <span class="token operator">=</span> 表达式<span class="token punctuation">,</span>参数名<span class="token number">2</span> <span class="token operator">=</span> 表达式<span class="token punctuation">,</span>……<span class="token punctuation">,</span>参数名n <span class="token operator">=</span> 表达式<span class="token punctuation">;</span></code></pre>
+<p>parameter是参数型数据的确认符。确认符后跟着一个用逗号分隔开的赋值语句表。在每一个赋值语句的右边必须是一个常数表达式。也就是说,该表达式只能包含数字或先前已定义过的参数。见下列:</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">parameter</span>     msb <span class="token operator">=</span> <span class="token number">7</span><span class="token punctuation">;</span>   <span class="token comment" spellcheck="true">//定义参数msb为常量7</span>
+<span class="token keyword">parameter</span>     e <span class="token operator">=</span> <span class="token number">25</span><span class="token punctuation">,</span> f <span class="token operator">=</span> <span class="token number">29</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//定义两个常数参数</span>
+<span class="token keyword">parameter</span>     r <span class="token operator">=</span> <span class="token number">5.7</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">//声明r为一个实型参数</span>
+<span class="token keyword">parameter</span>     byte_size <span class="token operator">=</span> <span class="token number">8</span><span class="token punctuation">,</span>  <span class="token comment" spellcheck="true">//用常数表达式赋值</span>
+            byte_msb <span class="token operator">=</span> byte_size <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span>    
+<span class="token keyword">parameter</span>     average_delay <span class="token operator">=</span> <span class="token punctuation">(</span>r<span class="token operator">+</span>f<span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">2</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//用常数表达式赋值</span></code></pre>
+<p>​        参数型常数经常用于定义 延迟时间 和 变量宽度 。在模块或实例引用时,可通过参数传递改变在被引用模块或实例中已定义的参数。</p>
+<h5 id="3-2-2-变量"><a href="#3-2-2-变量" class="headerlink" title="3.2.2 变量"></a>3.2.2 变量</h5><p>   变量是一种在程序运行过程中其值可以改变的量,在 Verilog HDL中变量的数据类型有很多种,这里只对常用的几种进行介绍。网络数据类型表示结构实体(例如门)之间的物理连接。网络类型的变量不能储存值,而且它必须受到驱动器(例如门或连续赋值语句, assign)的驱动。如果没有驱动器连接到网络类型的变量上,则该变量就是高阻的,即其值为 z 。常用的网络数据类型包括 wire 型和 tri 型。这两种变量都是用于连接器件单元,它们具有相同的语法格式和功能。之所以提供这两种名字来表达相同的概念,其目的是为了与模型中所使用的变量的实际情况相一致。wire 型变量通常是用来表示单个门驱动或连续赋值语句驱动的网络型数据, tri 型变量则用来表示多驱动器驱动的网络型数据。如果 wire 型或 tri 型变量没有定义逻辑强度( logic strength),在多驱动源的情况下,逻辑值会发生冲突,从而产生不确定值。下表为wire型和tri型变量的真值表。</p>
+<table>
+<thead>
+<tr>
+<th align="center">wire/tri</th>
+<th align="center">0</th>
+<th align="center">1</th>
+<th align="center">x</th>
+<th align="center">z</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">x</td>
+<td align="center">1</td>
+<td align="center">x</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+</tr>
+<tr>
+<td align="center">z</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">x</td>
+<td align="center">z</td>
+</tr>
+</tbody></table>
+<h6 id="3-2-2-1-wire型"><a href="#3-2-2-1-wire型" class="headerlink" title="3.2.2.1 wire型"></a>3.2.2.1 wire型</h6><p>wire型数据常用来表示用以 assign关键字指定的组合逻辑信号。 Verilog程序模块中输入、输出信号类型默认时自动定义为wire型。wire型信号可以用做任何方程式的输入,也可以用做“ assign”语句或实例元件的输出。<br>wire型信号的格式同reg型信号的格式很类似。其格式如下:</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">wire</span>    <span class="token punctuation">[</span>n<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    数据名<span class="token number">1</span><span class="token punctuation">,</span>数据名<span class="token number">2</span><span class="token punctuation">,</span>…数据名i<span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//共有i条总线,每条总线内有n条线路,或者</span>
+<span class="token keyword">wire</span>    <span class="token punctuation">[</span>n<span class="token punctuation">:</span><span class="token number">1</span><span class="token punctuation">]</span>    数据名<span class="token number">1</span><span class="token punctuation">,</span>数据名<span class="token number">2</span><span class="token punctuation">,</span>…数据名i。</code></pre>
+<p>wire是wire型数据的确认符;[n-1:0]和[n:1]代表该数据的位宽,即该数据有几位;最后跟着的是数据的名字。如果一次定义多个数据,数据名之间用逗号隔开。声明语句的最后要用分号表示语句结束。看下面的几个例子:</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">wire</span>             a<span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//定义了一个1位的wire型数据</span>
+<span class="token keyword">wire</span>    <span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>    b<span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//定义了一个8位的wire型数据</span>
+<span class="token keyword">wire</span>    <span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">:</span><span class="token number">1</span><span class="token punctuation">]</span>    c<span class="token punctuation">,</span>d<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//定义了二个4位的wire型数据</span></code></pre>
+<h6 id="3-2-2-2-reg型"><a href="#3-2-2-2-reg型" class="headerlink" title="3.2.2.2 reg型"></a>3.2.2.2 reg型</h6><p>​        寄存器是数据储存单元的抽象。寄存器数据类型的关键字是reg。通过赋值语句可以改变寄存器储存的值,其作用与改变触发器储存的值相当。 Verilog HDL语言提供了功能强大的结构语句,使设计者能有效地控制是否执行这些赋值语句。这些控制结构用来描述硬件触发条件,例如时钟的上升沿和多路器的选通信号。reg 类型数据的默认初始值为不定值 x 。reg型数据常用来表示 “always” 模块内的指定信号,常代表触发器。通常,在设计中要由 “always” 模块通过使用行为描述语句来表达逻辑关系。在 “always” 模块内被赋值的每一个信号都必须定义成reg型。reg 型数据的格式如下:</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">reg</span>        <span class="token punctuation">[</span>n<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>        数据名<span class="token number">1</span><span class="token punctuation">,</span>数据名<span class="token number">2</span><span class="token punctuation">,</span>…<span class="token punctuation">,</span>数据名i<span class="token punctuation">;</span>
+<span class="token keyword">reg</span>        <span class="token punctuation">[</span>n<span class="token punctuation">:</span><span class="token number">1</span><span class="token punctuation">]</span>        数据名<span class="token number">1</span><span class="token punctuation">,</span>数据名<span class="token number">2</span><span class="token punctuation">,</span>…<span class="token punctuation">,</span>数据名i<span class="token punctuation">;</span></code></pre>
+<p>reg是reg型数据的确认标识符;[n-1:0]和[n:1]代表该数据的位宽,即该数据有几位(bit);最后跟着的是数据的名字。如果一次定义多个数据,数据名之间用逗号隔开。声明语句的最后要用分号表示语句结束。看下面的几个例子:</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">reg</span>             rega<span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//定义了一个1位的名为rega的reg型数据</span>
+<span class="token keyword">reg</span>     <span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>     regb<span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//定义了一个4位的名为regb的reg型数据</span>
+<span class="token keyword">reg</span>        <span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">:</span><span class="token number">1</span><span class="token punctuation">]</span>    regc<span class="token punctuation">,</span>regd<span class="token punctuation">;</span><span class="token comment" spellcheck="true">//定义了二个4位的名为regc和regd的reg型数据</span></code></pre>
+<p>注：对于reg型数据,其赋值语句的作用就如同改变一组触发器的存储单元的值。在 Verilog 中有许多构造( construct)用来控制何时或是否执行这些赋值语句。这些控制构造可用来描述硬件触发器的各种具体情况,如触发条件时用时钟的上升沿,或用来描述判断逻辑的细节,如各种多路选择器。reg型数据的默认初始值是不定值。reg型数据可以赋正值,也可以赋负值。但当一个reg型数据是一个表达式中的操作数时,它的值被当作是无符号值,即正值。例如,当一个4位的寄存器用做表达式中的操作数时,如果开始寄存器被赋以值-1,则在表达式中进行运算时,其值被认为是+15。</p>
+<h6 id="3-2-2-3-memory型"><a href="#3-2-2-3-memory型" class="headerlink" title="3.2.2.3 memory型"></a>3.2.2.3 memory型</h6><p>Verilog HDl通过对reg型变量建立数组来对存储器建模,可以描述RAM型存储器ROM存储器和reg文件。数组中的每一个单元通过一个数组索引进行寻址。在 Verilog语言中没有多维数组存在。 memory型数据是通过扩展reg型数据的地址范围来生成的。其格式如下</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">reg</span>        <span class="token punctuation">[</span>n<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>        存储器名<span class="token punctuation">[</span>m<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>或
+<span class="token keyword">reg</span>        <span class="token punctuation">[</span>n<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>        存储器名<span class="token punctuation">[</span>m<span class="token punctuation">:</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span></code></pre>
+<p>在这里,reg [n-1:0]定义了存储器中每一个存储单元的大小,即该存储单元是一个n位的寄存器;存储器名后的[m-1:0]或[m:1]则定义了该存储器中有多少个这样的寄存器;最后用分号结束定义语句。下面举例说明:</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">reg</span>        <span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span>        mema<span class="token punctuation">[</span><span class="token number">255</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span></code></pre>
+<p>这个例子定义了一个名为mema的存储器,该存储器有256个8位的存储器。该存储器的地址范围是0到255。<br>注意:对存储器进行地址索引的表达式必须是常数表达式。另外,在同一个数据类型声明语句里,可以同时定义存储器型数据和reg型数据。见下例</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">parameter</span>    wordsize <span class="token operator">=</span> <span class="token number">16</span><span class="token punctuation">,</span>  <span class="token comment" spellcheck="true">//定义两个参数</span>
+            memsize <span class="token operator">=</span> <span class="token number">256</span><span class="token punctuation">;</span>
+<span class="token keyword">reg</span> <span class="token punctuation">[</span>wordsize<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">]</span> mem <span class="token punctuation">[</span>memsize<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> writereg<span class="token punctuation">,</span> readreg<span class="token punctuation">;</span></code></pre>
+<p>尽管 memory型数据和reg型数据的定义格式很相似,但要注意其不同之处。如一个由n个1位寄存器构成的存储器组是不同于一个n位的寄存器的。见下例:</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">reg</span>     <span class="token punctuation">[</span>n<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">]</span>     rega<span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">//一个n位的寄存器</span>
+<span class="token keyword">reg</span>     mema <span class="token punctuation">[</span>n<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//一个由n个1位寄存器构成的存储器组</span></code></pre>
+<p>一个n位的寄存器可以在一条赋值语句里进行赋值,而一个完整的存储器则不行。见下例</p>
+<pre class=" language-verilog"><code class="language-verilog">rega    <span class="token operator">=</span>     <span class="token number">0</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//合法赋值语句</span>
+mema     <span class="token operator">=</span>    <span class="token number">0</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//非法赋值语句</span></code></pre>
+<p>如果想对 memory中的存储单元进行读写操作,必须指定该单元在存储器中的地址。下面的写法是正确的:</p>
+<pre class=" language-verilog"><code class="language-verilog">mema    <span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span>    <span class="token operator">=</span>    <span class="token number">0</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//给 memory中的第3个存储单元赋值为0</span></code></pre>
+<p>进行寻址的地址索引可以是表达式,这样就可以对存储器中的不同单元进行操作。表达式的值可以取决于电路中其他的寄存器的值。例如可以用一个加法计数器来做RAM的地址索引。</p>
+<h4 id="3-3-基本运算符"><a href="#3-3-基本运算符" class="headerlink" title="3.3  基本运算符"></a>3.3  基本运算符</h4><p>Verilog HDL语言的运算符范围很广,其运算符按其功能可分为以下几类:</p>
+<ol>
+<li>算术运算符 (+，-，×，/，%)；</li>
+<li>赋值运算符 (=，&lt;=)；</li>
+<li>关系运算符 (&gt;，&lt;，&gt;=，&lt;=)；</li>
+<li>逻辑运算符 (&amp;&amp;，||，!)；</li>
+<li>条件运算符 (?:)；</li>
+<li>位运算符 (|，&amp;，<del>，^，</del>^)；</li>
+<li>移位运算符(&lt;&lt;，&gt;&gt;)；</li>
+<li>拼接运算符({})；</li>
+<li>缩减运算符(&amp;，|)</li>
+<li>其他。</li>
+</ol>
+<p>基本运算符优先级别</p>
+<img src="/medias/loading/loading.gif" data-original="/images/post_images/verilog_syntax/Priority.jpg">
+
+<h4 id="3-4-赋值语句和块语句"><a href="#3-4-赋值语句和块语句" class="headerlink" title="3.4 赋值语句和块语句"></a>3.4 赋值语句和块语句</h4><p>在 Verilog HDL语言中,信号有两种赋值方式</p>
+<h5 id="3-4-1-赋值语句"><a href="#3-4-1-赋值语句" class="headerlink" title="3.4.1 赋值语句"></a>3.4.1 赋值语句</h5><h6 id="3-4-1-1-非阻塞赋值"><a href="#3-4-1-1-非阻塞赋值" class="headerlink" title="3.4.1.1 非阻塞赋值"></a>3.4.1.1 非阻塞赋值</h6><ol>
+<li>在语句块中,上面语句所赋的变量值不能立即就为下面的语句所用;</li>
+<li>块结束后才能完成这次赋值操作,而所赋的变量值是上一次赋值得到的;</li>
+<li>在编写可综合的时序逻辑模块时,这是最常用的赋值方法。</li>
+</ol>
+<p>注意:非阻塞赋值符“&lt;=”与小于等于符“&lt;=”看起来是一样的,但意义完全不同,小于等于符是关系运算符,用于比较大小,而非阻塞赋值符用于赋值操作</p>
+<h6 id="3-4-1-2-阻塞赋值"><a href="#3-4-1-2-阻塞赋值" class="headerlink" title="3.4.1.2 阻塞赋值"></a>3.4.1.2 阻塞赋值</h6><ol>
+<li>赋值语句执行完后,块才结束;</li>
+<li>b的值在赋值语句执行完后立刻就改变的;</li>
+<li>在时序逻辑中使用时,可能会产生意想不到的结果。</li>
+</ol>
+<p>非阻塞赋值方式和阻塞赋值方式的区别常给设计人员带来问题。问题主要是对“ always块内的reg型信号的赋值方式不易把握。到目前为止,前面所举的例子中的“ always”模块内的reg型信号都是采用下面的这种赋值方式:</p>
+<pre class=" language-verilog"><code class="language-verilog">b <span class="token operator">&lt;=</span> a<span class="token punctuation">;</span></code></pre>
+<p>这种方式的赋值并不是马上执行的,也就是说,“ always”块内的下一条语句执行后,b并不等于a,而是保持原来的值,“always”块结束后,才进行赋值。而阻塞赋值方式,如下所示:</p>
+<pre class=" language-verilog"><code class="language-verilog">b <span class="token operator">=</span> a<span class="token punctuation">;</span></code></pre>
+<p>这种赋值方式是马上执行的,也就是说执行下一条语句时,b已等于a。尽管这种方式看起来很直观,但是可能引起麻烦。</p>
+<h5 id="3-4-2-块语句"><a href="#3-4-2-块语句" class="headerlink" title="3.4.2 块语句"></a>3.4.2 块语句</h5><h6 id="3-4-2-1-顺序块"><a href="#3-4-2-1-顺序块" class="headerlink" title="3.4.2.1 顺序块"></a>3.4.2.1 顺序块</h6><p>顺序块有以下特点:<br>(1)块内的语句是按顺序执行的,即只有上面一条语句执行完后下面的语句才能执行<br>(2)每条语句的延迟时间是相对于前一条语句的仿真时间而言的。<br>(3)直到最后一条语句执行完,程序流程控制才跳出该语句块。<br>顺序块的格式如下:</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">begin</span>    <span class="token punctuation">:</span>块名   <span class="token comment" spellcheck="true">//块名可以省略</span>
+    语句<span class="token number">1</span><span class="token punctuation">;</span>
+    语句<span class="token number">2</span><span class="token punctuation">;</span>
+    语句n<span class="token punctuation">;</span>
+<span class="token keyword">end</span></code></pre>
+<h6 id="3-4-2-2-并行块"><a href="#3-4-2-2-并行块" class="headerlink" title="3.4.2.2 并行块"></a>3.4.2.2 并行块</h6><p>并行块有以下4个特点:<br>(1)块内语句是同时执行的,即程序流程控制一进入到该并行块,块内语句则开始同时并行地执行。<br>(2)块内每条语句的延迟时间是相对于程序流程控制进入到块内的仿真时间的。<br>(3)延迟时间是用来给赋值语句提供执行时序的。<br>(4)当按时间时序排序在最后的语句执行完后或一个 disable语句执行时,程序流程控制跳出该程序块</p>
+<p>并行块的格式如下:</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">fork</span><span class="token punctuation">:</span>    块名
+    语句<span class="token number">1</span><span class="token punctuation">;</span>
+    语句<span class="token number">2</span><span class="token punctuation">;</span>
+    语句n<span class="token punctuation">;</span>
+<span class="token keyword">join</span></code></pre>
+<h6 id="3-4-2-3-块名"><a href="#3-4-2-3-块名" class="headerlink" title="3.4.2.3 块名"></a>3.4.2.3 块名</h6><p>在 Verily HDL语言中,可以给每个块取一个名字,只需将名字加在关键词 begin或fork后面即可。这样做的原因有以下几点<br>(1)可以在块内定义局部变量,即只在块内使用的变量。<br>(2)可以允许块被其他语句调用,如 disable语句。<br>(3)在 Verilog语言里,所有的变量都是静态的,即所有的变量都只有一个唯一的存储地址,因此进入或跳出块并不影响存储在变量内的值。基于以上原因,块名就提供了一个在任何仿真时刻确认变量值的方法。</p>
+<h6 id="3-4-2-4-起始时间和结束时间"><a href="#3-4-2-4-起始时间和结束时间" class="headerlink" title="3.4.2.4 起始时间和结束时间"></a>3.4.2.4 起始时间和结束时间</h6><p>在并行块和顺序块中都有一个起始时间和结束时间的概念。对于顺序块,起始时间就是第一条语句开始被执行的时间,结束时间就是最后一条语句执行完的时间。而对于并行块来说,起始时间对于块内所有的语句是相同的,即程序流程控制进入该块的时间,其结束时间是按时间排序在最后的语句执行结束的时间。</p>
+<p>当一个块嵌入另一个块时,块的起始时间和结束时间是很重要的。至于跟在块后面的语句只有在该块的结束时间到了才开始执行。也就是说,只有该块完全执行完后,后面的语句才可以执行。在 fork join块内,各条语句不必按顺序给出,因此在并行块里,各条语句在前还是在后是无关紧要的。</p>
+<h3 id="4-条件语句、循环语句、生成语句"><a href="#4-条件语句、循环语句、生成语句" class="headerlink" title="4  条件语句、循环语句、生成语句"></a>4  条件语句、循环语句、生成语句</h3><h4 id="4-1-条件语句（-if-else-）"><a href="#4-1-条件语句（-if-else-）" class="headerlink" title="4.1 条件语句（ if _else ）"></a>4.1 条件语句（ if _else ）</h4><p>if 语句是用来判定所给定的条件是否满足,根据判定的结果(真或假)决定执行给出的两种操作之一。</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token function">if</span><span class="token punctuation">(</span>表达式<span class="token number">1</span><span class="token punctuation">)</span>
+    语句<span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>表达式<span class="token number">2</span><span class="token punctuation">)</span>
+    语句<span class="token number">2</span><span class="token punctuation">;</span>
+<span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>表达式<span class="token number">3</span><span class="token punctuation">)</span>
+    语句<span class="token number">3</span><span class="token punctuation">;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token keyword">else</span> <span class="token function">if</span><span class="token punctuation">(</span>表达式m<span class="token punctuation">)</span>
+    语句m<span class="token punctuation">;</span>
+<span class="token keyword">else</span>
+    语句n<span class="token punctuation">;</span></code></pre>
+<p>注意: 条件语句必须在过程块语句中使用。所谓过程块语句是指由 initial和 always语句引导的执行语句集合。除这两种块语句引导的 begin end块中可以编写条件语句外,模块中的其他地方都不能编写。if 语句可以嵌套使用</p>
+<h4 id="4-2-多路分支语句（-case-）"><a href="#4-2-多路分支语句（-case-）" class="headerlink" title="4.2 多路分支语句（ case ）"></a>4.2 多路分支语句（ case ）</h4><p>case语句是一种多分支选择语句,f语句只有两个分支可供选择,而实际问题中常常需要用到多分支选择, Verilog语言提供的case语句直接处理多分支选择。case语句通常用于微理器的指令译码,它的一般形式如下</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token function">case</span><span class="token punctuation">(</span>表达式<span class="token punctuation">)</span>    <span class="token operator">&lt;</span><span class="token keyword">case</span>分支项<span class="token operator">></span>     <span class="token keyword">endcase</span>
+<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token function">casez</span><span class="token punctuation">(</span>表达式<span class="token punctuation">)</span>    <span class="token operator">&lt;</span><span class="token keyword">case</span>分支项<span class="token operator">></span>    <span class="token keyword">endcase</span>
+<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span> <span class="token function">casex</span><span class="token punctuation">(</span>表达式<span class="token punctuation">)</span>    <span class="token operator">&lt;</span><span class="token keyword">case</span>分支项<span class="token operator">></span>     <span class="token keyword">endcase</span></code></pre>
+<p>分支项的一般格式如下:</p>
+<pre class=" language-verilog"><code class="language-verilog">分支表达式<span class="token punctuation">:</span>            语句<span class="token punctuation">;</span>
+默认项<span class="token punctuation">(</span><span class="token keyword">default</span>项<span class="token punctuation">)</span><span class="token punctuation">:</span>    语句<span class="token punctuation">;</span></code></pre>
+<p>注：</p>
+<ol>
+<li>case括弧内的表达式称为控制表达式,case分支项中的表达式称为分支表达式。控制表达式通常表示为控制信号的某些位,分支表达式则用这些控制信号的具体状态值来表示,因此分支表达式又可以称为常量表达式</li>
+<li>当控制表达式的值与分支表达式的值相等时,就执行分支表达式后面的语句。如果所有的分支表达式的值都没有与控制表达式的值相匹配,就执行 default后面的语句。</li>
+<li>default项可有可无,一个case语句里只准有一个 default项。</li>
+<li>每一个case分项的分支表达式的值必须互不相同,否则就会出现问题,即对表达式的同一个值,将出现多种执行方案,产生矛盾</li>
+<li>执行完case分项后的语句,则跳出该case语句结构,终止case语句的执行</li>
+<li>在用case语句表达式进行比较的过程中,只有当信号的对应位的值能明确进行比较时,比较才能成功。因此,要注意详细说明case分项的分支表达式的值。</li>
+<li>case语句的所有表达式值的位宽必须相等,只有这样,控制表达式和分支表达式才能进行对应位的比较。一个经常犯的错误是用’bx，’bz来替代n’bx，n’bz,这样写是不对的,因为信号x,z的默认宽度是机器的字节宽度,通常是32位(此处n是case控制表达式的位宽)。</li>
+</ol>
+<p>case语句与 if else_if语句的区别主要有两点:<br>(1)与case语句中的控制表达式和多分支表达式这种比较结构相比, if else if结构中的条件表达式更为直观一些。<br>(2)对于那些分支表达式中存在不定值x和高阻值z的位时,case语句提供了处理这种情况的手段。下面的两个例子介绍了处理分支表达式中某位的值为x、z位的case语句。</p>
+<h4 id="4-3-循环语句"><a href="#4-3-循环语句" class="headerlink" title="4.3 循环语句"></a>4.3 循环语句</h4><p>在Verilog HDL中存在着4种类型的循环语句,用来控制执行语句的执行次数。<br>(1) forever语句:连续的执行语句<br>(2) repeat语句:连续执行一条语句n次<br>(3) while语句:执行一条语句直到某个条件不满足。如果一开始条件即不满足(为假),则语句一次也不能被执行。<br>(4) for语句:通过以下3个步骤来决定语句的循环执行<br>①先给控制循环次数的变量赋初值。<br>②判定控制循环的表达式的值,如为假,则跳出循环语句;如为真,则执行指定的语句后,转到第③步。<br>③执行一条赋值语句来修正控制循环变量次数的变量值,然后返回第②步</p>
+<h5 id="4-3-1-forever"><a href="#4-3-1-forever" class="headerlink" title="4.3.1 forever"></a>4.3.1 forever</h5><p>forever语句的格式如下:</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">forever</span>    语句<span class="token punctuation">;</span>   <span class="token comment" spellcheck="true">//或</span>
+<span class="token keyword">forever</span> <span class="token keyword">begin</span>
+    多条语句<span class="token punctuation">;</span>
+<span class="token keyword">end</span></code></pre>
+<p>forever循环语句常用于产生周期性的波形,用来作为仿真测试信号。它与 always语句不同之处在于不能独立写在程序中,而必须写在 initial块中。</p>
+<h5 id="4-3-2-repeat"><a href="#4-3-2-repeat" class="headerlink" title="4.3.2 repeat"></a>4.3.2 repeat</h5><p>repeat语句的格式如下</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token function">repeat</span><span class="token punctuation">(</span>表达式<span class="token punctuation">)</span>    语句<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//或 </span>
+<span class="token function">repeat</span><span class="token punctuation">(</span>表达式<span class="token punctuation">)</span> <span class="token keyword">begin</span>
+    多条语句<span class="token punctuation">;</span>
+<span class="token keyword">end</span></code></pre>
+<p>在 repeat语句中,其表达式通常为常量表达式。</p>
+<h5 id="4-3-3-while"><a href="#4-3-3-while" class="headerlink" title="4.3.3 while"></a>4.3.3 while</h5><p>while语句的格式如下:</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token function">while</span><span class="token punctuation">(</span>表达式<span class="token punctuation">)</span>    语句<span class="token punctuation">;</span>    或用如下格式<span class="token punctuation">:</span>
+<span class="token function">while</span><span class="token punctuation">(</span>表达式<span class="token punctuation">)</span> <span class="token keyword">begin</span>
+    多条语句<span class="token punctuation">;</span>
+<span class="token keyword">end</span></code></pre>
+<h5 id="4-3-4-for语句"><a href="#4-3-4-for语句" class="headerlink" title="4.3.4 for语句"></a>4.3.4 for语句</h5><p>for语句的一般形式为:</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token function">for</span><span class="token punctuation">(</span>表达式<span class="token number">1</span><span class="token punctuation">;</span>表达式<span class="token number">2</span><span class="token punctuation">;</span>表达式<span class="token number">3</span><span class="token punctuation">)</span>
+    语句<span class="token punctuation">;</span></code></pre>
+<p>它的执行过程如下:<br>(1) 先求解表达式1。<br>(2) 求解表达式2,若其值为真(非0),则执行for语句中指定的内嵌语句,然后执行下面的第(3)步。若为假(0),则结束循环,转到第(5)步<br>(3) 若表达式为真,在执行指定的语句后,求解表达式3。<br>(4) 转回上面的第(2)步骤继续执行。<br>(5) 执行for语句后续的语句。</p>
+<h4 id="4-4-生成语句（-generate-）"><a href="#4-4-生成语句（-generate-）" class="headerlink" title="4.4 生成语句（ generate ）"></a>4.4 生成语句（ generate ）</h4><h5 id="4-4-1-循环生成语句"><a href="#4-4-1-循环生成语句" class="headerlink" title="4.4.1 循环生成语句"></a>4.4.1 循环生成语句</h5><p>​        暂时略；</p>
+<h5 id="4-4-2-条件生成语句"><a href="#4-4-2-条件生成语句" class="headerlink" title="4.4.2 条件生成语句"></a>4.4.2 条件生成语句</h5><p>​        暂时略；</p>
+<h5 id="4-4-3-case生成语句"><a href="#4-4-3-case生成语句" class="headerlink" title="4.4.3 case生成语句"></a>4.4.3 case生成语句</h5><p>​        暂时略；</p>
+<h3 id="5-结构语句、任务、函数和系统任务"><a href="#5-结构语句、任务、函数和系统任务" class="headerlink" title="5  结构语句、任务、函数和系统任务"></a>5  结构语句、任务、函数和系统任务</h3><p>Verilog语言中的任何过程模块都从属于以下4种结构的说明语句:<br>(1) initial说明语句;<br>(2) always说明语句;<br>(3) task说明语句;<br>(4) function说明语句<br>一个程序模块可以有多个 initia和 always过程块。每个 initial和 always说明语句在仿真的一开始同时立即开始执行。 initial语句只执行一次,而 always语句则是不断地重复活动着,直到仿真过程结束。但 always语句后跟着的过程块是否运行,则要看它的触发条件是否满足,如满足则运行过程块一次,再次满足则再运行一次,直至仿真过程结束在一个模块中,使用 initial和 always语句的次数是不受限制的,它们都是同时开始运行的。task和 function语句可以在程序模块中的一处或多处调用,其具体使用方法以后再详细地加以介绍。在“ Verilog数字设计基础”部分里,只对 initial和 always语句深入加以介绍。</p>
+<h4 id="5-1-结构说明语句"><a href="#5-1-结构说明语句" class="headerlink" title="5.1 结构说明语句"></a>5.1 结构说明语句</h4><h5 id="5-1-1-initial语句"><a href="#5-1-1-initial语句" class="headerlink" title="5.1.1 initial语句"></a>5.1.1 initial语句</h5><p>initial的格式如下:</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">initial</span> <span class="token keyword">begin</span>
+    语句<span class="token number">1</span><span class="token punctuation">;</span>
+    语句<span class="token number">2</span><span class="token punctuation">;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    语句n<span class="token punctuation">;</span>
+<span class="token keyword">end</span></code></pre>
+<p>注意:一个模块中可以有多个 initia块,它们都是并行运行的； initial块常用于测试文件和虚拟模块的编写,用来产生仿真测试信号和设置信号记录等仿真环境。</p>
+<h5 id="5-1-2-always语句"><a href="#5-1-2-always语句" class="headerlink" title="5.1.2 always语句"></a>5.1.2 always语句</h5><p>always语句在仿真过程中是不断活动着的。但 always语句后跟着的过程块是否执行,则要看它的触发条件是否满足,如满足则运行过程块一次;如不断满足,则不断地循环执行。其声明格式如下:</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token important">always </span><span class="token operator">&lt;</span>时序控制<span class="token operator">></span> <span class="token operator">&lt;</span>语句<span class="token operator">></span></code></pre>
+<p>always语句由于其不断活动的特性,只有和一定的时序控制结合在一起才有用。如果个 always语句没有时序控制,则这个 always语句将会使仿真器产生死锁。</p>
+<p>always 的时间控制可以是沿触发也可以是电平触发的，可以单个信号也可以多个信号，中间需要用关键字or连接；</p>
+<h4 id="5-2-task和function说明语句"><a href="#5-2-task和function说明语句" class="headerlink" title="5.2  task和function说明语句"></a>5.2  task和function说明语句</h4><p>task和 function说明语句有些不同,主要的不同有以下4点:<br>(1)函数只能与主模块共用同一个仿真时间单位,而任务可以定义自己的仿真时间单位。<br>(2)函数不能启动任务,而任务能启动其他任务和函数。<br>(3)函数至少要有一个输入变量,而任务可以没有或有多个任何类型的变量。<br>(4)函数返回一个值,而任务则不返回值<br>        函数的目的是通过返回一个值来响应输入信号的值。任务却能支持多种目的,能计算多个结果值,这些结果值只能通过被调用的任务的输出或总线端口送出。 Verilog HDL模块使用函数时是把它当作表达式中的操作符,这个操作的结果值就是这个函数的返回值。下面可用例子来说明</p>
+<h5 id="5-2-1-task说明语句"><a href="#5-2-1-task说明语句" class="headerlink" title="5.2.1 task说明语句"></a>5.2.1 task说明语句</h5><p>如果传给任务的变量值和任务完成后接收结果的变量已定义,就可以用一条语句启动任务,任务完成以后控制就传回启动过程。如任务内部有定时控制,则启动的时间可以与控制返回的时间不同。任务可以启动其他的任务,其他任务又可以启动别的任务,可以启动的任务数是没有限制的。不管有多少任务启动,只有当所有的启动任务完成以后,控制才能返回。<br>(1)任务的定义定义任务的语法如下</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">task</span> <span class="token operator">&lt;</span>任务名<span class="token operator">></span><span class="token punctuation">;</span>
+    <span class="token operator">&lt;</span>端口及数据类型声明语句<span class="token operator">></span>
+    <span class="token operator">&lt;</span>语句<span class="token number">1</span><span class="token operator">></span>
+    <span class="token operator">&lt;</span>语句<span class="token number">2</span><span class="token operator">></span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token operator">&lt;</span>语句n<span class="token operator">></span>
+<span class="token keyword">endtask</span></code></pre>
+<p>这些声明语句的语法与模块定义中的对应声明语句的语法是一致的。<br>(2)任务的调用及变量的传递启动任务并传递输入、输出变量的声明语句的语法如下:</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token operator">&lt;</span>任务名<span class="token operator">></span> <span class="token punctuation">(</span>端口<span class="token number">1</span><span class="token punctuation">,</span>端口<span class="token number">2</span><span class="token punctuation">,</span>…<span class="token punctuation">,</span>端口n<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h5 id="5-2-2-function说明语句"><a href="#5-2-2-function说明语句" class="headerlink" title="5.2.2 function说明语句"></a>5.2.2 function说明语句</h5><p>函数的目的是返回一个用于表达式的值。</p>
+<p>(1)定义函数的语法:</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">function</span> <span class="token operator">&lt;</span>返回值的类型或范围<span class="token operator">></span> <span class="token punctuation">(</span>函数名<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">&lt;</span>端口说明语句<span class="token operator">></span>
+    <span class="token operator">&lt;</span>变量类型说明语句<span class="token operator">></span>
+    <span class="token keyword">begin</span>
+        <span class="token operator">&lt;</span>语句<span class="token operator">></span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token keyword">end</span>
+<span class="token keyword">endfunction</span></code></pre>
+<p>(2)函数的调用:</p>
+<p>函数的调用是通过将函数作为表达式中的操作数来实现的。其调用格式如下:</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token operator">&lt;</span>函数名<span class="token operator">></span><span class="token punctuation">(</span><span class="token operator">&lt;</span>表达式<span class="token operator">></span><span class="token punctuation">,</span>…<span class="token operator">&lt;</span>表达式<span class="token operator">></span><span class="token punctuation">)</span></code></pre>
+<h5 id="5-2-3-其他函数"><a href="#5-2-3-其他函数" class="headerlink" title="5.2.3 其他函数"></a>5.2.3 其他函数</h5><p>​    自动递归函数，常量函数，带符号函数</p>
+<h5 id="5-2-4-任务和函数总结"><a href="#5-2-4-任务和函数总结" class="headerlink" title="5.2.4 任务和函数总结"></a>5.2.4 任务和函数总结</h5><p>在前述中已对 Verilog行为建模中使用的任务和函数进行了讨论,可概括为以下特点:</p>
+<ol>
+<li>任务和函数都是用来对设计中多处使用的公共代码进行定义;使用任务和函数可以将模块分割成许多个可独立管理的子单元,增强了模块的可读性和可维护性;它们和C语言中的子程序起相同的作用。</li>
+<li>任务可以具有任意多个输入、输入/输出( inout)和输出变量;在任务中可以使用延迟、事件和时序控制结构,在任务中可以调用其他的任务和函数</li>
+<li>可重入任务使用关键字 automatic进行定义,它的每一次调用都对不同的地址空间进行操作。因此在被多次并发调用时,它仍然可以获得正确的结果。</li>
+<li>函数只能有一个返回值,并且至少要有一个输入变量;在函数中不能使用延迟、事件和时序控制结构,但可以调用其他函数,不能调用任务</li>
+<li>当声明函数时, Verilog仿真器都会隐含地声明一个同名的寄存器变量,函数的返回值通过这个寄存器传递回调用处。</li>
+<li>递归函数使用关键字 automatic进行定义,递归函数的每一次调用都拥有不同的地址空间。因此对这种函数的递归调用和并发调用可以得到正确的结果。</li>
+<li>任务和函数都包含在设计层次之中,可以通过层次名对它们进行调用。</li>
+</ol>
+<h4 id="5-3-常用系统任务"><a href="#5-3-常用系统任务" class="headerlink" title="5.3 常用系统任务"></a>5.3 常用系统任务</h4><h5 id="5-3-1-display-和-write"><a href="#5-3-1-display-和-write" class="headerlink" title="5.3.1 $display 和$write"></a>5.3.1 $display 和$write</h5><p>调用格式:</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token property">$display</span><span class="token punctuation">(</span>pl<span class="token punctuation">,</span> p2<span class="token punctuation">,</span>…<span class="token punctuation">,</span>pn<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token property">$write</span><span class="token punctuation">(</span>p1<span class="token punctuation">,</span>p2<span class="token punctuation">,</span>…<span class="token punctuation">,</span>pn<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>这两个函数和系统任务的作用是用来输出信息,即将参数 p2 到 pn 按参数 p1 给定的格式输出。参数p1通常称为 “格式控制” ,参数 p2 至 pn 通常称为“输出表列”。这两个任务的作用基本相同。$ display自动地在输出后进行换行,$ write则不是这样。如果想在一行里输出多个信息,可以使用$ write。在$ display和$ write中,其输出格式控制是用双引号括起来的<br>字符串,它包括以下两种信息:<br>(1)格式说明,由”%”和格式字符组成。它的作用是将输出的数据转换成指定的格式输出。格式说明总是由”%”字符开始的。对于不同类型的数据用不同的格式输出。下表中给出了常用的几种输出格式。</p>
+<table>
+<thead>
+<tr>
+<th align="center">输出格式</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">%h 或 %H</td>
+<td align="center">以十六进制的数输出</td>
+</tr>
+<tr>
+<td align="center">%d 或 %D</td>
+<td align="center">以十进制的数输出</td>
+</tr>
+<tr>
+<td align="center">%o 或 %O</td>
+<td align="center">以八进制的数输出</td>
+</tr>
+<tr>
+<td align="center">%b 或 %B</td>
+<td align="center">以二进制的数输出</td>
+</tr>
+<tr>
+<td align="center">%c 或 %C</td>
+<td align="center">以ASCII码字符的形式输出</td>
+</tr>
+<tr>
+<td align="center">%v 或 %V</td>
+<td align="center">输出网络型数据信号强度</td>
+</tr>
+<tr>
+<td align="center">%m 或 %M</td>
+<td align="center">输出等级层次的名字</td>
+</tr>
+<tr>
+<td align="center">%s 或 %S</td>
+<td align="center">以字符串的形式输出</td>
+</tr>
+<tr>
+<td align="center">%t 或 %T</td>
+<td align="center">以当前的时间格式输出</td>
+</tr>
+<tr>
+<td align="center">%e 或 %E</td>
+<td align="center">以指数的形式输出实型数</td>
+</tr>
+<tr>
+<td align="center">%f 或 %F</td>
+<td align="center">以十进制数的形式输出实型数</td>
+</tr>
+<tr>
+<td align="center">%g 或 %G</td>
+<td align="center">以指数或十进制数的形式输出实型数<br>无论何种格式都以较短的结果输出</td>
+</tr>
+</tbody></table>
+<p>(2)普通字符,即需要原样输出的字符。其中一些特殊的字符可以通过下表中的转换序列来输出。表中的字符形式用于格式字符串参数中,用来显示特殊的字符。</p>
+<table>
+<thead>
+<tr>
+<th align="center">换码序列</th>
+<th align="center">功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">\n</td>
+<td align="center">换行</td>
+</tr>
+<tr>
+<td align="center">\t</td>
+<td align="center">横向跳格（即跳到下一个输出区）</td>
+</tr>
+<tr>
+<td align="center">\</td>
+<td align="center">反斜杠字符 \</td>
+</tr>
+<tr>
+<td align="center">"</td>
+<td align="center">双引号字符 “</td>
+</tr>
+<tr>
+<td align="center">\o</td>
+<td align="center">1~3位八进制数代表的字符</td>
+</tr>
+<tr>
+<td align="center">%%</td>
+<td align="center">百分符号%</td>
+</tr>
+</tbody></table>
+<h5 id="5-3-2-文件输出"><a href="#5-3-2-文件输出" class="headerlink" title="5.3.2 文件输出"></a>5.3.2 文件输出</h5><p>Verilog的结果通常输出到标准输出和文件 verilog.log中。可以将 Verilog的输出重新定向到选择的文件。</p>
+<h6 id="5-3-2-1-打开文件"><a href="#5-3-2-1-打开文件" class="headerlink" title="5.3.2.1 打开文件"></a>5.3.2.1 打开文件</h6><p>文件可以用系统任务$ fopen打开。</p>
+<pre class=" language-verilog"><code class="language-verilog">用法<span class="token punctuation">:</span>    <span class="token property">$fopen</span><span class="token punctuation">(</span>“<span class="token operator">&lt;</span>文件名<span class="token operator">></span>”<span class="token punctuation">)</span><span class="token punctuation">;</span>
+用法<span class="token punctuation">:</span>    <span class="token operator">&lt;</span>文件句柄 <span class="token operator">>=</span> <span class="token property">$fopen</span><span class="token punctuation">(</span>“<span class="token operator">&lt;</span>文件名<span class="token operator">></span>”<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>任务 $fopen 返回一个被称为多通道描述符( multichannel descriptor)(4的32位值。多通道描述符中只有一位被设置成1。标准输出有一个多通道描述符,其最低位(第0位)被设置成1。标准输出也称为通道0。标准输出一直是开放的。以后对$ fopen的每一次调用打开个新的通道,并且返回一个设置了第1位、第2位等,直到32位描述符的第30位。第31位是保留位。通道号与多通道描述符中被设置为1的位相对应。[例6.20]说明了文件描述符的使用方法。<br>举例：</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">integer</span> handlel<span class="token punctuation">,</span> handle2<span class="token punctuation">,</span> handle3<span class="token punctuation">;</span><span class="token comment" spellcheck="true">//整型数为32位，多通道描述符</span>
+<span class="token comment" spellcheck="true">//标准输出是打开的; descriptor=32h0000_0001(第0位置1)</span>
+<span class="token keyword">initial</span> <span class="token keyword">begin</span>
+    handlel    <span class="token operator">=</span>    <span class="token property">$fopen</span><span class="token punctuation">(</span><span class="token string">"filel.out"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//handlel = 32 h0000_0002(bit 1 set 1)</span>
+    handle2    <span class="token operator">=</span>    <span class="token property">$fopen</span><span class="token punctuation">(</span><span class="token string">"file2.out"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//handle2 = 32 h0000_0004(bit 2 set 1)</span>
+    handle3    <span class="token operator">=</span>    <span class="token property">$fopen</span><span class="token punctuation">(</span><span class="token string">"file3.out"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//handle3 = 32 h0000_0008(bit 3 set 1)</span>
+<span class="token keyword">end</span></code></pre>
+<p>多通道描述符的优点在于可以有选择地同时写多个文件。</p>
+<h6 id="5-3-2-2-写入文件"><a href="#5-3-2-2-写入文件" class="headerlink" title="5.3.2.2 写入文件"></a>5.3.2.2 写入文件</h6><p>系统任务$display、$monitor、$fwrite 和$ strobe都用于写文件。<br>注意:这些任务在语法上与常规系统任务$ display、$ monitor等类似,但是它们提供了额外的写文件功能。<br>下面将只考虑$ display和$ monitor任务。<br>用法:</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token property">$display</span><span class="token punctuation">(</span><span class="token operator">&lt;</span>文件描述符<span class="token operator">></span><span class="token punctuation">,</span>pl<span class="token punctuation">,</span>p2<span class="token punctuation">,</span>…<span class="token punctuation">,</span>pn<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token property">$monitor</span><span class="token punctuation">(</span><span class="token operator">&lt;</span>文件描述符<span class="token operator">></span><span class="token punctuation">,</span>p1<span class="token punctuation">,</span>p2<span class="token punctuation">,</span>…<span class="token punctuation">,</span>pn<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>pl,p2,…,pn可以是变量、信号名或者带引号的字符串。文件描述符是一个多通道描述符,它可以是一个文件句柄或者多个文件句柄按位的组合。 Verilog会把输出写到与文件描述符中值为1的位相关联的所有文件中。下面将使用[例6.20中定义的文件描述符来解释<br>$ display和$ monitor任务的使用</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token comment" spellcheck="true">//所有的句柄已经上文"打开文件"中定义</span>
+<span class="token comment" spellcheck="true">//写到文件中去</span>
+<span class="token keyword">integer</span> descl<span class="token punctuation">,</span> desc<span class="token punctuation">,</span> desc<span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">//3个文件的描述符</span>
+<span class="token keyword">initial</span> <span class="token keyword">begin</span>
+    desc1 <span class="token operator">=</span> handle1 <span class="token operator">|</span> <span class="token number">1</span><span class="token punctuation">;</span>            <span class="token comment" spellcheck="true">//按位或; desch=32"h0000_0003</span>
+    S <span class="token function">display</span><span class="token punctuation">(</span>descl<span class="token punctuation">,</span><span class="token string">"Display 1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//写到文件 filel.out和标准输出 stdout</span>
+    desc2 <span class="token operator">=</span> handle2 <span class="token operator">|</span> handlel<span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">//desc2=32ho0000006</span>
+    S <span class="token function">display</span><span class="token punctuation">(</span> desc2<span class="token punctuation">,</span><span class="token string">"Display 2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//写到文件 filel.out和file2.out</span>
+    desc3 <span class="token operator">=</span> handle3<span class="token punctuation">;</span>                <span class="token comment" spellcheck="true">//desc3=32h00000008</span>
+    S <span class="token function">display</span><span class="token punctuation">(</span> desc<span class="token punctuation">,</span><span class="token string">"Display 3"</span><span class="token punctuation">)</span>    <span class="token comment" spellcheck="true">//只写到文件file3.out</span>
+<span class="token keyword">end</span></code></pre>
+<h6 id="5-3-2-3-关闭文件"><a href="#5-3-2-3-关闭文件" class="headerlink" title="5.3.2.3 关闭文件"></a>5.3.2.3 关闭文件</h6><p>文件可以用系统任务 $fclose 来关闭，用法:$ fclose(&lt;文件描述符&gt;);</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token property">$fclose</span><span class="token punctuation">(</span>handlel<span class="token punctuation">)</span><span class="token punctuation">;</span>                <span class="token comment" spellcheck="true">//关闭文件</span></code></pre>
+<p>文件一旦被关闭就不能再写入。多通道描述符中的相应位被设置为0,下一次 $fopen 的调用可以重用这一位;</p>
+<h5 id="5-3-3-显示层次"><a href="#5-3-3-显示层次" class="headerlink" title="5.3.3 显示层次"></a>5.3.3 显示层次</h5><p>通过任何显示任务，比如$display、$write、$monitor或者$strobe任务中的%m选项的方式可以显示任何级别的层次，这是非常有用的选项。例如，当一个模块的多个实例执行同一段Verilog代码时，%m选项会区分哪个模块实例在输出。显示任务中的%m选项无需参数，参见[例6.21]。</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token comment" spellcheck="true">//显示层次信息</span>
+<span class="token keyword">module</span> M <span class="token punctuation">;</span>
+<span class="token keyword">initial</span>
+    <span class="token property">$display</span> <span class="token punctuation">(</span><span class="token string">"Displaying in %m"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">endmodule</span>
+<span class="token comment" spellcheck="true">//调用模块M</span>
+<span class="token keyword">module</span> top<span class="token punctuation">;</span>
+    M <span class="token function">m1</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    M <span class="token function">m2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    M <span class="token function">m3</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">endmodule</span></code></pre>
+<p>仿真输出如下所示：</p>
+<pre><code>Displaying in top.m1
+Displaying in top.m2
+Displaying in top.m3</code></pre><h5 id="5-3-4-选通显示"><a href="#5-3-4-选通显示" class="headerlink" title="5.3.4 选通显示"></a>5.3.4 选通显示</h5><p>选通显示（Strobing)由关键字为$strobe的系统任务完成。这个任务与$display任务除了一点小差异外，其他非常相似。如果许多其他语句与$display任务在同一个时间单位执行，那么这些语句与$display任务的执行顺序是不确定的。如果使用$strobe,该语句总是在同时刻的其他赋值语句执行完成之后才执行。因此，$strobe提供了一种同步机制，它可以确保所有在同一时钟沿赋值的其他语句在执行完毕之后才显示数据，参见[例6.22]。</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token comment" spellcheck="true">//选通显示</span>
+<span class="token important">always@</span><span class="token punctuation">(</span><span class="token keyword">posedge</span> clock<span class="token punctuation">)</span><span class="token keyword">begin</span>
+    a <span class="token operator">=</span> b<span class="token punctuation">;</span>
+    c <span class="token operator">=</span> d<span class="token punctuation">;</span>
+<span class="token keyword">end</span>
+<span class="token important">always@</span><span class="token punctuation">(</span><span class="token keyword">posedge</span> clock<span class="token punctuation">)</span>
+    <span class="token property">$strobe</span><span class="token punctuation">(</span><span class="token string">"Displaying a=%b,c=%b"</span><span class="token punctuation">,</span>a<span class="token punctuation">,</span>c<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//显示正跳变沿时刻的值</span></code></pre>
+<p>在上例中，时钟上升沿的值在语句a=b和c=d执行完之后才显示。如果使用$display,$display可能在语句a=b和c=d之前执行，结果显示不同的值。</p>
+<h5 id="5-3-5-值变存储文件"><a href="#5-3-5-值变存储文件" class="headerlink" title="5.3.5 值变存储文件"></a>5.3.5 值变存储文件</h5><p>​        值变转储文件（VCD)是一个ASCII文件，它包含仿真时间、范围与信号的定义以及仿真运行过程中信号值的变化等信息。设计中的所有信号或者选定的信号集合在仿真过程中都可以被写人VCD文件。后处理工具可以把VCD文件作为输入并把层次信息、信号值和信号波形显示出来。现在有许多商业后处理工具以及集成到仿真器中的工具可供使用。对于大规模设计的仿真，设计者可以把选定的信号转储到VCD文件中，并使用后处理工具去调试、分析和验证仿真输出结果。</p>
+<p>​        Verilog提供了系统任务来选择要转储的模块实例或者模块实例信号（$dumpvars),选择VCD文件的名称（$dumpfile),选择转储过程的起点和终点（$dumpon,$dumpoff),选择生成检测点（$dumpall),每个任务的使用方法如[例6.23]所示。</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token comment" spellcheck="true">//指定VCD文件名。若不指定VCD文件，则由仿真器指定一默认文件名</span>
+<span class="token keyword">initial</span>
+    <span class="token property">$dumpfile</span><span class="token punctuation">(</span><span class="token string">"myfile.dmp"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//仿真信息转储到myfile.dmp文件</span></code></pre>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token comment" spellcheck="true">//转储模块中的信号</span>
+<span class="token keyword">initial</span>
+    <span class="token property">$dumpvars</span> <span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">//没有指定变量范围，把设计中全部信号都转储</span>
+<span class="token keyword">initial</span>
+<span class="token property">$dumpvars</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span>top<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//转储模块实例top中的信号</span>
+<span class="token comment" spellcheck="true">//数1表示层次的等级，只转储top下第一层信号</span>
+<span class="token comment" spellcheck="true">//即转储top模块中的变量，而不转储在top中调用</span>
+<span class="token comment" spellcheck="true">//模块中的变量</span>
+<span class="token keyword">initial</span>
+    <span class="token property">$dumpvars</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> top<span class="token punctuation">.</span>m1<span class="token punctuation">)</span><span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">//转储top.m1模块下两层的信号</span>
+<span class="token keyword">initial</span>
+    <span class="token property">$dumpvars</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> top<span class="token punctuation">.</span>ml<span class="token punctuation">)</span><span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">//数0表示转储top.m1模块下面各个层的所有信号</span></code></pre>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token comment" spellcheck="true">//启动和停止转储过程</span>
+<span class="token keyword">initial</span> <span class="token keyword">begin</span>
+    <span class="token property">$dumpon</span> <span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">//启动转储过程</span>
+    <span class="token number">#100000</span> <span class="token property">$dumpoff</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//过了100000个仿真时间单位后，停止转储过程</span>
+<span class="token keyword">end</span>
+<span class="token keyword">initial</span>                <span class="token comment" spellcheck="true">//生成一个检查点，转储所有VCD变量的现行值</span>
+    <span class="token property">$dumpall</span> <span class="token punctuation">;</span></code></pre>
+<h3 id="6-调试用系统任务和常用、编译预处理语句"><a href="#6-调试用系统任务和常用、编译预处理语句" class="headerlink" title="6  调试用系统任务和常用、编译预处理语句"></a>6  调试用系统任务和常用、编译预处理语句</h3><h4 id="6-1-系统任务-minitor"><a href="#6-1-系统任务-minitor" class="headerlink" title="6.1 系统任务  $minitor"></a>6.1 系统任务  $minitor</h4><p>格式：</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token property">$monitor</span><span class="token punctuation">(</span>p1<span class="token punctuation">,</span>p2<span class="token punctuation">,</span>…，pn<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token property">$monitor</span><span class="token punctuation">;</span>
+<span class="token property">$monitoron</span><span class="token punctuation">;</span>
+<span class="token property">$monitoroff</span><span class="token punctuation">;</span></code></pre>
+<p>​        任务$monitor提供了监控和输出参数列表中的表达式或变量值的功能。其参数列表中输出控制格式字符串和输出表列的规则和$display中的一样。当启动一个带有一个或多个参数的$monitor任务时，仿真器则建立一个处理机制，使得每当参数列表中变量或表达式的值发生变化时，整个参数列表中变量或表达式的值都将输出显示。如果同一时刻，两个或多个<br>参数的值发生变化，则在该时刻只输出显示一次。但在$monitor中，参数可以是$time系统函数。这样参数列表中变量或表达式的值同时发生变化的时刻可以通过标明同一时刻的多行输出来显示。如：</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token property">$monitor</span><span class="token punctuation">(</span><span class="token property">$time</span><span class="token punctuation">,</span><span class="token punctuation">,</span><span class="token string">"rxd=%b txd=%b"</span><span class="token punctuation">,</span>rxd<span class="token punctuation">,</span>txd<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>​        在$display中也可以这样使用。注意在上面的语句中，“，,”代表一个空参数。空参数在输出时显示为空格。$monitoron和$monitoroff任务的作用是通过打开和关闭监控标志来控制监控任务$monitor的启动和停止，这样使得程序员可以很容易地控制$monitor何时发生。其中$monitoroff任务用于关闭监控标志，停止监控任务$monitor,$monitoron则用于打开监控标志，启动监控任务$monitor。通常在通过调用$monitoron来启动$monitor时，不管$monitor参数列表中的值是否发生变化，总是立刻输出显示当前时刻参数列表中的值，这用于在监控的初始时刻设定初始比较值。在默认情况下，控制标志在仿真的起始时刻就已经打开了。在多模块调试的情况下，许多模块中都调用了$monitor,因为任何时刻只能有一个$monitor起作用，因此需配合$monitoron与$monitoroff使用，把需要监视的模块用$monitoron打开，在监视完毕后及时用$monitoroff关闭，以便把$monitor让给其他模块使用。$monitor与$display的不同处还在于$monitor往往在initial块中调用，只要不调用$monitoroff,$monitor便不间断地对所设定的信号进行监视。</p>
+<h4 id="6-2-时间度量系统函数-time"><a href="#6-2-时间度量系统函数-time" class="headerlink" title="6.2 时间度量系统函数  $time"></a>6.2 时间度量系统函数  $time</h4><p>在Verilog HDL中有两种类型的时间系统函数：$time和$realtime。用这两个时间系统函数可以得到当前的仿真时刻。</p>
+<h5 id="6-2-1-系统函数-time"><a href="#6-2-1-系统函数-time" class="headerlink" title="6.2.1 系统函数$time"></a>6.2.1 系统函数$time</h5><p>$time可以返回一个64位的整数来表示的当前仿真时刻值。该时刻是以模块的仿真时间尺度为基准的。下面举例说明：</p>
+<h5 id="6-2-2-系统函数-realtime"><a href="#6-2-2-系统函数-realtime" class="headerlink" title="6.2.2 系统函数$realtime"></a>6.2.2 系统函数$realtime</h5><p>$realtime和$time的作用是一样的，只是$realtime返回的时间数字是一个实型数，该数字也是以时间尺度为基准的。</p>
+<h4 id="6-3-系统函数-finish"><a href="#6-3-系统函数-finish" class="headerlink" title="6.3 系统函数 $finish"></a>6.3 系统函数 $finish</h4><p>格式：</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token property">$finish</span><span class="token punctuation">;</span>
+<span class="token property">$finish</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>系统任务$finish的作用是退出仿真器，返回主操作系统，也就是结束仿真过程。任务$finish可以带参数，根据参数的值输出不同的特征信息。如果不带参数，默认$finish的参数值为1。下面给出了对于不同的参数值，系统输出的特征信息：<br>0 不输出任何信息；<br>1 输出当前仿真时刻和位置；<br>2 输出当前仿真时刻、位置和在仿真过程中所用memory及CPU时间的统计。</p>
+<h4 id="6-4-系统任务-stop"><a href="#6-4-系统任务-stop" class="headerlink" title="6.4 系统任务 $stop"></a>6.4 系统任务 $stop</h4><p>格式：</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token property">$stop</span><span class="token punctuation">;</span>
+<span class="token property">$stop</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>$stop任务的作用是把EDA工具（例如仿真器）置成暂停模式，在仿真环境下给出一个交互式的命令提示符，将控制权交给用户。这个任务可以带有参数表达式。根据参数值（0,1或2)的不同，输出不同的信息。参数值越大，输出的信息越多。</p>
+<h4 id="6-5-系统任务-readmemb和-readmemh"><a href="#6-5-系统任务-readmemb和-readmemh" class="headerlink" title="6.5 系统任务 $readmemb和$readmemh"></a>6.5 系统任务 $readmemb和$readmemh</h4><p>在Verilog HDL程序中有两个系统任务$readmemb和$readmemh,并用来从文件中读取数据到存储器中。这两个系统任务可以在仿真的任何时刻被执行使用，其使用格式共有以下6种：</p>
+<pre><code>$readmemb("&lt;数据文件名&gt;",&lt;存储器名&gt;);
+$readmemb("&lt;数据文件名&gt;",&lt;存储器名&gt;,&lt;起始地址&gt;);
+$readmemb("数据文件名&gt;",&lt;存储器名&gt;,&lt;起始地址&gt;,《结束地址&gt;);
+$readmemh("&lt;数据文件名&gt;",&lt;存储器名&gt;);
+$readmemh("&lt;数据文件名&gt;",&lt;存储器名&gt;,&lt;起始地址&gt;);
+$readmemh("&lt;数据文件名&gt;",&lt;存储器名&gt;,&lt;起始地址&gt;,&lt;结束地址&gt;)。</code></pre><h4 id="6-6-系统任务-random"><a href="#6-6-系统任务-random" class="headerlink" title="6.6 系统任务 $random"></a>6.6 系统任务 $random</h4><p>这个系统函数提供了一个产生随机数的手段。当函数被调用时返回一个32位的随机数。它是一个带符号的整形数。<br>$random一般的用法是：</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token property">$ramdom</span> <span class="token operator">%</span> b<span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">//其中b>0。它给出了一个范围在（-b+1):(b-1)中的随机数。</span></code></pre>
+<p>下面给出一个产生随机数的例子：</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">reg</span> <span class="token punctuation">[</span><span class="token number">23</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token keyword">rand</span><span class="token punctuation">;</span>
+<span class="token keyword">rand</span> <span class="token operator">=</span> <span class="token property">$random</span> <span class="token operator">%</span> <span class="token number">60</span><span class="token punctuation">;</span></code></pre>
+<p>上面的例子给出了一个范围在-59-59之间的随机数，下面的例子通过位并接操作产生一个值在0-59之间的数。</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token keyword">reg</span> <span class="token punctuation">[</span><span class="token number">23</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token keyword">rand</span><span class="token punctuation">;</span>
+<span class="token keyword">rand</span> <span class="token operator">=</span> <span class="token operator">{</span><span class="token property">$random</span><span class="token operator">}</span> <span class="token operator">%</span> <span class="token number">60</span><span class="token punctuation">;</span></code></pre>
+<p>利用这个系统函数可以产生随机脉冲序列或宽度随机的脉冲序列，以用于电路的测试。</p>
+<h4 id="6-7-预编译处理"><a href="#6-7-预编译处理" class="headerlink" title="6.7  预编译处理"></a>6.7  预编译处理</h4><p>Verilog HDL语言和C语言一样也提供了编译预处理的功能。“编译预处理”是Verilog HDL编译系统的一个组成部分。Verilog HDL语言允许在程序中使用几种特殊的命令（它们不是一般的语句）。Verilog HDL编译系统通常先对这些特殊的命令进行“预处理”，然后将预处理的结果和源程序一起在进行通常的编译处理。在Verilog HDL语言中，为了和一般的语句相区别，这些预处理命令以符号”  ` “开头（位于主键盘左上角，其对应的上键盘字符为“~”。注意这个符号是不同于单引号“1”的）。这些预处理命令的有效作用范围为定义命令之后到本文件结束或到其他命令定义替代该命令之处。</p>
+<h5 id="6-7-1-宏定义-define"><a href="#6-7-1-宏定义-define" class="headerlink" title="6.7.1 宏定义 `define"></a>6.7.1 宏定义 `define</h5><p>用一个指定的标识符（即名字）来代表一个字符串，它的一般形式为：</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token constant">`define</span> 标识符（宏名）字符串（宏内容）</code></pre>
+<p>如：</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token constant">`define</span> signal <span class="token keyword">string</span></code></pre>
+<p>它的作用是指定用标识符signal来代替string这个字符串，在编译预处理时，把程序中在该命令以后所有的signal都替换成string。这种方法使用户能以一个简单的名字代替一个长的字符串，也可以用一个有含义的名字来代替没有含义的数字和符号。因此，把这个标识符(名字）称为“宏名”，在编译预处理时将宏名替换成字符串的过程称为“宏展开”。`define是宏<br>定义命令。</p>
+<p>关于宏定义的8点说明：</p>
+<ol>
+<li>宏名可以用大写字母表示，也可以用小写字母表示。建议使用大写字母，以与变量名相区别。</li>
+<li>define 命令可以出现在模块定义里面，也可以出现在模块定义外面。宏名的有效范围为定义命令之后到原文件结束。通常 ``define`命令写在模块定义的外面，作为程序的一部分，在此程序内有效</li>
+<li>在引用已定义的宏名时，必须在宏名的前面加上符号” ` “，表示该名字是一个经过宏定义的名字。</li>
+<li>使用宏名代替一个字符串，可以减少程序中重复书写某些字符串的工作量。而且记住一个宏名要比记住一个无规律的字符串容易，这样在读程序时能立即知道它的含义，当需要改变某一个变量时，可以只改变 `define 命令行，一改全改。由此可见使用宏定义，可以提高程序的可移植性和可读性。</li>
+<li>宏定义是用宏名代替一个字符串，也就是做简单的置换，不做语法检查。预处理时照样代入，不管含义是否正确，只有在编译已被宏展开后的源程序时才报错。</li>
+<li>宏定义不是Verilog HDL语句，不必在行末加分号。如果加了分号会连分号一起进行置换。</li>
+</ol>
+<h5 id="6-7-2-文件包含处理-include"><a href="#6-7-2-文件包含处理-include" class="headerlink" title="6.7.2 文件包含处理 `include"></a>6.7.2 文件包含处理 `include</h5><p>所谓“文件包含”处理是一个源文件可以将另外一个源文件的全部内容包含进来，即将另外的文件包含到本文件之中。Verilog HDL语言提供了include命令用来实现“文件包含”的操作。其一般形式为：</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token constant">`include</span>  <span class="token string">"文件名"</span></code></pre>
+<h5 id="6-7-3-时间尺度-timescale"><a href="#6-7-3-时间尺度-timescale" class="headerlink" title="6.7.3 时间尺度 `timescale"></a>6.7.3 时间尺度 `timescale</h5><p>`timescale 命令用来说明跟在该命令后的模块的时间单位和时间精度。使用 ‘timescale命令可以在同一个设计里包含采用了不同的时间单位的模块。例如，一个设计中包含了两个模块，其中一个模块的时间延迟单位为纳秒（ns),另一个模块的时间延迟单位为皮秒（ps)。EDA工具仍然可以对这个设计进行仿真测试。’timescale命令的格式如下：</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token constant">`timescale</span> <span class="token operator">&lt;</span>时间单位<span class="token operator">>/&lt;</span>时间精度<span class="token operator">></span></code></pre>
+<p>在这条命令中，时间单位参量是用来定义模块中仿真时间和延迟时间的基准单位的。时间精度参量是用来声明该模块的仿真时间的精确程度的，该参量被用来对延迟时间值进行取整操作（仿真前）,因此该参量又可以被称为取整精度。如果在同一个程序设计里，存在多个`timescale命令，则用最小的时间精度值来决定仿真的时间单位。另外时间精度至少要和时间单位一样精确，时间精度值不能大于时间单位值。在’timescale命令中，用于说明时间单位和时间精度参量值的数字必须是整数，其有效数字为1,10,100,单位为秒（s)、毫秒（ms)、微秒（us)、纳秒（ns)、皮秒（ps)、飞秒（fs)。</p>
+<h5 id="6-7-4-条件编译命令-ifdef、else、endif"><a href="#6-7-4-条件编译命令-ifdef、else、endif" class="headerlink" title="6.7.4 条件编译命令 ifdef、else、endif"></a>6.7.4 条件编译命令 ifdef、else、endif</h5><p>一般情况下，Verilog HDL源程序中所有的行都将参加编译。但是有时希望对其中的一部分内容只有在满足条件时才进行编译，也就是对一部分内容指定编译的条件，这就是“条件编译”。有时，希望当满足条件时对一组语句进行编译，而当条件不满足时则编译另一部分。条件编译命令有以下几种形式：</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token constant">`ifdef</span> 宏名（标识符）
+    程序段<span class="token number">1</span>
+<span class="token constant">`else</span>
+    程序段<span class="token number">2</span>
+<span class="token constant">`endif</span></code></pre>
+<p>它的作用是当宏名已经被定义过（用\define命令定义）,则对程序段1进行编译，程序段2将被忽略；否则编译程序段2,程序段1被忽略。其中’else部分可以没有，即：</p>
+<pre class=" language-verilog"><code class="language-verilog"><span class="token constant">`ifdef</span> 宏名（标识符）
+    程序段<span class="token number">1</span>
+<span class="token constant">`endif</span></code></pre>
+<p>这里的“宏名”是一个Verilog HDL的标识符，“程序段”可以是Verilog HDL语句组，也可以是命令行。这些命令可以出现在源程序的任何地方。</p>
+<p>[  完  ]</p>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+            </div>
+            <hr/>
+
+            
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/Verilog/">
+                                    <span class="chip bg-color">Verilog</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="qq,wechat,weibo,douban" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/posts/2990932631/">
+                    <div class="card-image">
+                        
+                        <img src="/medias/featureimages/verilog.jpg" class="responsive-img" alt="Verilog 设计方法-计数器">
+                        
+                        <span class="card-title">Verilog 设计方法-计数器</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            本文整理计数器架构设计方法
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-03-27
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/FPGA-%E6%80%BB%E7%BB%93/" class="post-category">
+                                    FPGA-总结
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Verilog/">
+                        <span class="chip bg-color">Verilog</span>
+                    </a>
+                    
+                    <a href="/tags/%E8%AE%A1%E6%95%B0%E5%99%A8/">
+                        <span class="chip bg-color">计数器</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/posts/3995157926/">
+                    <div class="card-image">
+                        
+                        <img src="/medias/featureimages/fpga.jpg" class="responsive-img" alt="Verilog编辑仿真环境">
+                        
+                        <span class="card-title">Verilog编辑仿真环境</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            搭建轻量级verilog编辑仿真环境
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-22
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/FPGA-%E5%B7%A5%E5%85%B7/" class="post-category">
+                                    FPGA-工具
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/iverilog/">
+                        <span class="chip bg-color">iverilog</span>
+                    </a>
+                    
+                    <a href="/tags/sublime/">
+                        <span class="chip bg-color">sublime</span>
+                    </a>
+                    
+                    <a href="/tags/gtkwave/">
+                        <span class="chip bg-color">gtkwave</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('2'),
+            headingSelector: 'h2, h3, h4 ,h5 ,h6'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4 ,h5 ,h6').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    
+    <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2020</span>
+            <a href="https://wuyasheng.github.io" target="_blank">yasheng</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+            
+
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2020";
+                    var startMonth = "3";
+                    var startDate = "19";
+                    var startHour = "12";
+                    var startMinute = "37";
+                    var startSecond = "12";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
+            <br>
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+
+
+
+            <br>
+            
+            
+            
+            
+            <canvas class="fireworks" style="position: fixed; left: 0; top: 0; z-index: 1; pointer-events: none;" ></canvas>
+            <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script>
+            <script type="text/javascript" src="/js/fireworks.js"></script>
+            
+
+
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/wuyasheng" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:1058349718@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1058349718" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1058349718" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <script type="text/javascript" src="/libs/background/ribbon-dynamic.js" async="async"></script>
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","width":160,"height":320},"mobile":{"show":false},"react":{"opacity":0.5}});</script><script>!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).bottom&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script></body>
+
+<script type="text/javascript">
+    var OriginTitile=document.title,st;
+    document.addEventListener("visibilitychange",function(){
+        document.hidden?(document.title="(≥◇≤) 你找不到我了",clearTimeout(st)):(document.title="(Ő∀Ő3)哇！你好厉害",st=setTimeout(function(){document.title=OriginTitile},3e3))
+    })
+</script>
+
+
+</html>
